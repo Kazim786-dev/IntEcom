@@ -1,0 +1,53 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint",
+    "start": "nodemon --exec babel-node index.js",
+    "prod:build": "rm -rf dist && webpack --config webpack.babel.js --progress",
+    "prod:start": "node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "kazim.asif",
+  "license": "ISC",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "bcrypt": "^5.1.0",
+    "cloudinary": "^1.37.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.4",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "shortid": "^2.2.16"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-export-default-from": "^7.12.13",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-import": "^1.13.3",
+    "eslint": "^8.51.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.32.2",
+    "nodemon": "^2.0.14",
+    "webpack": "^5.32.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
