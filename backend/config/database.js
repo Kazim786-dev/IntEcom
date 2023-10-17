@@ -1,4 +1,3 @@
-// Import the entire 'mongoose' module using CommonJS syntax
 import mongoose from 'mongoose';
 
 const { connection, connect, set } = mongoose;
