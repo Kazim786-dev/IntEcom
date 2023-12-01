@@ -10,6 +10,7 @@ import LoginPage from '../pages/auth/login'
 import NewPassPage from '../pages/auth/new-password'
 import SignUpPage from '../pages/auth/signup'
 import TotalOrders from '../pages/orders/cust-total-orders'
+import Wishlist from '../pages/wishlist/wishlist'
 
 // admin pages
 import AdminHome from '../pages/admin/home'
@@ -78,6 +79,14 @@ const RouterLinks = ({
 							element={
 								<Layout user={user} showNavbar={true}>
 									{user.isLoggedIn ? <TotalOrders user={user} /> : <Navigate to='/login' />}
+								</Layout>
+							}
+						/>
+						<Route
+							path='/wishlist'
+							element={
+								<Layout user={user} showNavbar={true}>
+									{user.isLoggedIn ? <Wishlist user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
 						/>

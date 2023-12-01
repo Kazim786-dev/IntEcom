@@ -1,38 +1,96 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Container, Row, Col, Button, Card, Image } from 'react-bootstrap';
 import { ReactComponent as Trash } from '../../static/images/svg/Trash.svg';
-import './Wishlist.css'; // Custom CSS file for Wishlist
+import { Link } from 'react-router-dom';
+import SpinnerComp from '../../components/spinner'; 
 
-const Wishlist = ({ wishlistItems, handleRemove }) => {
+import './wishlist.css';
+
+const Wishlist = ({ user }) => {
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/get`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        if (response.status === 200) {
+          setWishlistItems(response.data); // assuming the response has a 'products' field
+        }
+      } catch (error) {
+        console.error('Error fetching wishlist:', error);
+        // Handle error appropriately
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchWishlist();
+    }
+  }, [user]);
+
+  const handleRemove = async (productId) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/remove/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setWishlistItems(wishlistItems.filter(item => item._id !== productId));
+    } catch (error) {
+      console.error('Error removing product from wishlist:', error);
+      // Handle error (e.g., show an error message)
+    }
+  };
+  
+
+  if (loading) {
+    return <SpinnerComp />;
+  }
+
   return (
-    <Container className="wishlist-container">
-      <h2 className="mb-4">Your Wishlist</h2>
-      {wishlistItems.length > 0 ? (
-        wishlistItems.map((item, index) => (
-          <Card className="wishlist-item" key={index}>
-            <Row className="align-items-center">
-              <Col md={4}>
-                <Image src={item.image} alt={item.name} fluid />
-              </Col>
-              <Col md={6}>
-                <Card.Body>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>{item.description}</Card.Text>
-                </Card.Body>
-              </Col>
-              <Col md={2}>
+    <div>
+      <br/>
+      <Container className="wishlist-container">
+        <h2 className="mb-4">Your Wishlist</h2>
+        {wishlistItems.length > 0 ? (
+          wishlistItems.map((item, index) => (
+            <Card className="wishlist-item" key={index}>
+              <Row className="align-items-center">
+                <Col md={2}>
+                  <Image src={item.image} alt={item.name} fluid className="wishlist-item-img" />
+                </Col>
+                <Col md={7}>
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>{`Color: ${item.color}, Size: ${item.size}`}</Card.Text>
+                  </Card.Body>
+                </Col>
+                <Col md={2} className="d-flex justify-content-between align-items-center">
                 <Button variant="link" onClick={() => handleRemove(item._id)}>
-                  <Trash />
-                </Button>
-              </Col>
-            </Row>
-          </Card>
-        ))
-      ) : (
-        <p>Your wishlist is empty.</p>
-      )}
-    </Container>
+                    <Trash />
+                  </Button>
+                  <Link to={`/product/${item._id}`} className="me-2">
+                    <Button variant="primary">Shop Now</Button>
+                  </Link>
+                  
+                </Col>
+              </Row>
+            </Card>
+          ))
+        ) : (
+          <p>Your wishlist is empty.</p>
+        )}
+      </Container>
+    </div>
   );
+
 };
 
 export default Wishlist;

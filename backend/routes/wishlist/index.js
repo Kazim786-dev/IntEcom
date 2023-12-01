@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import {
     addProduct,
-    getWishlist 
+    getWishlist,
+    removeProductFromWishlist
 } from '../../controllers/wishlist/index.js';
 
 
@@ -40,6 +41,17 @@ router.get('/get', async (req, res) => {
         
     }
 });
+
+
+router.delete('/remove/:productId', async (req, res) => {
+    try {
+        await removeProductFromWishlist(req.user.user, req.params.productId);
+        res.status(200).json({ message: 'Product removed from wishlist' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 
 
