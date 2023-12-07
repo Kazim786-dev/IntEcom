@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
+import { useNavigate } from 'react-router-dom';
 
 //react-bootstrap
 import { Container, Row, Col, Form } from 'react-bootstrap'
@@ -17,6 +18,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { add, increase } from '../../redux/slice/cart/cart-slice'
 
 const AllProductsPage = ({ user }) => {
+    const navigate = useNavigate();
 
 	const dispatch = useDispatch()
 	const searchInputRef = useRef(null)
@@ -144,7 +146,10 @@ const AllProductsPage = ({ user }) => {
 			dispatch(increase(product._id))
 		}
 	}
-
+	// Navigate to product detail page on image click
+	const handleProductClick = (productId) => {
+		navigate(`/product-detail/${productId}`, { state: { wishlist: wishlist, productId: productId } });
+	};
 	const isAlreadyAdded = (product) => {
 		const foundProduct = cartProducts.find((item) => item._id == product._id)
 		return foundProduct ? true : false
@@ -225,7 +230,8 @@ const AllProductsPage = ({ user }) => {
 									Mobile: 1 product per row */}
 									{products.map((product, index) => (
 										<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
-											<div>
+											<div onClick={() => handleProductClick(product._id)}>
+
 												<ProductCard 
 													name={user.name} 
 													product={product} 

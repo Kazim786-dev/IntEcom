@@ -1,0 +1,15 @@
+.product-detail-card {
+    margin-top: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  }
+  
+  .product-detail-card img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .product-detail-card .btn {
+    margin-top: 10px;
+  }
+  

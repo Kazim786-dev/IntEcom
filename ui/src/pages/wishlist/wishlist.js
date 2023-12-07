@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Button, Card, Image } from 'react-bootstrap';
 import { ReactComponent as Trash } from '../../static/images/svg/Trash.svg';
-import { Link } from 'react-router-dom';
-import SpinnerComp from '../../components/spinner'; 
+import { useNavigate } from 'react-router-dom';
+import SpinnerComp from '../../components/spinner';
 
 import './wishlist.css';
 
 const Wishlist = ({ user }) => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -20,11 +21,10 @@ const Wishlist = ({ user }) => {
           },
         });
         if (response.status === 200) {
-          setWishlistItems(response.data); // assuming the response has a 'products' field
+          setWishlistItems(response.data);
         }
       } catch (error) {
         console.error('Error fetching wishlist:', error);
-        // Handle error appropriately
       } finally {
         setLoading(false);
       }
@@ -45,10 +45,13 @@ const Wishlist = ({ user }) => {
       setWishlistItems(wishlistItems.filter(item => item._id !== productId));
     } catch (error) {
       console.error('Error removing product from wishlist:', error);
-      // Handle error (e.g., show an error message)
     }
   };
-  
+
+  const handleShopNow = (productId) => {
+    // Navigate to the product detail page and pass productId and wishlist
+    navigate(`/product-detail/${productId}`, { state: { wishlist: wishlistItems, productId } });
+  };
 
   if (loading) {
     return <SpinnerComp />;
@@ -73,13 +76,12 @@ const Wishlist = ({ user }) => {
                   </Card.Body>
                 </Col>
                 <Col md={2} className="d-flex justify-content-between align-items-center">
-                <Button variant="link" onClick={() => handleRemove(item._id)}>
+                  <Button variant="link" onClick={() => handleRemove(item._id)}>
                     <Trash />
                   </Button>
-                  <Link to={`/product/${item._id}`} className="me-2">
-                    <Button variant="primary">Shop Now</Button>
-                  </Link>
-                  
+                  <Button variant="primary" onClick={() => handleShopNow(item._id)}>
+                    Shop Now
+                  </Button>
                 </Col>
               </Row>
             </Card>
@@ -90,7 +92,6 @@ const Wishlist = ({ user }) => {
       </Container>
     </div>
   );
-
 };
 
 export default Wishlist;
