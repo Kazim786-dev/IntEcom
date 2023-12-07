@@ -116,6 +116,8 @@ const ProductDetailPage = ({ user }) => {
     return (
         <Container className="mt-5">
             <br/>
+            <br/>
+            <br/>
             {product && (
                 <Card className="product-detail-card">
                     <Row>
@@ -130,9 +132,9 @@ const ProductDetailPage = ({ user }) => {
                                 <Card.Text>
                                     <strong>Price:</strong> ${product.price.toFixed(2)}
                                 </Card.Text>
-                                <Card.Text>
-                                    <Badge bg="secondary">{product.color}</Badge>
-                                    <Badge bg="secondary">{product.size}</Badge>
+                                <Card.Text >
+                                    <Badge bg="secondary" className='pad'>{product.color}</Badge>
+                                    <Badge bg="secondary" className='pad'>{product.size}</Badge>
                                 </Card.Text>
                                 <Button 
                                     variant="primary" 
