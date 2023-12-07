@@ -1,8 +1,9 @@
 import { Router, response } from 'express';
 import upload from '../../middleware/multer.js';
 import VerifyRole from '../../middleware/role-verification.js';
-
+import reportProduct from '../../controllers/product/report-product.js';
 import multer from 'multer';
+import { checkUserReports } from '../../controllers/product/is-reported_by_user.js';
 const updateupload = multer()
 
 import {
@@ -78,5 +79,27 @@ router.delete('/:id', authMiddleware, VerifyRole({ roleToCheck: 'admin' }), asyn
   }
 });
 
+// POST request to report a product
+router.post('/report', authMiddleware, async (req, res) => {
+  try {
+    const result = await reportProduct(req.body, req.user); // Pass the request body and user info
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'An error occurred while reporting the product.' });
+  }
+});
+
+// Get user-specific reports for a product
+router.get('/reports/:productId', authMiddleware, async (req, res) => {
+  try {
+      const userId = req.user.user._id; // Assuming the user's ID is stored in req.user
+      const productId = req.params.productId;
+      const result = await checkUserReports(userId, productId);
+      
+      res.status(result.status).json(result.data);
+  } catch (error) {
+      res.status(500).json({ error: 'An error occurred while fetching reports.' });
+  }
+});
 
 export default router;

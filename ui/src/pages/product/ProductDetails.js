@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ProductDetails.css';
-
-import { Container, Row, Col, Button, Card, Image, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Image, Badge, Modal, Form } from 'react-bootstrap';
 import SpinnerComp from '../../components/spinner';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,17 +15,19 @@ const ProductDetailPage = ({ user }) => {
     const dispatch = useDispatch();
     const cartProducts = useSelector((state) => state.cart.products);
     const [reporting, setReporting] = useState(false);
+    const [hasUserReported, setHasUserReported] = useState(false);
     const [isProductInWishlist, setIsProductInWishlist] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [reportText, setReportText] = useState('');
 
     const isProductInCart = cartProducts.some(item => item._id === productId);
 
     useEffect(() => {
-        //set the state by checking if the passed state (i.e., array of products in wishlist) contain the current product
-        setIsProductInWishlist( wishlist.some(item => item._id === productId))
+        setIsProductInWishlist(wishlist.some(item => item._id === productId));
 
         const fetchProductDetails = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/${productId}`,{
+                const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/${productId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
@@ -41,11 +42,28 @@ const ProductDetailPage = ({ user }) => {
             }
         };
 
+        const checkUserReports = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/reports/${productId}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+                console.log(response.data);
+                if (response.data.userHasReported) {
+                    setHasUserReported(true);
+                }
+            } catch (error) {
+                console.error('Error checking user reports:', error);
+            }
+        };
+
         fetchProductDetails();
+        checkUserReports();
     }, [productId, user.token]);
 
     const handleAddToCart = () => {
-        const item = { ...product, orderQuantity: 1 }; // Assuming orderQuantity
+        const item = { ...product, orderQuantity: 1 };
         if (!isProductInCart) {
             dispatch(addToCartAction(item));
         } else {
@@ -57,19 +75,39 @@ const ProductDetailPage = ({ user }) => {
         try {
             await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/add`, {
                 productId: product._id
-            },{
+            }, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             });
-            setIsProductInWishlist(true)
+            setIsProductInWishlist(true);
         } catch (error) {
             console.error('Error adding to wishlist:', error);
         }
     };
+
     const handleReportProduct = () => {
-        setReporting(true);
-      };
+        setShowModal(true);
+    };
+
+    const handleConfirmReport = async () => {
+        try {
+            await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/report`, {
+                productId: product._id,
+                reportText: reportText,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
+            setReporting(true);
+        } catch (error) {
+            console.error('Error reporting product:', error);
+        } finally {
+            setShowModal(false);
+            setReportText('');
+        }
+    };
 
     if (loading) {
         return <SpinnerComp />;
@@ -114,16 +152,45 @@ const ProductDetailPage = ({ user }) => {
                                 <Button 
                                     variant="danger" 
                                     onClick={handleReportProduct} 
-                                    disabled={reporting}
+                                    disabled={reporting || hasUserReported}
                                     className="ms-2"
-                                    >
-                                    {reporting ? 'Reported' : 'Report Product'}
+                                >
+                                    {hasUserReported ? 'Reported' : 'Report Product'}
                                 </Button>
                             </Card.Body>
                         </Col>
                     </Row>
                 </Card>
             )}
+
+            {/* Modal for reporting the product */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Report Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Reason for Reporting</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={reportText}
+                                onChange={(e) => setReportText(e.target.value)}
+                                placeholder="Enter your reason here..."
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirmReport}>
+                        Confirm Report
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };
