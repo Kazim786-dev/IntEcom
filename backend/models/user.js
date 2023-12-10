@@ -18,11 +18,17 @@ const UserSchema = new Schema({
   mobile: {
     type: String,
     required: true
+  },  
+  status: {
+    type: String,
+    required: true,
+    enum: ['pending', 'active', 'blocked', 'denied'],
+    default: 'active'
   },
   role: {
     type: String,
     required: true,
-    enum: ['admin', 'customer'],
+    enum: ['admin', 'customer', 'seller'],
     default: 'customer'
   },
   // add more fields like profile picture, etc. as per your requirements
@@ -34,6 +40,11 @@ UserSchema.pre(
   'save',
   async function(next) {
     const user = this;
+  // Only hash the password if it has been modified (or is new)
+  if (!user.isModified('password')) {
+    return next();
+  }
+
     // bcrypt.hash(this.password, 10) passes the password and the value of salt round (or cost) to 10.
     const hash = await bcrypt.hash(this.password, 10);
 

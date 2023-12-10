@@ -25,6 +25,13 @@ const Sidebar = ({ selectedItem, handleItemClick }) => {
 				onItemClick={() => handleItemClick('Orders')}
 			/>
 			<hr />
+			<SidebarItem
+				icon={<ArrowRight />}
+				text="Sellers"
+				isSelected={selectedItem === 'Sellers'}
+				onItemClick={() => handleItemClick('Sellers')}
+			/>
+			<hr />
 		</Card>
 	)
 }

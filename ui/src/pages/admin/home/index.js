@@ -28,6 +28,8 @@ const AllProducts = ({ user }) => {
 	const [totalPages, setTotalPages] = useState(1)
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 9
+	const [sellers, setSellers] = useState([]);
+
 
 	const [data, setData] = useState([])
 	const [orderItem, setOrderItem] = useState()
@@ -65,38 +67,40 @@ const AllProducts = ({ user }) => {
 	const fetchData = () => {
 		
 		setFetchDataError(false)
-
-		axios.get(
-			`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
-			{
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			}
-		).then((response) => {
-			if (response.status && response.status === 200) {
-				const { totalPages, data } = response.data
-				setData(data)
-				setFetchDataError(false)
-				setTotalPages(totalPages)
-			}
-			setTimeout(() => {
-				setLoading(false)
-				setTableLoading(false)
-			}, 1000)
-		}).catch((error) => {
-			if (error.response?.status && error.response.status === 401) {
-				setErrorText('Unauthorized. Try login again')
-			}
-			else
-				selectedItem === 'Products' ?
-					setErrorText('Error while fetching products') : setErrorText('Error while fetching orders')
-			setFetchDataError(true)
-			setTimeout(() => {
-				setLoading(false)
-				setTableLoading(false)
-			}, 1000)
-		})
+		if(selectedItem!=='Sellers'){
+			axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			).then((response) => {
+				if (response.status && response.status === 200) {
+					const { totalPages, data } = response.data
+					setData(data)
+					setFetchDataError(false)
+					setTotalPages(totalPages)
+				}
+				setTimeout(() => {
+					setLoading(false)
+					setTableLoading(false)
+				}, 1000)
+			}).catch((error) => {
+				if (error.response?.status && error.response.status === 401) {
+					setErrorText('Unauthorized. Try login again')
+				}
+				else
+					selectedItem === 'Products' ?
+						setErrorText('Error while fetching products') : setErrorText('Error while fetching orders')
+				setFetchDataError(true)
+				setTimeout(() => {
+					setLoading(false)
+					setTableLoading(false)
+				}, 1000)
+			})
+		}
+		
 
 	}
 
@@ -180,6 +184,84 @@ setTableLoading(true)	}
 		setCurrentPage(page)
 	}
 
+
+	
+    useEffect(() => {
+        if (selectedItem === 'Sellers') {
+            fetchSellers();
+        } else {
+            debouncedFetchData();
+        }
+    }, [currentPage, selectedItem, searchTerm]);
+
+    const fetchSellers = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
+            if (response.status === 200) {
+				
+                setSellers(response.data.sellers);
+                setTotalPages(response.data.totalPages);
+            }
+        } catch (error) {
+            console.error('Error fetching sellers:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+	const handleAcceptSeller = async (sellerId) => {
+		try {
+			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers/accept/${sellerId}`, {}, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+			// Refresh the sellers list after accepting
+			fetchSellers();
+		} catch (error) {
+			console.error('Error accepting seller:', error);
+		}
+	};
+	
+	const handleRejectSeller = async (sellerId) => {
+		try {
+			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers/reject/${sellerId}`, {}, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+			// Refresh the sellers list after rejecting
+			fetchSellers();
+		} catch (error) {
+			console.error('Error rejecting seller:', error);
+		}
+	};
+
+    const SellerTablecolumns = [
+        {
+            header: 'Name',
+            render: (sellers) => sellers.name,
+        },
+        {
+            header: 'Email',
+            render: (sellers) => sellers.email,
+        },
+        {
+            header: 'Actions',
+            render: (sellers) => (
+                <>
+                    <Button onClick={() => handleAcceptSeller(sellers._id)} variant="success">Accept</Button>
+                    <Button onClick={() => handleRejectSeller(sellers._id)} variant="danger" className="ms-2">Reject</Button>
+                </>
+            ),
+        },
+    ];
+
+	
 	// Product table column styling
 	const ProductsTablecolumns = [
 		{
@@ -286,118 +368,110 @@ setTableLoading(true)	}
 		<>
 			{loading ? (
 				<SpinnerComp />
-			) :
-				(
-					<>
-						<Container fluid className='pt-0 p-5 ps-0'>
-							<Row>
-								<Col xs={3}>
-									<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
+			) : (
+				<Container fluid className='pt-0 p-5 ps-0'>
+					<Row>
+						<Col xs={3}>
+							<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
+						</Col>
+						<Col className="mt-4 px-3">
+							{selectedItem === 'Orders' && <OrderSummary user={user} setErrorText={setErrorText} />}
+							<Row className='mb-4 m-0'>
+								<Col className='d-flex justify-content-start ps-0 align-items-center'>
+									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
-								<Col className="mt-4 px-3">
-
-									{selectedItem === 'Orders' && <OrderSummary user={user} setErrorText={setErrorText} />}
-
-									<Row className='mb-4 m-0'>
-										<Col className='d-flex justify-content-start ps-0 align-items-center'>
-											<h2 className='text-primary'>{selectedItem}</h2>
-										</Col>
-										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											{selectedItem === 'Products' ? (
-												<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-											) : (
-												<>
-													<Form.Label className="me-2"><b>Search:</b></Form.Label>
-													<Form.Group className="mb-1">
-														<Form.Control 
-															className='pe-5' 
-															type="text" 
-															value={searchTerm} 
-															placeholder="Search by user & order Id" 
-															onChange={handleSearchChange} 
-															ref={searchInputRef}
-														/>
-													</Form.Group>
-												</>
-											)
-											}
-										</Col>
-									</Row>
-									
-									{(selectedItem === 'Products'?
-										(
-											<div style={{ height: '24.4rem', overflowY: 'auto'}}>
-												{tableLoading ? (
-													<SpinnerComp/>
-												):(
-													<DetailsTable
-													data={data}
-													columns={ProductsTablecolumns}
+								<Col className='d-flex justify-content-end pe-0 align-items-center'>
+									{selectedItem === 'Products' ? (
+										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
+									) : selectedItem !== 'Sellers' && (
+										<>
+											<Form.Label className="me-2"><b>Search:</b></Form.Label>
+											<Form.Group className="mb-1">
+												<Form.Control 
+													className='pe-5' 
+													type="text" 
+													value={searchTerm} 
+													placeholder={`Search by ${selectedItem}`} 
+													onChange={handleSearchChange} 
+													ref={searchInputRef}
 												/>
-												)}
-												
-											</div>
-										) : (
-											<div style={{ height: '18.5rem', overflowY: 'auto'}}>
-												{tableLoading ? (
-													<SpinnerComp/>
-												):(
-													<DetailsTable
-														data={data}
-														columns={OrdersTablecolumns}
-													/>
-												)}
-											</div>
-										)
+											</Form.Group>
+										</>
 									)}
-
-									<Footer
-										className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
-										// text={`${products.length} products found in clothing and accessories`}
-										text={''}
-										totalPages={totalPages}
-										currentPage={currentPage}
-										setCurrentPage={handlePageChange}
-									/>
 								</Col>
 							</Row>
-
-
-							{fetchDataError && (
-								<AlertComp
-									variant='danger'
-									text={Errortext}
-									onClose={() => setFetchDataError(false)}
-								/>
-							)}
-
-						</Container>
-						{/* show the modal for confirmation on click of delte icon */}
-						{showDeleteModal && <DeleteConfirmationModal showDeleteModal={showDeleteModal}
-							setShowDeleteModal={setShowDeleteModal} handleDeleteConfirmation={handleDeleteConfirmation} />}
-                        
-						{showOrderCanvas && <OffCanvasComp
+							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
+								{loading ? (
+									<SpinnerComp />
+								) : selectedItem === 'Sellers' ? (
+									<DetailsTable
+										data={sellers}
+										columns={SellerTablecolumns}
+									/>
+								) : selectedItem === 'Products' ? (
+									<DetailsTable
+										data={data}
+										columns={ProductsTablecolumns}
+									/>
+								) : (
+									<DetailsTable
+										data={data}
+										columns={OrdersTablecolumns}
+									/>
+								)}
+							</div>
+							<Footer
+								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
+								text={''}
+								totalPages={totalPages}
+								currentPage={currentPage}
+								setCurrentPage={handlePageChange}
+							/>
+						</Col>
+					</Row>
+	
+					{fetchDataError && (
+						<AlertComp
+							variant='danger'
+							text={Errortext}
+							onClose={() => setFetchDataError(false)}
+						/>
+					)}
+	
+					{showDeleteModal && (
+						<DeleteConfirmationModal
+							showDeleteModal={showDeleteModal}
+							setShowDeleteModal={setShowDeleteModal}
+							handleDeleteConfirmation={handleDeleteConfirmation}
+						/>
+					)}
+					
+					{showOrderCanvas && (
+						<OffCanvasComp
 							placement={'end'}
 							show={showOrderCanvas}
 							setShow={setShowOrderCanvas}
 							orderItem={orderItem}
 							name={orderItem.user.name}
-							token={user.token} />
-						}
-
-						{showProductCanvas && <ProductCanvas
+							token={user.token}
+						/>
+					)}
+	
+					{showProductCanvas && (
+						<ProductCanvas
 							placement={'end'}
 							show={showProductCanvas}
 							setShow={setShowProductCanvas}
 							product={product}
 							handleShouldFetchAgain={handleShouldFetchAgain}
-							token={user.token} />
-						}
-					</>
-				)
-			}
+							token={user.token}
+						/>
+					)}
+				</Container>
+			)}
 		</>
-	)
+	);
+	
 
 }
 

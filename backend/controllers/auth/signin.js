@@ -47,13 +47,15 @@ const { secret_key } = process.env
       if (!user) {
         return { status: 401, data: { message: 'Invalid credentials' } };
       }
-  
       const isMatch = await user.isValidPassword(password);
-  
+      
       if (!isMatch) {
         return { status: 401, data: { message: 'Invalid credentials' } };
       }
-  
+
+      if (user.status !== 'active') {
+        return { status: 404, data: { message: 'Your account is not verified by Admin!' } };
+      }
       const token = jwt.sign(
         {
           id: user._id,

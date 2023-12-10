@@ -4,7 +4,7 @@ import { sendEmail } from '../../mail/index.js';
 
 const { secret_key } = process.env
 
-const Signup = async ({ name, email, password, mobile, role }) => {
+const Signup = async ({ name, email, password, mobile, role, status }) => {
     
     // Define the regex patterns for validation
     const capitalRegex = /[A-Z]/;
@@ -46,15 +46,17 @@ const Signup = async ({ name, email, password, mobile, role }) => {
       }
       else {
         let Role = 'customer'
-        if(role && role==='admin'){
+        if(role && role==='seller'){
           Role = role
+          status = 'pending'
         }
         const newUser = new User({
           name,
           email,
           password,
           mobile,
-          role: Role
+          role: Role,
+          status
         });
   
         // Generate JWT token
