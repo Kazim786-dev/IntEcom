@@ -66,10 +66,10 @@ const Signup = async ({ name, email, password, mobile, role }) => {
   
   
         // Compose the email content
-        const emailContent = `<p>Welcome ${newUser.name} to this amazing e-commerce platform.<br/>
-        We are absolutely thrilled to have you join our ever-growing family of online shoppers.<br/>
-        Congratulations on successfully creating your account! 🎉
-        Note: Do not share your password with anyone</p>`;
+        const emailContent = `<h1>Welcome <b>${newUser.name}</b> to this amazing e-commerce platform.</h1><br/>
+        <p>We are absolutely thrilled to have you join our ever-growing family of online shoppers.<br/>
+        Congratulations on successfully creating your account. <b>Happy Shopping! 🎉</b><br/>
+        <b>Note</b>: Do not share your password with anyone</p>`;
   
         // Send the email using the generic sendEmail function
         sendEmail(newUser.email, 'Account Created Successfully', emailContent);
