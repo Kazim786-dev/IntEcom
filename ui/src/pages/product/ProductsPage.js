@@ -41,11 +41,17 @@ const AllProductsPage = ({ user }) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 8
 
+	/// error handeling for wishlist
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
+
 	//redux state
 	const cartProducts = useSelector((state) => state.cart.products)
 
 
 	const fetchWishlist = async () => {
+		setIsError(false); // Reset error state before making a new request
+	
 		try {
 			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/get`, {
 				headers: {
@@ -53,11 +59,13 @@ const AllProductsPage = ({ user }) => {
 				},
 			});
 			if (response.status === 200) {
-				setWishlist(response.data); // assuming the response has a 'products' field
+				setWishlist(response.data); // assuming the response data structure matches your needs
 			}
 		} catch (error) {
-			console.error('Error fetching wishlist:', error);
-			// Handle error appropriately
+			console.log('Error fetching wishlist:', error);
+			setIsError(true);
+			setErrorMessage('Wishlist not found or there was an error fetching it.');
+			// You can customize the error message based on the specific error if needed
 		}
 	}
 
@@ -86,7 +94,7 @@ const AllProductsPage = ({ user }) => {
 			setFetchProductError(false)
 			// Make an API request to route with the selected price filter and searchTerm as query parameters
 			response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
 			)
 			if (response.status && response.status === 200) {
 				const { totalPages, data } = response.data

@@ -3,7 +3,7 @@
 import Product from '../../models/product';
 
 const deleteProduct = async ({id, user}) => {
-  if (user.role !== 'admin') {
+  if (user.role !== 'admin' && user.role !== 'seller') {
     return { status: 401, message: 'Unauthorized' };
   }
 

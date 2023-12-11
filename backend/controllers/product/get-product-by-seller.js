@@ -1,6 +1,6 @@
 import Product from '../../models/product';
 
-const getProducts = async ({query}) => {
+const getProductsBySeller = async ({query, userId}) => {
   try {
     const sortOrder = query.sort;
     if (sortOrder && sortOrder !== 'asc' && sortOrder !== 'desc') {
@@ -13,16 +13,16 @@ const getProducts = async ({query}) => {
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
 
-    // Update findQuery to exclude blocked products
+    // Update the findQuery to include the current user's ID
     const findQuery = {
       isDeleted: false,
-      status: { $ne: 'blocked' }, // Exclude blocked products
+      user: userId,  // Filter by user ID
       ...(queryName && {
         $or: [
           { name: { $regex: queryName, $options: 'i' } },
           { description: { $regex: queryName, $options: 'i' } },
-        ],
-      }),
+        ]
+      })
     };
 
     const totalCount = await Product.countDocuments(findQuery);
@@ -40,4 +40,4 @@ const getProducts = async ({query}) => {
   }
 };
 
-export default getProducts;
+export default getProductsBySeller;

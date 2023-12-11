@@ -9,17 +9,15 @@ import AlertComp from '../../../components/alert'
 import DetailsTable from '../../../components/table'
 import DeleteConfirmationModal from '../../../components/modal/delete-confirmation'
 import Footer from '../../../components/footer'
-import OffCanvasComp from '../../../components/offcanvas'
 import OrderSummary from '../../../components/order-summary'
 import ProductCanvas from '../../../components/product-canvas'
 import SpinnerComp from '../../../components/spinner'
 
-import Sidebar from '../../../components/sidebar'
+import Sidebar from '../../../components/sidebar/SellerSidebar'
 
 //svg
 import { ReactComponent as Trash } from '../../../static/images/svg/Trash.svg'
 import { ReactComponent as Edit } from '../../../static/images/svg/Pencil square.svg'
-import { ReactComponent as ArrowUpRight } from '../../../static/images/svg/Arrow up right.svg'
 
 
 const AllProducts = ({ user }) => {
@@ -28,7 +26,6 @@ const AllProducts = ({ user }) => {
 	const [totalPages, setTotalPages] = useState(1)
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 9
-	const [sellers, setSellers] = useState([]);
 
     const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
 
@@ -41,8 +38,6 @@ const AllProducts = ({ user }) => {
 	const [tableLoading, setTableLoading] = useState(true)
 	const [fetchDataError, setFetchDataError] = useState(false)
 	const [Errortext, setErrorText] = useState('')
-    const [reportedProducts, setReportedProducts] = useState([]); // State for reported products
-    const [reportLoading, setReportLoading] = useState(false); // Loading state for reports
 
 	const [product, setproduct] = useState('')
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -70,7 +65,7 @@ const AllProducts = ({ user }) => {
 	const fetchData = () => {
 		
 		setFetchDataError(false)
-		if(selectedItem!=='Sellers' && selectedItem!=='Process' && selectedItem!== 'reported'){
+		if(selectedItem!=='Sellers' && selectedItem!=='Process'){
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -122,6 +117,7 @@ const AllProducts = ({ user }) => {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setProcessedOrders(response.data);
+            console.log(response.data); // Log to check response
         } catch (error) {
             console.error('Error fetching processed orders:', error);
             setErrorText('Error fetching processed orders');
@@ -209,9 +205,7 @@ const AllProducts = ({ user }) => {
         setCurrentPage(1);
         setLoading(true);
         setSelectedItem(item);
-        if (item === 'reported') {
-            fetchReportedProducts();
-        } else if (item === 'Process') {
+        if (item === 'Process') {
             fetchProcessedOrders();
         } else {
             debouncedFetchData();
@@ -222,12 +216,7 @@ const AllProducts = ({ user }) => {
 		fetchData()
 	}
 
-	const handleSearchChange = (event) => {
-		const { value } = event.target
-		setSearchTerm(value)
-		setTableLoading(true)
-		setCurrentPage(1)
-	}
+
 
 	const handleOrderDetailButtonClick = (item) => {
 		setOrderItem(item)
@@ -242,101 +231,16 @@ const AllProducts = ({ user }) => {
 
 	
     useEffect(() => {
-        if (selectedItem === 'Sellers') {
-            fetchSellers();
-        } else if (selectedItem === 'Process') {
+		if (selectedItem === 'Process') {
             fetchProcessedOrders();
-        } else if (selectedItem === 'reported') {
-            fetchReportedProducts();
         } else {
             debouncedFetchData();
         }
     }, [currentPage, selectedItem, searchTerm]);
-	const fetchReportedProducts = async () => {
-		setReportLoading(true); // Start loading for reported products
-		setLoading(true);      // Start main loading
-		try {
-			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/all-reports`, {
-				headers: { Authorization: `Bearer ${user.token}` }
-			});
 
-			setReportedProducts(response.data);
-		} catch (error) {
-			console.error('Error fetching reported products:', error);
-			setErrorText('Error fetching reported products');
-			setFetchDataError(true);
-		} finally {
-			setReportLoading(false); // Stop loading for reported products
-			setLoading(false);       // Stop main loading
-		}
-	};
-	
-    const fetchSellers = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            });
-            if (response.status === 200) {
-				
-                setSellers(response.data.sellers);
-                setTotalPages(response.data.totalPages);
-            }
-        } catch (error) {
-            console.error('Error fetching sellers:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
-	const handleAcceptSeller = async (sellerId) => {
-		try {
-			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers/accept/${sellerId}`, {}, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			});
-			// Refresh the sellers list after accepting
-			fetchSellers();
-		} catch (error) {
-			console.error('Error accepting seller:', error);
-		}
-	};
-	
-	const handleRejectSeller = async (sellerId) => {
-		try {
-			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers/reject/${sellerId}`, {}, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			});
-			// Refresh the sellers list after rejecting
-			fetchSellers();
-		} catch (error) {
-			console.error('Error rejecting seller:', error);
-		}
-	};
+	const OrdersTablecolumns = []
 
-    const SellerTablecolumns = [
-        {
-            header: 'Name',
-            render: (sellers) => sellers.name,
-        },
-        {
-            header: 'Email',
-            render: (sellers) => sellers.email,
-        },
-        {
-            header: 'Actions',
-            render: (sellers) => (
-                <>
-                    <Button onClick={() => handleAcceptSeller(sellers._id)} variant="success">Accept</Button>
-                    <Button onClick={() => handleRejectSeller(sellers._id)} variant="danger" className="ms-2">Reject</Button>
-                </>
-            ),
-        },
-    ];
 
 	
 	// Product table column styling
@@ -382,126 +286,7 @@ const AllProducts = ({ user }) => {
 			),
 		},
 	]
-	
-	const handleBlockProduct = async (productId) => {
-		try {
-			const response = await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/block/${productId}`, {}, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			});
-			// Handle response here, such as updating state or showing a success message
-			console.log('Product blocked successfully', response.data);
-			// Optionally, refresh the data to reflect the changes
-			fetchReportedProducts();
-		} catch (error) {
-			console.error('Error blocking product:', error);
-			// Handle error here, such as updating state or showing an error message
-		}
-	};
-	
 
-	const handleCancelReport = async (reportId) => {
-		try {
-			const response = await axios.delete(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/cancel-report/${reportId}`, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			});
-			// Handle response here, such as updating state or showing a success message
-			console.log('Report canceled successfully', response.data);
-			// Optionally, refresh the data to reflect the changes
-			fetchReportedProducts();
-		} catch (error) {
-			console.error('Error canceling report:', error);
-			// Handle error here, such as updating state or showing an error message
-		}
-	};
-	
-
-    const ReportedProductsTableColumns = [
-        // Define columns for reported products table
-        {
-            header: 'Reported Product',
-            render: (report) => report.product.description,
-        },
-		{
-            header: 'Report by',
-            render: (report) => report.user.name,
-        },
-		{
-            header: 'Reason',
-            render: (report) => report.text,
-        },
-        // ... other columns for product details
-        {
-            header: 'Actions',
-            render: (report) => (
-                <>
-                    <Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
-                    <Button onClick={() => handleCancelReport(report._id)} variant="secondary" className="ms-2">Cancel Report</Button>
-                </>
-            ),
-        },
-    ];
-
-	// Order table column styling
-	const OrdersTablecolumns = [
-		{
-			header: 'Date',
-			width: '17rem',
-			render: (item) => {
-				const date = new Date(item.date)
-				// const utcDate = date.toLocaleString('en-US', { timeZone: 'UTC' })
-				const localDate = date.toLocaleString(undefined, { timeZoneName: 'short' })
-
-				return localDate
-			}
-		},
-		{
-			header: 'Order#',
-			width: '20rem',
-			render: (item) => item.orderNumber
-		},
-		{
-			header: 'User',
-			width: '20rem',
-			render: (item) => {
-				if (item.user) {
-					return item.user.name
-				}
-				return ''
-			}
-		},
-		{
-			header: 'Product(s)',
-			width: '20rem',
-			render: (item) => {
-				// const totalProducts = item.products.length
-				if (item.products) {
-					return item.products.length
-				}
-				return 1
-			}
-		},
-		{
-			header: 'Amount',
-			width: '17rem',
-			render: (item) => {
-				if (item.totalAmount)
-					return '$' + item.totalAmount.toFixed(2)
-				return '$' + 0
-			}
-		},
-		{
-			header: 'Action',
-			render: (item) => (
-				<>
-					<button className="bg-white border-0" onClick={() => handleOrderDetailButtonClick(item)}><ArrowUpRight /></button>
-				</>
-			),
-		},
-	]
     const ProcessedOrdersTableColumns = [
 		{
 			header: 'Date',
@@ -558,7 +343,7 @@ const AllProducts = ({ user }) => {
   
 	return (
 		<>
-			{loading || reportLoading ? (
+			{loading ? (
 				<SpinnerComp />
 			) : (
 				<Container fluid className='pt-0 p-5 ps-0'>
@@ -575,19 +360,9 @@ const AllProducts = ({ user }) => {
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-									) : selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && (
+									) : selectedItem !== 'Sellers' && (
 										<>
-											<Form.Label className="me-2"><b>Search:</b></Form.Label>
-											<Form.Group className="mb-1">
-												<Form.Control 
-													className='pe-5' 
-													type="text" 
-													value={searchTerm} 
-													placeholder={`Search by ${selectedItem}`} 
-													onChange={handleSearchChange} 
-													ref={searchInputRef}
-												/>
-											</Form.Group>
+
 										</>
 									)}
 								</Col>
@@ -595,22 +370,12 @@ const AllProducts = ({ user }) => {
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
 								{loading ? (
 									<SpinnerComp />
-								) : selectedItem === 'reported' ? (
-									<DetailsTable
-										data={reportedProducts}
-										columns={ReportedProductsTableColumns}
-									/>
-								) :selectedItem === 'Process' ? (
+								) : selectedItem === 'Process' ? (
 									<DetailsTable
 										data={processedOrders}
 										columns={ProcessedOrdersTableColumns}
 									/>
-								) :selectedItem === 'Sellers' ? (
-									<DetailsTable
-										data={sellers}
-										columns={SellerTablecolumns}
-									/>
-								) : selectedItem === 'Products' ? (
+								)  : selectedItem === 'Products' ? (
 									<DetailsTable
 										data={data}
 										columns={ProductsTablecolumns}
@@ -648,16 +413,7 @@ const AllProducts = ({ user }) => {
 						/>
 					)}
 					
-					{showOrderCanvas && (
-						<OffCanvasComp
-							placement={'end'}
-							show={showOrderCanvas}
-							setShow={setShowOrderCanvas}
-							orderItem={orderItem}
-							name={orderItem.user.name}
-							token={user.token}
-						/>
-					)}
+
 	
 					{showProductCanvas && (
 						<ProductCanvas

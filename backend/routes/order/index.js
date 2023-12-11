@@ -7,10 +7,13 @@ import {
     getAllUserOrders,
     getAllOrderProducts,
     getOrderSummary,
-    checkout
+    checkout,
+    getSellerOrders,
+    updateOrderDeliveryStatus
 } from '../../controllers/order/index.js';
 
 import VerifyRole from '../../middleware/role-verification.js';
+import authMiddleware from '../../middleware/auth.js'
 
 const router = Router();
 
@@ -51,6 +54,19 @@ router.get('/summary', VerifyRole({ roleToCheck: 'admin' }), async (req, res) =>
     }
 })
 
+// Route to get orders for a specific seller
+router.get('/seller-orders', authMiddleware, async (req, res) => {
+    const userId = req.user.user._id;  // Get the user ID from req.user
+    try {
+        const result = await getSellerOrders(userId);
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'An error occurred while fetching the orders.' });
+    }
+
+});
+
 router.post('/order-products', async (req, res) => {
     const { products } = req.body;
     try {
@@ -69,6 +85,25 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'An error occurred while creating the order. ' + error.message });
+    }
+});
+// In your order routes file (e.g., orderRoutes.js)
+router.patch('/ship/:orderId', authMiddleware, async (req, res) => {
+    try {
+
+        
+        const result = await updateOrderDeliveryStatus(req.params.orderId, req.user.user._id, 'Shipped');
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+router.patch('/deliver/:orderId', authMiddleware, async (req, res) => {
+    try {
+        const result = await updateOrderDeliveryStatus(req.params.orderId, req.user.user._id, 'Delivered');
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

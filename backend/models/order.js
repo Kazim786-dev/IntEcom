@@ -26,16 +26,17 @@ const orderSchema = new Schema({
     quantity: {
       type: Number,
       required: true
+    }, 
+    deliverStatus:{
+      type: String,
+      enum: ['Pending', 'Shipped', 'Delivered'],
+      default: 'Pending',
+      required: true
     }
   }],
   totalAmount: {
     type: Number,
     required: true
-  },
-  status: {
-    type: String,
-    enum: ['Pending', 'Shipped', 'Delivered'],
-    default: 'Pending'
   },
   paymentStatus: {
     type: String,

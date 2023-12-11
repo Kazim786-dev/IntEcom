@@ -15,6 +15,10 @@ import ProductDetailPage from '../pages/product/ProductDetails'
 // admin pages
 import AdminHome from '../pages/admin/home'
 
+//seller pages
+import SellerHome from '../pages/seller/home/sellerHomePage'  // Import your SellerHome component
+
+
 //components
 import Layout from '../components/layout'
 
@@ -24,11 +28,14 @@ const RouterLinks = ({
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route
+			<Route
 					path='/'
 					element={
 						<Layout user={user} showNavbar={true}>
-							{user.role!=='admin' ? <Navigate to='/products' /> : <Navigate to='/admin' />}
+							{user.role === 'admin' ? <Navigate to='/admin' /> : 
+							user.role === 'seller' ? <Navigate to='/seller' /> : 
+							user.role === 'customer' ? <Navigate to='/products' /> : 
+							<Navigate to='/login' />}
 						</Layout>
 					}
 				/>
@@ -56,7 +63,7 @@ const RouterLinks = ({
 					path='/new-pass/:token'
 					element={<NewPassPage />}
 				/>
-				{user.role !== 'admin' &&
+				{user.role === 'customer' &&
 					<>
 						<Route
 							path='/products'
@@ -107,6 +114,20 @@ const RouterLinks = ({
 								element={
 									<Layout user={user} showNavbar={true}>
 										{<AdminHome user={user}/>}
+									</Layout>
+								}
+							/>
+						</Route>
+					</>
+				}
+				{user.role ==='seller' &&
+					<>
+						<Route path='/seller'>
+							<Route
+								path=''
+								element={
+									<Layout user={user} showNavbar={true}>
+										{<SellerHome user={user}/>}
 									</Layout>
 								}
 							/>

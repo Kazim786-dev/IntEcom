@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import './ProductDetails.css';
 import { Container, Row, Col, Button, Card, Image, Badge, Modal, Form } from 'react-bootstrap';
 import SpinnerComp from '../../components/spinner';
@@ -9,9 +11,8 @@ import { add as addToCartAction, increase as increaseInCart } from '../../redux/
 
 const ProductDetailPage = ({ user }) => {
     const location = useLocation();
-    const { wishlist, productId } = location.state;
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const cartProducts = useSelector((state) => state.cart.products);
     const [reporting, setReporting] = useState(false);
@@ -20,46 +21,59 @@ const ProductDetailPage = ({ user }) => {
     const [showModal, setShowModal] = useState(false);
     const [reportText, setReportText] = useState('');
 
+    const wishlist = location.state?.wishlist || [];
+    const productId = location.state?.productId || null;
+
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const isProductInCart = cartProducts.some(item => item._id === productId);
 
     useEffect(() => {
-        setIsProductInWishlist(wishlist.some(item => item._id === productId));
 
-        const fetchProductDetails = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/${productId}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
-                if (response.status === 200) {
-                    setProduct(response.data);
+        if (productId) {
+            setIsProductInWishlist(wishlist.some(item => item._id === productId));
+
+            const fetchProductDetails = async () => {
+                try {
+                    const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/${productId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    });
+                    if (response.status === 200) {
+                        setProduct(response.data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching product details:', error);
+                } finally {
+                    setLoading(false);
                 }
-            } catch (error) {
-                console.error('Error fetching product details:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+            };
 
-        const checkUserReports = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/reports/${productId}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
-                console.log(response.data);
-                if (response.data.userHasReported) {
-                    setHasUserReported(true);
+            const checkUserReports = async () => {
+                try {
+                    const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/reports/${productId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    });
+                    if (response.data.userHasReported) {
+                        setHasUserReported(true);
+                    }
+                } catch (error) {
+                    console.error('Error checking user reports:', error);
                 }
-            } catch (error) {
-                console.error('Error checking user reports:', error);
-            }
-        };
+            };
 
-        fetchProductDetails();
-        checkUserReports();
+            fetchProductDetails();
+            checkUserReports();
+        } else {
+            setLoading(false);
+            navigate('/products');
+            // Optionally, redirect to home or show an error message
+        }
+        
     }, [productId, user.token]);
 
     const handleAddToCart = () => {
@@ -139,9 +153,10 @@ const ProductDetailPage = ({ user }) => {
                                 <Button 
                                     variant="primary" 
                                     onClick={handleAddToCart} 
-                                    disabled={isProductInCart}
+                                    disabled={isProductInCart || product.quantity==0}
                                 >
                                     {isProductInCart ? 'In Cart' : 'Add to Cart'}
+                                    {product.quantity==0 ? 'Out of Stock' : 'Add to Cart'}
                                 </Button>
                                 <Button 
                                     variant="success" 

@@ -6,7 +6,8 @@ import deleteOrder from "./delete"
 import getAllOrderProducts from "./all-order-products"
 import getOrderSummary from "./get-summary"
 import checkout from "./checkout"
-
+import getSellerOrders from "./seller-all-orders"
+import updateOrderDeliveryStatus from "./update-status"
 module.exports = {
   getAllOrders,
   getAllUserOrders,
@@ -15,5 +16,7 @@ module.exports = {
   deleteOrder,
   getAllOrderProducts,
   getOrderSummary,
-  checkout
+  checkout,
+  getSellerOrders,
+  updateOrderDeliveryStatus
 }

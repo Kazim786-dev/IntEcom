@@ -39,12 +39,13 @@ const NavbarComp = ({ user, userPicture }) => {
                 <Navbar.Collapse id="navbar-nav">
                     <Nav className="ms-auto align-items-center">
                         {/* Wishlist Icon */}
-                        <Link to="/wishlist" className="me-4">
-						<img src={WishlistIcon} alt="Wishlist" style={{ width: '25px', height: '25px' }} />
-						</Link>
-
+                        {user.role === 'customer' &&
+                            <Link to="/wishlist" className="me-4">
+                            <img src={WishlistIcon} alt="Wishlist" style={{ width: '25px', height: '25px' }} />
+                            </Link>
+                        }
                         {/* Cart Icon */}
-                        {user.role !== 'admin' &&
+                        {user.role === 'customer' &&
                             <Link to="/cart" className="me-4">
                                 <div style={{ position: 'relative' }}>
                                     <Bag />

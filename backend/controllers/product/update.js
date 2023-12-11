@@ -5,7 +5,7 @@ import cloudinary from '../../middleware/cloudinary.js';
 import Product from '../../models/product';
 
 const updateProduct = async ({id, productData, imageFile, user}) => {
-  if (user.role !== 'admin') {
+  if (user.role !== 'admin' && user.role !== 'seller') {
     return { status: 401, data: { error: 'Unauthorized' } };
   }
 
