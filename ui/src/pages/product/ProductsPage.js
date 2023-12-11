@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
+import { useNavigate } from 'react-router-dom';
 
 //react-bootstrap
 import { Container, Row, Col, Form } from 'react-bootstrap'
@@ -17,6 +18,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { add, increase } from '../../redux/slice/cart/cart-slice'
 
 const AllProductsPage = ({ user }) => {
+    const navigate = useNavigate();
 
 	const dispatch = useDispatch()
 	const searchInputRef = useRef(null)
@@ -25,6 +27,9 @@ const AllProductsPage = ({ user }) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [priceFilter, setPriceFilter] = useState('desc')
 	const [fetchProductError, setFetchProductError] = useState(false)
+
+	const [wishlist, setWishlist] = useState([]);
+
 	// state to hande if product is added to cart
 	const [addedToCart, setAddedToCart] = useState(false)
 	const [errorText, setErrorText] = useState('')
@@ -36,10 +41,38 @@ const AllProductsPage = ({ user }) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 8
 
+	/// error handeling for wishlist
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
+
 	//redux state
 	const cartProducts = useSelector((state) => state.cart.products)
 
+
+	const fetchWishlist = async () => {
+		setIsError(false); // Reset error state before making a new request
+	
+		try {
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/get`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+			if (response.status === 200) {
+				setWishlist(response.data); // assuming the response data structure matches your needs
+			}
+		} catch (error) {
+			console.log('Error fetching wishlist:', error);
+			setIsError(true);
+			setErrorMessage('Wishlist not found or there was an error fetching it.');
+			// You can customize the error message based on the specific error if needed
+		}
+	}
+
+
 	useEffect(() => {
+		fetchWishlist();
+
 		debouncedFetchData()
 		
 		// Cleanup the debounced function when the component is unmounted
@@ -61,7 +94,7 @@ const AllProductsPage = ({ user }) => {
 			setFetchProductError(false)
 			// Make an API request to route with the selected price filter and searchTerm as query parameters
 			response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
 			)
 			if (response.status && response.status === 200) {
 				const { totalPages, data } = response.data
@@ -121,11 +154,45 @@ const AllProductsPage = ({ user }) => {
 			dispatch(increase(product._id))
 		}
 	}
-
+	// Navigate to product detail page on image click
+	const handleProductClick = (productId) => {
+		navigate(`/product-detail/${productId}`, { state: { wishlist: wishlist, productId: productId } });
+	};
 	const isAlreadyAdded = (product) => {
 		const foundProduct = cartProducts.find((item) => item._id == product._id)
 		return foundProduct ? true : false
 	}
+
+	const addToWishlist = async (product) => {
+        // API call to add product to wishlist
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/add`, {
+                productId: product._id
+            },
+			{
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+            if (res.status == 200) {
+                setWishlist(currentWishlist => {
+					// Add the product to the wishlist if not already present
+					if (!currentWishlist.some(item => item._id === product._id)) {
+						return [...currentWishlist, product];
+					}
+					return currentWishlist;
+				});
+            }
+			
+        } catch (error) {
+            console.error('Error adding to wishlist:', error);
+        }
+    };
+
+    const isAlreadyInWishlist = (product) => {
+        const foundProduct = wishlist.find((item) => item._id ==product._id )
+		return foundProduct ? true : false
+    };
 
 	return (
 		<>
@@ -171,8 +238,16 @@ const AllProductsPage = ({ user }) => {
 									Mobile: 1 product per row */}
 									{products.map((product, index) => (
 										<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
-											<div>
-												<ProductCard name={user.name} product={product} addToCart={addToCart} addedToCart={isAlreadyAdded(product)} />
+											<div onClick={() => handleProductClick(product._id)}>
+
+												<ProductCard 
+													name={user.name} 
+													product={product} 
+													addToCart={addToCart} 
+													addToWishlist={addToWishlist}
+													addedToCart={isAlreadyAdded(product)} 
+													isInWishlist={() => isAlreadyInWishlist(product)} // Pass this prop
+												/>
 											</div>
 										</Col>
 									))}

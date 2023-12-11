@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import authMiddleware from '../../middleware/auth.js'
+import authMiddleware from '../../middleware/auth'
 
 const router = Router();
 
@@ -8,7 +8,10 @@ import {
     getUserById,
     updateUser,
     verifyMail,
-    updatePassword
+    updatePassword,
+    getSellers,
+    acceptSeller,
+    rejectSeller
   } from '../../controllers/user/index.js';
 
 // User routes
@@ -23,8 +26,20 @@ router.post('/verify-mail', async (req, res) => {
   }
 });
 
+router.get('/sellers',authMiddleware, async (req, res) => {
+
+  try {
+      const page = parseInt(req.query.page) || 1;
+      const size = parseInt(req.query.size) || 10;
+      const result = await getSellers(page, size);
+      res.status(200).json(result);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 // Update Password
-router.patch('/update-password', async (req, res) => {
+router.patch('/update-password', authMiddleware, async (req, res) => {
   const { token, newPassword } = req.body;
 
   try {
@@ -32,6 +47,29 @@ router.patch('/update-password', async (req, res) => {
     return res.status(result.status).json(result.message);
   } catch (error) {
     return res.status(500).json({ error: 'An error occurred while updating password.' });
+  }
+});
+
+
+// Accept Seller
+router.patch('/sellers/accept/:id', authMiddleware, async (req, res) => {
+  try {
+      const sellerId = req.params.id;
+      await acceptSeller(sellerId);
+      res.status(200).json({ message: 'Seller accepted successfully' });
+  } catch (error) {
+      res.status(500).json({ error: 'Error accepting seller' });
+  }
+});
+
+// Reject Seller
+router.patch('/sellers/reject/:id', authMiddleware, async (req, res) => {
+  try {
+      const sellerId = req.params.id;
+      await rejectSeller(sellerId);
+      res.status(200).json({ message: 'Seller rejected successfully' });
+  } catch (error) {
+      res.status(500).json({ error: 'Error rejecting seller' });
   }
 });
 

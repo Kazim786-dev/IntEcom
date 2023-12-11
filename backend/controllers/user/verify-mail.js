@@ -1,10 +1,10 @@
-import User from '../../models/user.js';
+import User from '../../models/user';
 import jwt from 'jsonwebtoken'
-import {sendEmail} from '../../mail/index.js';
+import { sendEmail } from '../../mail/index.js';
 
 const jwtSecret = process.env.secret_key
 
-  const generateResetToken = (email) => {
+const generateResetToken = (email) => {
     return jwt.sign({ email }, jwtSecret, { expiresIn: '10m' });
   };
 
@@ -28,4 +28,5 @@ const jwtSecret = process.env.secret_key
     }
   };
   
+
   export default verifyMail

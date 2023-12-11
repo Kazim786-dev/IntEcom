@@ -20,9 +20,30 @@ const Sidebar = ({ selectedItem, handleItemClick }) => {
 			<hr />
 			<SidebarItem
 				icon={<ArrowRight />}
-				text="Orders"
+				text="Process Orders"
+				isSelected={selectedItem === 'Process'}
+				onItemClick={() => handleItemClick('Process')}
+			/>
+			<hr />
+			<SidebarItem
+				icon={<ArrowRight />}
+				text="Orders Summary"
 				isSelected={selectedItem === 'Orders'}
 				onItemClick={() => handleItemClick('Orders')}
+			/>
+			<hr />
+			<SidebarItem
+				icon={<ArrowRight />}
+				text="Sellers"
+				isSelected={selectedItem === 'Sellers'}
+				onItemClick={() => handleItemClick('Sellers')}
+			/>
+			<hr />
+			<SidebarItem
+				icon={<ArrowRight />}
+				text="Reported Products"
+				isSelected={selectedItem === 'reported'}
+				onItemClick={() => handleItemClick('reported')}
 			/>
 			<hr />
 		</Card>
