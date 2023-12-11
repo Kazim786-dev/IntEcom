@@ -123,7 +123,7 @@ const LoginPage = () => {
 				</Row>
 				<Row className="mt-2">
 					<Form.Group controlId="remember" className="mb-3">
-						<Form.Check className='text-styles' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} />
+						{/* <Form.Check className='text-styles' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} /> */}
 					</Form.Group>
 				</Row>
 				<Row className='m-0 mt-4'>
