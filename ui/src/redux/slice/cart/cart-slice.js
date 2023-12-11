@@ -46,30 +46,34 @@ export const cartSlice = createSlice({
 	}
 })
 
-export const placeOrder = (products, totalAmount, token) => async (dispatch) => {
+export const placeOrder = (products, totalAmount, token, shippingDetails, paymentStatus) => async (dispatch) => {
 	try {
 		const response = await axios.post(
-			`${process.env.REACT_APP_DEV_BACKEND_URL}/orders`,
-			{
-				products,
-				totalAmount: totalAmount.toFixed(2),
-				status: 'Pending',
+		`${process.env.REACT_APP_DEV_BACKEND_URL}/orders`,
+		{
+			products,
+			totalAmount: totalAmount.toFixed(2),
+			status: 'Pending',
+			shippingDetails, // Include shipping details in the payload
+			paymentStatus, // Include payment status in the payload
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
 			},
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
-		if (response.status && response.status === 201) {
-			dispatch(empty())
-			return true // Indicate successful order placement
+		}
+		);
+		if (response.status === 201) {
+		
+		dispatch(empty()); // Assuming 'empty' is a function to clear the cart or similar
+		return true; // Indicate successful order placement
 		}
 	} catch (error) {
-		console.log(error)
+		console.error(error);
 	}
-	return false // Indicate order placement failure
-}
+	return false; // Indicate order placement failure
+  };
+  
 
 
 // Action creators are generated for each case reducer function

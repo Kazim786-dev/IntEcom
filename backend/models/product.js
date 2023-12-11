@@ -36,6 +36,16 @@ const productSchema = new Schema({
     required:true,
     default:'Black'
   },
+  status:{
+    type:String,
+    required:true,
+    default:'Active'
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+},
   size:{
     type:String,
     enum:['XS','S','M','L','XL','XXL','All'],

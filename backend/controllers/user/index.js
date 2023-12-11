@@ -1,15 +1,20 @@
-import getAllUsers from "./get-all-users.js"
-import getUserById from "./get-all-users.js"
-import updateUser from "./update.js"
-import verifyMail from "./verify-mail.js"
-import updatePassword from "./update-password.js"
+import getAllUsers from "./get-all-users"
+import getUserById from "./get-all-users"
+import updateUser from "./update"
+import verifyMail from "./verify-mail"
+import updatePassword from "./update-password"
+import getSellers from "./get-all-sellers"
+import acceptSeller from "./accept-seller"
+import rejectSeller from "./reject-seller"
 
 
-
-export {
+module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
   verifyMail,
-  updatePassword
+  updatePassword,
+  getSellers,
+  acceptSeller,
+  rejectSeller
 }

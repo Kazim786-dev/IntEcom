@@ -1,5 +1,8 @@
 
-import User from '.././models/user.js';
+//------------------------------with passport.js-------------------------------
+
+
+import User from '.././models/user';
 
 import passport from 'passport';
 import passportJWT from 'passport-jwt'
@@ -35,6 +38,46 @@ const strategy = new JwtStrategy(jwtOptions, async(payload, done) => {
 passport.use(strategy);
 
 // Export the authentication middleware
-const authenticateJwt = passport.authenticate('jwt', { session: false });
+module.exports = passport.authenticate('jwt', { session: false });
 
-export default authenticateJwt;
+
+
+// without passport.js
+
+// import jwt from 'jsonwebtoken';
+
+// export const checkRole=(Role)=>{
+//     return (req,res,next)=>{
+//         if( req.decoded.role==Role){
+//             next();
+//         }else{
+//             res.status(401).send({"message":`You are not authorized`})
+//         }
+//     }
+// }
+
+// export const verifyuserloggedin=(req,res,next)=>{
+//     const token = req.headers['token'];
+//     jwt.verify(token, process.env.secret_key , (err, decoded) =>{
+//         if(!err){
+//             req.decoded = decoded;
+//             next();         
+//         }else{
+//             res.status(401).send({"message":"Not logged in"})
+//         }
+//     })
+// }
+
+// export const validate=(req,res,next)=>{
+//     const token = req.headers['token'];
+//     jwt.verify(token, process.env.secret_key , (err, decoded) =>{
+//         if(!err){
+//             req.decoded = decoded;
+//             res.json({message:"Valid token"})
+//         }else{
+//             res.status(401).send({"message":"Invalid Token or not logged in"})
+//         }
+//     })
+//}
+
+

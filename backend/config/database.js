@@ -1,7 +1,6 @@
-// Import the entire 'mongoose' module using CommonJS syntax
-import mongoose from 'mongoose';
+import AllModels from '../models/all-models'
 
-const { connection, connect, set } = mongoose;
+import { connection, connect, set } from 'mongoose';
 
 const { MONGO_URL } = process.env;
 

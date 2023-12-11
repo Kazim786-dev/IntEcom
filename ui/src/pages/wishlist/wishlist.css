@@ -1,0 +1,26 @@
+.wishlist-container {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  color: #333;
+}
+
+.wishlist-item {
+  margin-bottom: 15px;
+}
+
+.wishlist-item-img {
+  width: 80%; /* Ensure the width is consistent */
+  height: 130px; /* Set a fixed height */
+}
+
+/* Adjust the height and alignment of the row */
+.wishlist-item .row {
+  min-height: 120px; /* Decrease this value as needed */
+  align-items: center; /* Align items vertically */
+}
+
+/* Ensure the content within the card body fits the new row height */
+.wishlist-item .card-body {
+  padding: 5px 0px; /* Adjust padding for a tighter fit */
+}

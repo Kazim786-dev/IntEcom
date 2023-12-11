@@ -1,4 +1,4 @@
-import User from '../../models/user.js';
+import User from '../../models/user';
 
 const updateUser = async ({id, userData}) => {
   const { name, email, password, mobile } = userData;

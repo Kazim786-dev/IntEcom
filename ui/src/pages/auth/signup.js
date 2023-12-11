@@ -22,6 +22,8 @@ function SignUpPage() {
 		email: '',
 		password: '',
 		mobile: '',
+		role: 'customer', // default role
+
 	})
 	const [emailError, setEmailError] = useState('')
 	const [passwordError, setPasswordError] = useState('')
@@ -50,6 +52,8 @@ function SignUpPage() {
 				email: formData.email,
 				password: formData.password,
 				mobile: formData.mobile,
+				role: formData.role, // sending role to backend
+
 			})
 			if (res.status && res.status === 201) {
 				navigate('/login')
@@ -163,6 +167,20 @@ function SignUpPage() {
 						onChange={handleFieldChange}
 					/>
 				</Row>
+				<Row className="mt-3">
+                    <Col>
+                        <Form.Label>Role</Form.Label>
+                        <Form.Select
+                            aria-label="Select Role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleFieldChange}
+                        >
+                            <option value="customer">Customer</option>
+                            <option value="seller">Seller</option>
+                        </Form.Select>
+                    </Col>
+                </Row>
 				<Row className="m-0 mt-4">
 					<CustomButton variant="primary" type="submit" className="w-100" 
 						// isDisabled={

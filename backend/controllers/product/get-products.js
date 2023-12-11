@@ -1,5 +1,4 @@
-
-import Product from '../../models/product.js';
+import Product from '../../models/product';
 
 const getProducts = async ({query}) => {
   try {
@@ -13,15 +12,18 @@ const getProducts = async ({query}) => {
     const queryName = query.name;
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
-    const findQuery = queryName
-      ? {
-          isDeleted: false,
-          $or: [
-            { name: { $regex: queryName, $options: 'i' } },
-            { description: { $regex: queryName, $options: 'i' } },
-          ],
-        }
-      : { isDeleted: false };
+
+    // Update findQuery to exclude blocked products
+    const findQuery = {
+      isDeleted: false,
+      status: { $ne: 'blocked' }, // Exclude blocked products
+      ...(queryName && {
+        $or: [
+          { name: { $regex: queryName, $options: 'i' } },
+          { description: { $regex: queryName, $options: 'i' } },
+        ],
+      }),
+    };
 
     const totalCount = await Product.countDocuments(findQuery);
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -38,4 +40,4 @@ const getProducts = async ({query}) => {
   }
 };
 
-  export default getProducts
+export default getProducts;

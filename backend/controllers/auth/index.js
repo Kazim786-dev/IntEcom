@@ -1,8 +1,8 @@
 
-import Signin from "./signin.js"
-import Signup from "./signup.js"
+import Signin from "./signin"
+import Signup from "./signup"
 
-export {
+module.exports = {
   Signin,
   Signup
 }

@@ -1,4 +1,6 @@
 import { React, useState, useMemo } from 'react'
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { Container, Form, Image } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
@@ -22,10 +24,12 @@ import SpinnerComp from '../../components/spinner'
 import { remove, increase, decrease, placeOrder } from '../../redux/slice/cart/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
 
-//component
-const ShoppingCart = ({ user }) => {
+// Import the PaymentForm component
+import PaymentForm from '../checkout/paymentForm'; // Adjust the path as needed
+const stripePromise = loadStripe('pk_test_51OHrp2GPQMuSMoo9D37NyaFjrEBynzU7R9G97MOQyg07osataoLH51UKHgp4zovjokjt4gsHUb93TMXry9TrfwVl00qd0jwf9c');
 
-	const taxRate = 0.1 // Assuming tax rate of 10%
+const ShoppingCart = ({ user }) => {
+    const taxRate = 0.1 // Assuming tax rate of 10%
 
 	// states
 	const [deleteItemId, setDeleteItemId] = useState(null)
@@ -40,6 +44,13 @@ const ShoppingCart = ({ user }) => {
 
 	//redux State
 	const cartItems = useSelector((state) => state.cart.products)
+
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+
+  // Modify handlePlaceOrder to just show the payment form
+  const handleContinueToCheckout = () => {
+    setShowPaymentForm(true);
+  };
 
 	// Function to handle quantity increase
 	const handleIncrease = (itemId) => {
@@ -86,51 +97,7 @@ const ShoppingCart = ({ user }) => {
 			setShowDeleteModal(false)
 		}
 	}
-
-	const handlePlaceOrder = async () => {
-
-		try {
-			setLoading(true)
-			const products = cartItems.map((product) => ({
-				product: product._id,
-				quantity: product.orderQuantity,
-			}))
-
-			const orderPlaced = dispatch(
-				placeOrder(products, total, user.token)
-			)
-
-			if (orderPlaced) {
-				setOrderPlaced(true)
-				setOrderError(false)
-				setErrorText('')
-				navigate('/total-orders')
-				setTimeout(() => {
-					setLoading(false)
-				}, 1000)
-			} else {
-				setOrderError(true)
-				setErrorText('Error occured in placing the order')
-				setOrderPlaced(false)
-				setTimeout(() => {
-					setLoading(false)
-				}, 1000)
-			}
-
-		} catch (error) {
-			setOrderError(true)
-			setErrorText('Error occured in placing the order')
-			setOrderPlaced(false)
-			setTimeout(() => {
-				setLoading(false)
-			}, 1000)
-		}
-
-		
-
-	}
-
-	// table column styling
+		// table column styling
 	const columns = [
 		// {
 		// 	header: (
@@ -211,15 +178,13 @@ const ShoppingCart = ({ user }) => {
 		},
 	]
 
-	return (
-
-		<>
-			{loading ? (
-				<SpinnerComp />
-			) : (
-
-				<Container fluid className="pt-0 p-5 mt-5">
-					<div className="d-flex align-items-center heading-container">
+  return (
+    <>
+      {loading ? (
+        <SpinnerComp />
+      ) : (
+        <Container fluid className="pt-0 p-5 mt-5">
+          <div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
 						<h1 className="cart-heading ">Your Shopping Bag</h1>
 					</div>
@@ -233,14 +198,28 @@ const ShoppingCart = ({ user }) => {
 						<div ><p>Tax:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div>
 						<div ><p>Total:</p><b>${total.toFixed(2)}</b></div>
 					</div>
-					<div className="d-flex justify-content-end">
-						<CustomButton className="custom-button" isDisabled={cartItems.length <= 0} variant="primary" type="submit" onClick={handlePlaceOrder}>
-							Place Order
-						</CustomButton>
-					</div>
+          <div className="d-flex justify-content-end">
+            <CustomButton
+              className="custom-button"
+              isDisabled={cartItems.length <= 0}
+              variant="primary"
+              onClick={handleContinueToCheckout}
+            >
+              Continue to Checkout
+            </CustomButton>
+          </div>
 
-					{/* show the modal for confirmation on click of delte icon */}
-					{showDeleteModal && <DeleteConfirmationModal showDeleteModal={showDeleteModal}
+          {showPaymentForm && (
+            <Elements stripe={stripePromise}>
+              <PaymentForm
+                user={user}
+                total={total}
+                cartItems={cartItems}
+              />
+            </Elements>
+          )}
+
+          {showDeleteModal && <DeleteConfirmationModal showDeleteModal={showDeleteModal}
 						setShowDeleteModal={setShowDeleteModal} handleDeleteConfirmation={handleDeleteConfirmation} />}
 
 					{orderPlaced && (
@@ -257,12 +236,10 @@ const ShoppingCart = ({ user }) => {
 							onClose={() => setOrderError(false)} 
 						/>
 					)}
-				</Container>
-			)
-			}
-		</>
+        </Container>
+      )}
+    </>
+  );
+};
 
-	)
-}
-
-export default ShoppingCart
+export default ShoppingCart;
