@@ -30,10 +30,11 @@ const NavbarComp = ({ user, userPicture }) => {
     ].filter(Boolean); // Filter out undefined elements
 
     return (
-        <Navbar bg="white" expand="lg">
+        <Navbar style={{ backgroundColor: 'rgb(117, 36, 36)' }} expand="lg">
+
             <Container fluid className="ps-1 pe-1 ms-5 me-5">
                 <Navbar.Brand>
-                    <Link to="/" className="text-decoration-none navbar-heading">IntECom</Link>
+                    <Link to="/" className="text-decoration-none navbar-heading" style={{ color: 'white' }}>IntECom</Link>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbar-nav" />
                 <Navbar.Collapse id="navbar-nav">
@@ -66,7 +67,7 @@ const NavbarComp = ({ user, userPicture }) => {
                         {user.isLoggedIn ?
                             (
                                 <>
-                                    <NavDropdownComp title={<span style={{ color: 'blue' }}>{user.name}</span>} items={dropdownItems} />
+                                    <NavDropdownComp title={<span style={{ color: 'white' }}>{user.name}</span>} items={dropdownItems} />
                                     <Image
                                         src={userPicture}
                                         alt="User Image"

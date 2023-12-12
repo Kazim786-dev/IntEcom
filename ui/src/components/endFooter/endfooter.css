@@ -1,0 +1,24 @@
+.footer a.text-white:hover {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.footer h5 {
+    margin-bottom: 20px;
+}
+
+.footer p {
+    font-size: 0.9em;
+}
+
+.footer ul.list-unstyled li {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.footer i.bi {
+    font-size: 1.5em;
+}
+ .back{
+    background-color: rgb(117, 36, 36);
+ }
