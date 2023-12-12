@@ -123,10 +123,6 @@ router.post('/', authMiddleware, upload, async (req, res) => {
   }
 });
 
-
-
-
-
 // Update Product
 router.put('/:id', authMiddleware, upload, async (req, res) => {
   const { id } = req.params;

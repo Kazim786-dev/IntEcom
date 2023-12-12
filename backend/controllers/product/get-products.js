@@ -1,6 +1,7 @@
 import Product from '../../models/product';
+import axios from 'axios';
 
-const getProducts = async ({query}) => {
+const getProducts = async ({ query }) => {
   try {
     const sortOrder = query.sort;
     if (sortOrder && sortOrder !== 'asc' && sortOrder !== 'desc') {
@@ -12,18 +13,30 @@ const getProducts = async ({query}) => {
     const queryName = query.name;
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+    
+    const response = await axios.get('http://localhost:5000/search', { params: { prod: queryName } });
+    const foundProducts = response.data.products
 
-    // Update findQuery to exclude blocked products
     const findQuery = {
       isDeleted: false,
-      status: { $ne: 'blocked' }, // Exclude blocked products
-      ...(queryName && {
-        $or: [
-          { name: { $regex: queryName, $options: 'i' } },
-          { description: { $regex: queryName, $options: 'i' } },
-        ],
-      }),
+      status: { $ne: 'blocked' },
+      $or: [
+        { uid: { $in: foundProducts } },
+      ]
     };
+    
+
+    // Update findQuery to exclude blocked products
+    // const findQuery = {
+    //   isDeleted: false,
+    //   status: { $ne: 'blocked' }, // Exclude blocked products
+    //   ...(queryName && {
+    //     $or: [
+    //       { name: { $regex: queryName, $options: 'i' } },
+    //       { description: { $regex: queryName, $options: 'i' } },
+    //     ],
+    //   }),
+    // };
 
     const totalCount = await Product.countDocuments(findQuery);
     const totalPages = Math.ceil(totalCount / pageSize);

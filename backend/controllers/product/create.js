@@ -1,4 +1,5 @@
 import fs from 'fs';
+import axios from 'axios';
 
 import cloudinary from '../../middleware/cloudinary.js';
 
@@ -44,17 +45,23 @@ const createProduct = async ({productData, imageFile, user}) => {
           }
 
           const newProduct = new Product({
-            name,
+            name:description,
             description,
             price,
             quantity,
             image,
             user: existingUser._id, // set the user reference
-            // Add other fields as necessary
+            uid: uniqueId,
           });
 
           const savedProduct = await newProduct.save();
 
+          // adding to vector Database
+          axios.post('http://localhost:5000/add', savedProduct)
+          .then(response => {
+          }).catch(e=>{
+          })
+            
           return { status: 201, data: savedProduct };
         }
       });

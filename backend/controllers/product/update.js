@@ -40,6 +40,7 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
               product.description = description || product.description;
               product.price = price || product.price;
               product.quantity = quantity || product.quantity;
+              product.uid = product.uid
               const updatedProduct = await product.save();
 
               // If the updated quantity is 1 or more, notify users whose wishlist contains this product
@@ -62,6 +63,7 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
           product.description = description || product.description;
           product.price = price || product.price;
           product.quantity = quantity || product.quantity;
+          product.uid = product.uid
   
           const updatedProduct = await product.save();
 
