@@ -3,6 +3,9 @@ import fs from 'fs';
 import cloudinary from '../../middleware/cloudinary.js';
 
 import Product from '../../models/product';
+import Wishlist from '../../models/wishlist';
+import User from '../../models/user';
+import { sendEmail } from '../../mail/index.js';
 
 const updateProduct = async ({id, productData, imageFile, user}) => {
   if (user.role !== 'admin' && user.role !== 'seller') {
@@ -16,6 +19,7 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
     if (!product) {
       return { status: 404, data: { error: 'Product not found.' } };
     }
+    const oldQuant= product.quantity
 
     let image=''
         if(imageFile){
@@ -37,6 +41,19 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
               product.price = price || product.price;
               product.quantity = quantity || product.quantity;
               const updatedProduct = await product.save();
+
+              // If the updated quantity is 1 or more, notify users whose wishlist contains this product
+              if (quantity >= 1 && oldQuant == 0) {
+                const wishlists = await Wishlist.find({ products: product._id }).populate('user');
+                const userEmails = wishlists.map(wishlist => wishlist.user.email);
+
+                userEmails.forEach(async (email) => {
+                  const emailContent = `<p>Your favorite product "${product.name}" is back in stock! Check it out now.</p>`;
+                  await sendEmail(email, 'Product Back in Stock', emailContent);
+                });
+              }
+
+
               return { status: 200, data: updatedProduct };
             }
           })
@@ -47,6 +64,19 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
           product.quantity = quantity || product.quantity;
   
           const updatedProduct = await product.save();
+
+          // If the updated quantity is 1 or more, notify users whose wishlist contains this product
+          if (quantity >= 1 && oldQuant ==0) {
+            const wishlists = await Wishlist.find({ products: product._id }).populate('user');
+            const userEmails = wishlists.map(wishlist => wishlist.user.email);
+
+            userEmails.forEach(async (email) => {
+              const emailContent = `<p>Your favorite product "${product.name}" is back in stock! Check it out now.</p>`;
+              await sendEmail(email, 'Product Back in Stock', emailContent);
+            });
+          }
+
+
           return { status: 200, data: updatedProduct };
         }
         // Return a pending status, as the response will be handled asynchronously
