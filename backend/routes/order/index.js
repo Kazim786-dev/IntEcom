@@ -69,7 +69,7 @@ router.get('/seller-orders', authMiddleware, async (req, res) => {
     const userId = req.user.user._id;  // Get the user ID from req.user
     try {
         const result = await getSellerOrders(userId);
-        res.status(result.status).json(result.data);
+        res.status(result.status).json(result);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'An error occurred while fetching the orders.' });

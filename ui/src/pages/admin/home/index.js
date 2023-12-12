@@ -121,7 +121,9 @@ const AllProducts = ({ user }) => {
             const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
-            setProcessedOrders(response.data);
+			const {totalPages, data} = response.data;
+            setProcessedOrders(data);
+			setTotalPages(totalPages)
         } catch (error) {
             console.error('Error fetching processed orders:', error);
             setErrorText('Error fetching processed orders');
@@ -207,7 +209,7 @@ const AllProducts = ({ user }) => {
 
     const handleItemClick = (item) => {
         setCurrentPage(1);
-        setLoading(true);
+        setTableLoading(true);
         setSelectedItem(item);
         if (item === 'reported') {
             fetchReportedProducts();
@@ -252,9 +254,10 @@ const AllProducts = ({ user }) => {
             debouncedFetchData();
         }
     }, [currentPage, selectedItem, searchTerm]);
+
 	const fetchReportedProducts = async () => {
 		setReportLoading(true); // Start loading for reported products
-		setLoading(true);      // Start main loading
+		setTableLoading(true);      // Start main loading
 		try {
 			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/all-reports`, {
 				headers: { Authorization: `Bearer ${user.token}` }
@@ -262,12 +265,12 @@ const AllProducts = ({ user }) => {
 
 			setReportedProducts(response.data);
 		} catch (error) {
-			console.error('Error fetching reported products:', error);
+			// console.error('Error fetching reported products:', error);
 			setErrorText('Error fetching reported products');
 			setFetchDataError(true);
 		} finally {
 			setReportLoading(false); // Stop loading for reported products
-			setLoading(false);       // Stop main loading
+			setTableLoading(false);       // Stop main loading
 		}
 	};
 	
@@ -502,6 +505,7 @@ const AllProducts = ({ user }) => {
 			),
 		},
 	]
+
     const ProcessedOrdersTableColumns = [
 		{
 			header: 'Date',
@@ -593,7 +597,7 @@ const AllProducts = ({ user }) => {
 								</Col>
 							</Row>
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{loading ? (
+								{tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'reported' ? (
 									<DetailsTable

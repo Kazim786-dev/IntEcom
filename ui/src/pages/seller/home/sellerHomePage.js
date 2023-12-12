@@ -27,7 +27,7 @@ const AllProducts = ({ user }) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 9
 
-    const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
+	const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
 
 	const [data, setData] = useState([])
 	const [orderItem, setOrderItem] = useState()
@@ -55,17 +55,17 @@ const AllProducts = ({ user }) => {
 		}
 	}, [currentPage, selectedItem, searchTerm])
 
-	useEffect(()=> {
+	useEffect(() => {
 		setLoading(true)
-		if(searchInputRef.current){
+		if (searchInputRef.current) {
 			searchInputRef.current.focus()
-		}	
-	},[])
+		}
+	}, [])
 
 	const fetchData = () => {
-		
+
 		setFetchDataError(false)
-		if(selectedItem!=='Sellers' && selectedItem!=='Process'){
+		if (selectedItem !== 'Sellers' && selectedItem !== 'Process') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -98,7 +98,7 @@ const AllProducts = ({ user }) => {
 				}, 1000)
 			})
 		}
-		
+
 
 	}
 
@@ -111,22 +111,24 @@ const AllProducts = ({ user }) => {
 	}
 
 	const fetchProcessedOrders = async () => {
-        try {
-            setTableLoading(true); // Start loading
-            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-            setProcessedOrders(response.data);
-            console.log(response.data); // Log to check response
-        } catch (error) {
-            console.error('Error fetching processed orders:', error);
-            setErrorText('Error fetching processed orders');
-            setFetchDataError(true);
-        } finally {
-            setLoading(false); // Stop loading
-            setTableLoading(false); // Stop table loading
-        }
-    };
+		try {
+			setTableLoading(true); // Start loading
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
+				headers: { Authorization: `Bearer ${user.token}` }
+			});
+			const { totalPages, data } = response.data
+			setProcessedOrders(data);
+			setTotalPages(totalPages);
+			// console.log(response.data); // Log to check response
+		} catch (error) {
+			// console.error('Error fetching processed orders:', error);
+			setErrorText('Error fetching processed orders');
+			setFetchDataError(true);
+		} finally {
+			setLoading(false); // Stop loading
+			setTableLoading(false); // Stop table loading
+		}
+	};
 	const handleDeleteConfirmation = () => {
 		if (product) {
 
@@ -160,14 +162,15 @@ const AllProducts = ({ user }) => {
 			setShowDeleteModal(false)
 		}
 
-	setTableLoading(true)	}
+		setTableLoading(true)
+	}
 
-	const handleEditClick = (item)=> {
+	const handleEditClick = (item) => {
 		setproduct(item)
 		setShowProductCanvas(true)
 	}
-    // Function to handle shipping an order
-    const handleShip = async (orderId) => {
+	// Function to handle shipping an order
+	const handleShip = async (orderId) => {
 		try {
 			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/ship/${orderId}`, {}, {
 				headers: {
@@ -181,8 +184,8 @@ const AllProducts = ({ user }) => {
 		}
 	};
 
-    // Function to handle delivering an order
-    const handleDeliver = async (orderId) => {
+	// Function to handle delivering an order
+	const handleDeliver = async (orderId) => {
 		try {
 			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/deliver/${orderId}`, {}, {
 				headers: {
@@ -195,24 +198,25 @@ const AllProducts = ({ user }) => {
 			console.error('Error delivering order:', error);
 		}
 	};
-	
-	const handleAddClick = ()=> {
+
+	const handleAddClick = () => {
 		setproduct(null)
 		setShowProductCanvas(true)
 	}
 
-    const handleItemClick = (item) => {
-        setCurrentPage(1);
-        setLoading(true);
-        setSelectedItem(item);
-        if (item === 'Process') {
-            fetchProcessedOrders();
-        } else {
-            debouncedFetchData();
-        }
-    };
+	const handleItemClick = (item) => {
+		setCurrentPage(1);
+		setTableLoading(true);
+		setSelectedItem(item);
+		// setTotalPages(0)
+		if (item === 'Process') {
+			fetchProcessedOrders();
+		} else {
+			debouncedFetchData();
+		}
+	};
 
-	const handleShouldFetchAgain= ()=> {
+	const handleShouldFetchAgain = () => {
 		fetchData()
 	}
 
@@ -223,26 +227,26 @@ const AllProducts = ({ user }) => {
 		setShowOrderCanvas(true)
 	}
 
-	const handlePageChange = (page)=> {
+	const handlePageChange = (page) => {
 		setTableLoading(true)
 		setCurrentPage(page)
 	}
 
 
-	
-    useEffect(() => {
+
+	useEffect(() => {
 		if (selectedItem === 'Process') {
-            fetchProcessedOrders();
-        } else {
-            debouncedFetchData();
-        }
-    }, [currentPage, selectedItem, searchTerm]);
+			fetchProcessedOrders();
+		} else {
+			debouncedFetchData();
+		}
+	}, [currentPage, selectedItem, searchTerm]);
 
 
 	const OrdersTablecolumns = []
 
 
-	
+
 	// Product table column styling
 	const ProductsTablecolumns = [
 		{
@@ -287,7 +291,7 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
-    const ProcessedOrdersTableColumns = [
+	const ProcessedOrdersTableColumns = [
 		{
 			header: 'Date',
 			width: '17rem',
@@ -318,29 +322,29 @@ const AllProducts = ({ user }) => {
 			}
 		},
 		{
-		header: 'Action',
+			header: 'Action',
 			render: (item) => (
 				<>
-				<Button
-					onClick={() => handleShip(item._id)}
-					variant="info"
-					disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
-				>
-					Ship
-				</Button>
-				<Button
-					onClick={() => handleDeliver(item._id)}
-					variant="success"
-					className="ms-2"
-					disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
-				>
-					Deliver
-				</Button>
+					<Button
+						onClick={() => handleShip(item._id)}
+						variant="info"
+						disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
+					>
+						Ship
+					</Button>
+					<Button
+						onClick={() => handleDeliver(item._id)}
+						variant="success"
+						className="ms-2"
+						disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
+					>
+						Deliver
+					</Button>
 				</>
 			),
 		},
 	];
-  
+
 	return (
 		<>
 			{loading ? (
@@ -368,14 +372,14 @@ const AllProducts = ({ user }) => {
 								</Col>
 							</Row>
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{loading ? (
+								{tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'Process' ? (
 									<DetailsTable
 										data={processedOrders}
 										columns={ProcessedOrdersTableColumns}
 									/>
-								)  : selectedItem === 'Products' ? (
+								) : selectedItem === 'Products' ? (
 									<DetailsTable
 										data={data}
 										columns={ProductsTablecolumns}
@@ -396,7 +400,7 @@ const AllProducts = ({ user }) => {
 							/>
 						</Col>
 					</Row>
-	
+
 					{fetchDataError && (
 						<AlertComp
 							variant='danger'
@@ -404,7 +408,7 @@ const AllProducts = ({ user }) => {
 							onClose={() => setFetchDataError(false)}
 						/>
 					)}
-	
+
 					{showDeleteModal && (
 						<DeleteConfirmationModal
 							showDeleteModal={showDeleteModal}
@@ -412,9 +416,9 @@ const AllProducts = ({ user }) => {
 							handleDeleteConfirmation={handleDeleteConfirmation}
 						/>
 					)}
-					
 
-	
+
+
 					{showProductCanvas && (
 						<ProductCanvas
 							placement={'end'}
@@ -429,7 +433,7 @@ const AllProducts = ({ user }) => {
 			)}
 		</>
 	);
-	
+
 
 }
 

@@ -4,21 +4,21 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Form, Button, Container, Row, Col, InputGroup } from 'react-bootstrap';
 import './PaymentForm.css'; // This will be your custom CSS file
 import { useNavigate } from 'react-router-dom';
-import AlertComp from '../../components/alert'; 
+import AlertComp from '../../components/alert';
 
 //redux
 import { remove, increase, decrease, placeOrder } from '../../redux/slice/cart/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const countryOptions = [
-	{ code: 'US', name: 'United States' },
-	{ code: 'UK', name: 'United Kingdom' },
-	{ code: 'PK', name: 'Pakistan' },
-	{ code: 'JP', name: 'Japan' },
-	// ... other countries
-  ];
+  { code: 'US', name: 'United States' },
+  { code: 'UK', name: 'United Kingdom' },
+  { code: 'PK', name: 'Pakistan' },
+  { code: 'JP', name: 'Japan' },
+  // ... other countries
+];
 
-const PaymentForm = ({ user, total, cartItems }) => {
+const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch()
@@ -54,16 +54,16 @@ const PaymentForm = ({ user, total, cartItems }) => {
     const paymentIntentEndpoint = `${process.env.REACT_APP_DEV_BACKEND_URL}/orders/create-payment-intent`;
 
     try {
-		const amountInCents = Math.round(total * 100);
+      const amountInCents = Math.round(total * 100);
 
       const { data } = await axios.post(paymentIntentEndpoint, {
         amount: amountInCents, // Stripe expects amount in cents
         currency: 'usd',
-      },{
-		headers: {
-			Authorization: `Bearer ${user.token}`,
-		},
-	});
+      }, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       const cardElement = elements.getElement(CardElement);
       const paymentResult = await stripe.confirmCardPayment(data.clientSecret, {
         payment_method: {
@@ -94,42 +94,49 @@ const PaymentForm = ({ user, total, cartItems }) => {
             quantity: product.orderQuantity,
           }));
 
-		const orderSuccessful = dispatch(
-			placeOrder(products, total, user.token, shippingInfo, 'Paid')
-		)
-		if (orderSuccessful) {
-			setOrderPlaced(true)
-			setOrderError(false)
-			setErrorText('')
-			navigate('/total-orders')
-			setTimeout(() => {
-				setLoading(false)
-			}, 1000)
-		} else {
-			setOrderError(true)
-			setErrorText('Error occured in placing the order')
-			setOrderPlaced(false)
-			setTimeout(() => {
-				setLoading(false)
-			}, 1000)
-		}
+          const orderSuccessful = dispatch(
+            placeOrder(products, total, user.token, shippingInfo, 'Paid')
+          )
+          if (orderSuccessful) {
+            setOrderPlaced(true)
+            setOrderError(false)
+            setErrorText('')
+            navigate('/total-orders')
+            setTimeout(() => {
+              setLoading(false)
+            }, 1000)
+          } else {
+            setOrderError(true)
+            setErrorText('Error occured in placing the order')
+            setOrderPlaced(false)
+            setTimeout(() => {
+              setLoading(false)
+            }, 1000)
+          }
         } catch (error) {
-			setOrderError(true);
-			setErrorText(error.message || 'Order Placement error');        }
+          setOrderError(true);
+          setErrorText(error.message || 'Order Placement error');
+        }
       }
     } catch (error) {
-		setOrderError(true);
-		setErrorText(error.message || 'Payment error');    }
+      setOrderError(true);
+      setErrorText(error.message || 'Payment error');
+    }
   };
 
   return (
     <div className="payment-form-slide">
       <Container>
-        <h2 className="mb-4">Shipping and Payment</h2>
+        <div className="d-flex ">
+          <h2 className="mb-4">Shipping and Payment</h2>
+          <Button className="ms-auto p-2 h-50" variant="primary" onClick={()=>setShowPaymentForm(false)}>
+            Close
+          </Button>
+        </div>
         <Form onSubmit={handlePaymentSubmit}>
           {/* Shipping Details */}
           <fieldset>
-            <legend>Shipping Details</legend><br/><br/>
+            <legend>Shipping Details</legend><br /><br />
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={2}>Name</Form.Label>
               <Col sm={10}>
@@ -165,13 +172,13 @@ const PaymentForm = ({ user, total, cartItems }) => {
               </Col>
             </Form.Group>
 
-			<Form.Group as={Row} className="mb-3">
+            <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={2}>Country</Form.Label>
               <Col sm={10}>
-                <Form.Control 
-                  as="select" 
-                  name="country" 
-                  value={shippingInfo.country} 
+                <Form.Control
+                  as="select"
+                  name="country"
+                  value={shippingInfo.country}
                   onChange={handleInputChange}
                 >
                   {countryOptions.map((option) => (
@@ -185,7 +192,7 @@ const PaymentForm = ({ user, total, cartItems }) => {
           </fieldset>
 
           {/* Payment Details */}
-			<br/><br/><br/><legend>Payment Details</legend><br/><br/>
+          <br /><br /><br /><legend>Payment Details</legend><br /><br />
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={2}>Card Information</Form.Label>
             <Col sm={10}>
@@ -194,18 +201,18 @@ const PaymentForm = ({ user, total, cartItems }) => {
               </InputGroup>
             </Col>
           </Form.Group>
-			<Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={2}>Name on Card</Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" name="Name on Card" onChange={handleInputChange} />
-              </Col>
-            </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={2}>Name on Card</Form.Label>
+            <Col sm={10}>
+              <Form.Control type="text" name="Name on Card" onChange={handleInputChange} />
+            </Col>
+          </Form.Group>
 
-          <br/><br/><br/><Button type="submit" variant="primary" disabled={!stripe}>
+          <br /><br /><br /><Button type="submit" variant="primary" disabled={!stripe}>
             Confirm Payment
           </Button>
         </Form>
-		{orderPlaced && (
+        {orderPlaced && (
           <AlertComp variant="success" text="Awesome, Your order has been placed successfully." onClose={() => setOrderPlaced(false)} />
         )}
         {orderError && (

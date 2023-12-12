@@ -29,7 +29,7 @@ import PaymentForm from '../checkout/paymentForm'; // Adjust the path as needed
 const stripePromise = loadStripe('pk_test_51OHrp2GPQMuSMoo9D37NyaFjrEBynzU7R9G97MOQyg07osataoLH51UKHgp4zovjokjt4gsHUb93TMXry9TrfwVl00qd0jwf9c');
 
 const ShoppingCart = ({ user }) => {
-    const taxRate = 0.1 // Assuming tax rate of 10%
+	const taxRate = 0.1 // Assuming tax rate of 10%
 
 	// states
 	const [deleteItemId, setDeleteItemId] = useState(null)
@@ -45,24 +45,24 @@ const ShoppingCart = ({ user }) => {
 	//redux State
 	const cartItems = useSelector((state) => state.cart.products)
 
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
+	const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  // Modify handlePlaceOrder to just show the payment form
-  const handleContinueToCheckout = () => {
-    setShowPaymentForm(true);
-  };
+	// Modify handlePlaceOrder to just show the payment form
+	const handleContinueToCheckout = () => {
+		setShowPaymentForm(true);
+	};
 
 	// Function to handle quantity increase
 	const handleIncrease = (itemId) => {
 		const product = cartItems.find((product) => product._id === itemId)
-		if(product && (product.orderQuantity + 1)> product.quantity){
+		if (product && (product.orderQuantity + 1) > product.quantity) {
 			setOrderError(true)
 			setErrorText('Not enough quantity')
 			setTimeout(() => {
 				setOrderError(false)
 			}, 2000)
 		}
-		else{
+		else {
 			dispatch(increase(itemId))
 		}
 	}
@@ -97,7 +97,7 @@ const ShoppingCart = ({ user }) => {
 			setShowDeleteModal(false)
 		}
 	}
-		// table column styling
+	// table column styling
 	const columns = [
 		// {
 		// 	header: (
@@ -178,13 +178,13 @@ const ShoppingCart = ({ user }) => {
 		},
 	]
 
-  return (
-    <>
-      {loading ? (
-        <SpinnerComp />
-      ) : (
-        <Container fluid className="pt-0 p-5 mt-5">
-          <div className="d-flex align-items-center heading-container">
+	return (
+		<>
+			{loading ? (
+				<SpinnerComp />
+			) : (
+				<Container fluid className="pt-0 p-5 mt-5">
+					<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
 						<h1 className="cart-heading ">Your Shopping Bag</h1>
 					</div>
@@ -198,48 +198,49 @@ const ShoppingCart = ({ user }) => {
 						<div ><p>Tax:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div>
 						<div ><p>Total:</p><b>${total.toFixed(2)}</b></div>
 					</div>
-          <div className="d-flex justify-content-end">
-            <CustomButton
-              className="custom-button"
-              isDisabled={cartItems.length <= 0}
-              variant="primary"
-              onClick={handleContinueToCheckout}
-            >
-              Continue to Checkout
-            </CustomButton>
-          </div>
+					<div className="d-flex justify-content-end">
+						<CustomButton
+							className="custom-button"
+							isDisabled={cartItems.length <= 0}
+							variant="primary"
+							onClick={handleContinueToCheckout}
+						>
+							Continue to Checkout
+						</CustomButton>
+					</div>
 
-          {showPaymentForm && (
-            <Elements stripe={stripePromise}>
-              <PaymentForm
-                user={user}
-                total={total}
-                cartItems={cartItems}
-              />
-            </Elements>
-          )}
+					{showPaymentForm && (
+						<Elements stripe={stripePromise}>
+							<PaymentForm
+								setShowPaymentForm={setShowPaymentForm}
+								user={user}
+								total={total}
+								cartItems={cartItems}
+							/>
+						</Elements>
+					)}
 
-          {showDeleteModal && <DeleteConfirmationModal showDeleteModal={showDeleteModal}
+					{showDeleteModal && <DeleteConfirmationModal showDeleteModal={showDeleteModal}
 						setShowDeleteModal={setShowDeleteModal} handleDeleteConfirmation={handleDeleteConfirmation} />}
 
 					{orderPlaced && (
-						<AlertComp 
-							variant="success" 
-							text="Awesome, Your order has been placed successfully." 
-							onClose={() => setOrderPlaced(false)} 
+						<AlertComp
+							variant="success"
+							text="Awesome, Your order has been placed successfully."
+							onClose={() => setOrderPlaced(false)}
 						/>
 					)}
 					{orderError && (
-						<AlertComp 
-							variant="danger" 
+						<AlertComp
+							variant="danger"
 							text={errorText}
-							onClose={() => setOrderError(false)} 
+							onClose={() => setOrderError(false)}
 						/>
 					)}
-        </Container>
-      )}
-    </>
-  );
+				</Container>
+			)}
+		</>
+	);
 };
 
 export default ShoppingCart;
