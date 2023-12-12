@@ -39,7 +39,7 @@ const AllProductsPage = ({ user }) => {
 	//states for pagination
 	const [totalPages, setTotalPages] = useState(1)
 	const [currentPage, setCurrentPage] = useState(1)
-	const pageSize = 8
+	const pageSize = 12
 
 	/// error handeling for wishlist
 	const [isError, setIsError] = useState(false);
@@ -256,7 +256,7 @@ const AllProductsPage = ({ user }) => {
 							</div>
 
 							<Footer className={'d-flex justify-content-between align-items-center ps-1 pe-1'}
-								text={`${products.length} products found in clothing and accessories`}
+								text={`${products.length} products found`}
 								totalPages={totalPages}
 								currentPage={currentPage}
 								setCurrentPage={setCurrentPage}

@@ -64,7 +64,7 @@ const Wishlist = ({ user }) => {
         <h2 className="mb-4">Your Wishlist</h2>
         {wishlistItems.length > 0 ? (
           wishlistItems.map((item, index) => (
-            <Card className="wishlist-item" key={index}>
+            <Card className="wishlist-item ps-4" key={index}>
               <Row className="align-items-center">
                 <Col md={2}>
                   <Image src={item.image} alt={item.name} fluid className="wishlist-item-img" />

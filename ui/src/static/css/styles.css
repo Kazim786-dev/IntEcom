@@ -53,7 +53,7 @@
 }
 
 .background-image {
-  background-image: url('E:\University\Semester 7\FYP 1\new project integration\IntEcom\ui\src\static\images\ecom.png'); /* Replace with your image source */
+  background-image: url('C:\Users\Taha Asif\Desktop\FYP\IntEcom\ui\src\static\images\ecom.png'); /* Replace with your image source */
   background-size: cover ; 
   background-position: center;
   width: 115%;
@@ -94,13 +94,19 @@
 /* nav bar */
 
 .navbar-heading {
-  font-size: 16px;
+  font-size: 23px;
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
   color: #343A40;
 }
 
+.navbar-tagline{
+  font-size: 17px;
+  font-weight: 450;
+  font-style: italic;
+  color: #d31919;
+}
 /* product card */
 
 .product-card {

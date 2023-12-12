@@ -133,14 +133,21 @@ const ProductDetailPage = ({ user }) => {
             <br/>
             {product && (
                 <Card className="product-detail-card">
-                    <Row>
+                    <Card.Body>
+                        <div className='text-primary text-center my-4'>
+                            <h1>Product Details</h1>
+                        </div>  
+                    <Row className='mt-5'>
+
+                        
+                        
                         <Col md={6}>
                             <Image src={product.image} alt={product.name} fluid />
                         </Col>
                         <Col md={6}>
-                            <Card.Body>
-                            <br/><br/>
-                                <br/>
+                            
+                            {/* <br/><br/>
+                                <br/> */}
                                 <Card.Title>{product.name}</Card.Title>
                                 <Card.Text>{product.description}</Card.Text>
                                 <Card.Text>
@@ -155,8 +162,8 @@ const ProductDetailPage = ({ user }) => {
                                     onClick={handleAddToCart} 
                                     disabled={isProductInCart || product.quantity==0}
                                 >
-                                    {isProductInCart ? 'In Cart' : 'Add to Cart'}
-                                    {product.quantity==0 ? 'Out of Stock' : 'Add to Cart'}
+                                    {isProductInCart ? 'In Cart' : product.quantity==0 ? 'Out of Stock' : 'Add to Cart'}
+                                    {/* {product.quantity==0 ? 'Out of Stock' : 'Add to Cart'} */}
                                 </Button>
                                 <Button 
                                     variant="success" 
@@ -175,9 +182,11 @@ const ProductDetailPage = ({ user }) => {
                                     {hasUserReported ? 'Reported' : 'Report Product'}
                                 </Button>
                                 <br/><br/><br/><br/><br/><br/><br/><br/>
-                            </Card.Body>
+                            
                         </Col>
+                        
                     </Row>
+                    </Card.Body>
                 </Card>
             )}
 

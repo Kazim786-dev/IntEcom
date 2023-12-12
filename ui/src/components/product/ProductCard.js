@@ -40,7 +40,7 @@ const ProductCard = ({
         <Card className="product-card py-3 px-3 pb-0" onClick={navigateToProductDetail}>
             <Card.Img variant="top" src={product.image} className="product-card-img" />
             <Card.Body className="px-0 d-flex flex-column justify-content-between">
-                <Card.Text className='text-styles' style={{ color: '#212529', fontWeight: '500' }}>
+                <Card.Text className='text-styles' style={{ color: '#212529', fontWeight: '500', height: '50px', overflow: 'hidden' }}>
                     {product.description}
                 </Card.Text>
                 <div>

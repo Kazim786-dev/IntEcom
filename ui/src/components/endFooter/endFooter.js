@@ -6,15 +6,15 @@ import facebookIcon from '../../static/images/twitter.png';
 import instagramIcon from '../../static/images/insta.png';
 import linkedinIcon from '../../static/images/in.png';
 const Footer = () => {
-    return (
-        <footer className="back text-white pt-4 pb-4">
+    return ( //rgb(117, 36, 36)
+        <footer className="main-footer text-white pt-4 pb-4">
             <div className="container">
                 <div className="row">
                     {/* About Section */}
                     <div className="col-md-3">
                         <h5>About Us</h5>
-                        <p>IntEcom offers the best shopping and selling plateform to its user. our 
-                            best searching mechanism enhace the user experience for the user
+                        <p>IntEcom offers the best shopping and selling platform to its users. Our 
+                            best searching mechanism enhancing the user experience.
                         </p>
                     </div>
 
