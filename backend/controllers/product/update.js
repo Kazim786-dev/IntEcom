@@ -36,6 +36,7 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
               product.description = description || product.description;
               product.price = price || product.price;
               product.quantity = quantity || product.quantity;
+              product.uid = product.uid
               const updatedProduct = await product.save();
               return { status: 200, data: updatedProduct };
             }
@@ -45,6 +46,7 @@ const updateProduct = async ({id, productData, imageFile, user}) => {
           product.description = description || product.description;
           product.price = price || product.price;
           product.quantity = quantity || product.quantity;
+          product.uid = product.uid
   
           const updatedProduct = await product.save();
           return { status: 200, data: updatedProduct };

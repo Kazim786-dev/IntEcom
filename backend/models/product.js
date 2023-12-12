@@ -46,6 +46,9 @@ const productSchema = new Schema({
     enum:['XS','S','M','L','XL','XXL','All'],
     // required:true,
     default:'L'
+  },
+  uid:{
+    type:String,
   }
 },{
   timestamps:true
