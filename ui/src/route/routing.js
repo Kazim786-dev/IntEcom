@@ -42,7 +42,7 @@ const RouterLinks = ({
 				<Route
 					path='/login'
 					element={
-						<Layout user={user} showNavbar={false}>
+						<Layout user={user} showNavbar={false} footer={false}>
 							{!user.isLoggedIn ? <LoginPage /> : <Navigate to='/' />}
 						</Layout>
 					}
@@ -50,7 +50,7 @@ const RouterLinks = ({
 				<Route
 					path='/signup'
 					element={
-						<Layout user={user} showNavbar={false}>
+						<Layout user={user} showNavbar={false} footer={false}>
 							{!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' /> }
 						</Layout>
 					}
@@ -68,7 +68,7 @@ const RouterLinks = ({
 						<Route
 							path='/products'
 							element={
-								<Layout user={user} showNavbar={true}>
+								<Layout user={user} showNavbar={true} footer={true}>
 									<AllProductsPage user={user} />
 								</Layout>
 							}
@@ -76,7 +76,7 @@ const RouterLinks = ({
 						<Route
 							path='/cart'
 							element={
-								<Layout user={user} showNavbar={true}>
+								<Layout user={user} showNavbar={true} footer={true}>
 									{user.isLoggedIn ? <CartPage user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
@@ -84,7 +84,7 @@ const RouterLinks = ({
 						<Route
 							path='/total-orders'
 							element={
-								<Layout user={user} showNavbar={true}>
+								<Layout user={user} showNavbar={true} footer={true}>
 									{user.isLoggedIn ? <TotalOrders user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
@@ -92,14 +92,14 @@ const RouterLinks = ({
 						<Route
 							path='/wishlist'
 							element={
-								<Layout user={user} showNavbar={true}>
+								<Layout user={user} showNavbar={true} footer={true}>
 									{user.isLoggedIn ? <Wishlist user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
 						/>
 						<Route path="/product-detail/:productId" 
 							element={
-								<Layout user={user} showNavbar={true}>
+								<Layout user={user} showNavbar={true} footer={true}>
 									{user.isLoggedIn ? <ProductDetailPage  user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
@@ -112,7 +112,7 @@ const RouterLinks = ({
 							<Route
 								path=''
 								element={
-									<Layout user={user} showNavbar={true}>
+									<Layout user={user} showNavbar={true} footer={true}>
 										{<AdminHome user={user}/>}
 									</Layout>
 								}
@@ -126,7 +126,7 @@ const RouterLinks = ({
 							<Route
 								path=''
 								element={
-									<Layout user={user} showNavbar={true}>
+									<Layout user={user} showNavbar={true} footer={true}>
 										{<SellerHome user={user}/>}
 									</Layout>
 								}

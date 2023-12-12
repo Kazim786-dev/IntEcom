@@ -131,7 +131,6 @@ const ProductDetailPage = ({ user }) => {
         <Container className="mt-5">
             <br/>
             <br/>
-            <br/>
             {product && (
                 <Card className="product-detail-card">
                     <Row>
@@ -140,6 +139,7 @@ const ProductDetailPage = ({ user }) => {
                         </Col>
                         <Col md={6}>
                             <Card.Body>
+                            <br/><br/>
                                 <br/>
                                 <Card.Title>{product.name}</Card.Title>
                                 <Card.Text>{product.description}</Card.Text>
@@ -174,6 +174,7 @@ const ProductDetailPage = ({ user }) => {
                                 >
                                     {hasUserReported ? 'Reported' : 'Report Product'}
                                 </Button>
+                                <br/><br/><br/><br/><br/><br/><br/><br/>
                             </Card.Body>
                         </Col>
                     </Row>

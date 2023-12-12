@@ -2,6 +2,9 @@ import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './endfooter.css'
+import facebookIcon from '../../static/images/twitter.png';
+import instagramIcon from '../../static/images/insta.png';
+import linkedinIcon from '../../static/images/in.png';
 const Footer = () => {
     return (
         <footer className="back text-white pt-4 pb-4">
@@ -30,18 +33,23 @@ const Footer = () => {
                         <h5>Contact Us</h5>
                         <ul className="list-unstyled">
                             <li>Phone: +123 456 7890</li>
-                            <li>Email: support@example.com</li>
-                            <li>Address: 123 Street, City, Country</li>
+                            <li>Email: i202310@nu.edu.pk</li>
+                            <li>Address: 123 Street, Islamabad, Pakistan</li>
                         </ul>
                     </div>
 
                     {/* Social Media Icons */}
                     <div className="col-md-3">
-                        <h5>Follow Us</h5>
-                        <a href="#" className="text-white me-2"><i className="bi bi-facebook"></i></a>
-                        <a href="#" className="text-white me-2"><i className="bi bi-twitter"></i></a>
-                        <a href="#" className="text-white me-2"><i className="bi bi-instagram"></i></a>
-                        <a href="#" className="text-white"><i className="bi bi-linkedin"></i></a>
+                    <h5>Follow Us</h5>
+                    <a href="https://twitter.com/?lang=en" className="text-white me-2">
+                        <img style={{height:'45px'}} src={facebookIcon} alt="Facebook" />
+                    </a>
+                    <a href="https://www.instagram.com/" className="text-white me-2">
+                        <img style={{height:'45px'}} src={instagramIcon} alt="Instagram" />
+                    </a>
+                    <a href="https://pk.linkedin.com/" className="text-white">
+                        <img style={{height:'45px'}} src={linkedinIcon} alt="LinkedIn" />
+                    </a>
                     </div>
                 </div>
 
