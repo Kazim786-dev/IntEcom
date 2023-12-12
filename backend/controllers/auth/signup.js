@@ -66,15 +66,27 @@ const Signup = async ({ name, email, password, mobile, role, status }) => {
           { expiresIn: '3h' }
         );
   
-  
-        // Compose the email content
-        const emailContent = `<h1>Welcome <b>${newUser.name}</b> to this amazing e-commerce platform.</h1><br/>
-        <p>We are absolutely thrilled to have you join our ever-growing family of online shoppers.<br/>
-        Congratulations on successfully creating your account. <b>Happy Shopping! 🎉</b><br/>
-        <b>Note</b>: Do not share your password with anyone</p>`;
-  
-        // Send the email using the generic sendEmail function
-        sendEmail(newUser.email, 'Account Created Successfully', emailContent);
+
+
+
+        
+        if (role==='seller') {
+          // Compose the email content
+          const emailContentForSeller = `<h1>Welcome <b>${newUser.name}</b> to this amazing e-commerce platform.</h1><br/>
+          <p>We are absolutely thrilled to have you join our ever-growing family of online sellers.<br/>
+          Congratulations on successfully applying for your account as a seller🎉. <b> </b><br/>
+          <b>Note</b>: We  are processing you request and we will let you know once admin has approved your request!</p>`
+          // Send the email to seller using the generic sendEmail function
+          sendEmail(newUser.email, 'Account Request Placed Successfully', emailContentForSeller);
+        }else{
+          // Compose the email content
+          const emailContent = `<h1>Welcome <b>${newUser.name}</b> to this amazing e-commerce platform.</h1><br/>
+          <p>We are absolutely thrilled to have you join our ever-growing family of online shoppers.<br/>
+          Congratulations on successfully creating your account. <b>Happy Shopping! 🎉</b><br/>
+          <b>Note</b>: Do not share your password with anyone</p>`;
+          // Send the email to customer using the generic sendEmail function
+          sendEmail(newUser.email, 'Account Created Successfully', emailContent);
+        }
   
         // Save the user to the database
         await newUser.save();
