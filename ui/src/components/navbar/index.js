@@ -33,7 +33,7 @@ const NavbarComp = ({ user, userPicture }) => {
         <Navbar bg="white" expand="lg">
             <Container fluid className="ps-1 pe-1 ms-5 me-5">
                 <Navbar.Brand>
-                    <Link to="/" className="text-decoration-none navbar-heading">Intelligent E-Commerce</Link>
+                    <Link to="/" className="text-decoration-none navbar-heading">IntECom</Link>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbar-nav" />
                 <Navbar.Collapse id="navbar-nav">
