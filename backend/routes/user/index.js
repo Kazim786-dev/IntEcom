@@ -39,9 +39,9 @@ router.get('/sellers',authMiddleware, async (req, res) => {
 });
 
 // Update Password
-router.patch('/update-password', authMiddleware, async (req, res) => {
+router.patch('/update-password', async (req, res) => {
   const { token, newPassword } = req.body;
-
+  
   try {
     const result = await updatePassword({token: token, newPassword: newPassword});
     return res.status(result.status).json(result.message);

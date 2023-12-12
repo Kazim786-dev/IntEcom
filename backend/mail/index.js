@@ -2,7 +2,7 @@
 import nodemailer from 'nodemailer'
 import 'dotenv/config'
 
-const myEmail = 'asifkazim09@gmail.com'
+const myEmail = 'zainjaved.fyp@gmail.com'
 // getting environment variable
 const {nodemailer_pass}= process.env
 
