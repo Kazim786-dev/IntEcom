@@ -56,7 +56,7 @@ const Footer = () => {
                 {/* Copyright */}
                 <div className="row mt-3">
                     <div className="col text-center">
-                        © 2023 Your E-Commerce Store. All rights reserved.
+                        © 2023 IntECom Store. All rights reserved.
                     </div>
                 </div>
             </div>

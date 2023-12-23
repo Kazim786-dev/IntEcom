@@ -325,6 +325,7 @@ const AllProducts = ({ user }) => {
 			header: 'Action',
 			render: (item) => (
 				<>
+					<div className='d-flex'>
 					<Button
 						onClick={() => handleShip(item._id)}
 						variant="info"
@@ -340,6 +341,7 @@ const AllProducts = ({ user }) => {
 					>
 						Deliver
 					</Button>
+					</div>
 				</>
 			),
 		},

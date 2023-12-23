@@ -60,7 +60,7 @@ const NavbarComp = ({ user, userPicture }) => {
                                 <div style={{ position: 'relative' }}>
                                     <Bag fill="black" borderRadius={2} />
                                     {cartProducts.length > 0 &&
-                                        <Badge className='position-absolute translate-middle rounded-circle'>{cartProducts.length}
+                                        <Badge className='position-absolute translate-middle rounded-circle bg-danger'>{cartProducts.length}
                                         </Badge>
                                     }
                                 </div>

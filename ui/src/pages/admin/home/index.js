@@ -30,7 +30,7 @@ const AllProducts = ({ user }) => {
 	const pageSize = 9
 	const [sellers, setSellers] = useState([]);
 
-    const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
+	const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
 
 	const [data, setData] = useState([])
 	const [orderItem, setOrderItem] = useState()
@@ -41,8 +41,8 @@ const AllProducts = ({ user }) => {
 	const [tableLoading, setTableLoading] = useState(true)
 	const [fetchDataError, setFetchDataError] = useState(false)
 	const [Errortext, setErrorText] = useState('')
-    const [reportedProducts, setReportedProducts] = useState([]); // State for reported products
-    const [reportLoading, setReportLoading] = useState(false); // Loading state for reports
+	const [reportedProducts, setReportedProducts] = useState([]); // State for reported products
+	const [reportLoading, setReportLoading] = useState(false); // Loading state for reports
 
 	const [product, setproduct] = useState('')
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -60,17 +60,17 @@ const AllProducts = ({ user }) => {
 		}
 	}, [currentPage, selectedItem, searchTerm])
 
-	useEffect(()=> {
+	useEffect(() => {
 		setLoading(true)
-		if(searchInputRef.current){
+		if (searchInputRef.current) {
 			searchInputRef.current.focus()
-		}	
-	},[])
+		}
+	}, [])
 
 	const fetchData = () => {
-		
+
 		setFetchDataError(false)
-		if(selectedItem!=='Sellers' && selectedItem!=='Process' && selectedItem!== 'reported'){
+		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -103,7 +103,7 @@ const AllProducts = ({ user }) => {
 				}, 1000)
 			})
 		}
-		
+
 
 	}
 
@@ -116,23 +116,23 @@ const AllProducts = ({ user }) => {
 	}
 
 	const fetchProcessedOrders = async () => {
-        try {
-            setTableLoading(true); // Start loading
-            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-			const {totalPages, data} = response.data;
-            setProcessedOrders(data);
+		try {
+			setTableLoading(true); // Start loading
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
+				headers: { Authorization: `Bearer ${user.token}` }
+			});
+			const { totalPages, data } = response.data;
+			setProcessedOrders(data);
 			setTotalPages(totalPages)
-        } catch (error) {
-            console.error('Error fetching processed orders:', error);
-            setErrorText('Error fetching processed orders');
-            setFetchDataError(true);
-        } finally {
-            setLoading(false); // Stop loading
-            setTableLoading(false); // Stop table loading
-        }
-    };
+		} catch (error) {
+			console.error('Error fetching processed orders:', error);
+			setErrorText('Error fetching processed orders');
+			setFetchDataError(true);
+		} finally {
+			setLoading(false); // Stop loading
+			setTableLoading(false); // Stop table loading
+		}
+	};
 	const handleDeleteConfirmation = () => {
 		if (product) {
 
@@ -166,14 +166,15 @@ const AllProducts = ({ user }) => {
 			setShowDeleteModal(false)
 		}
 
-	setTableLoading(true)	}
+		setTableLoading(true)
+	}
 
-	const handleEditClick = (item)=> {
+	const handleEditClick = (item) => {
 		setproduct(item)
 		setShowProductCanvas(true)
 	}
-    // Function to handle shipping an order
-    const handleShip = async (orderId) => {
+	// Function to handle shipping an order
+	const handleShip = async (orderId) => {
 		try {
 			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/ship/${orderId}`, {}, {
 				headers: {
@@ -187,8 +188,8 @@ const AllProducts = ({ user }) => {
 		}
 	};
 
-    // Function to handle delivering an order
-    const handleDeliver = async (orderId) => {
+	// Function to handle delivering an order
+	const handleDeliver = async (orderId) => {
 		try {
 			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/deliver/${orderId}`, {}, {
 				headers: {
@@ -201,26 +202,26 @@ const AllProducts = ({ user }) => {
 			console.error('Error delivering order:', error);
 		}
 	};
-	
-	const handleAddClick = ()=> {
+
+	const handleAddClick = () => {
 		setproduct(null)
 		setShowProductCanvas(true)
 	}
 
-    const handleItemClick = (item) => {
-        setCurrentPage(1);
-        setTableLoading(true);
-        setSelectedItem(item);
-        if (item === 'reported') {
-            fetchReportedProducts();
-        } else if (item === 'Process') {
-            fetchProcessedOrders();
-        } else {
-            debouncedFetchData();
-        }
-    };
+	const handleItemClick = (item) => {
+		setCurrentPage(1);
+		setTableLoading(true);
+		setSelectedItem(item);
+		if (item === 'reported') {
+			fetchReportedProducts();
+		} else if (item === 'Process') {
+			fetchProcessedOrders();
+		} else {
+			debouncedFetchData();
+		}
+	};
 
-	const handleShouldFetchAgain= ()=> {
+	const handleShouldFetchAgain = () => {
 		fetchData()
 	}
 
@@ -236,24 +237,24 @@ const AllProducts = ({ user }) => {
 		setShowOrderCanvas(true)
 	}
 
-	const handlePageChange = (page)=> {
+	const handlePageChange = (page) => {
 		setTableLoading(true)
 		setCurrentPage(page)
 	}
 
 
-	
-    useEffect(() => {
-        if (selectedItem === 'Sellers') {
-            fetchSellers();
-        } else if (selectedItem === 'Process') {
-            fetchProcessedOrders();
-        } else if (selectedItem === 'reported') {
-            fetchReportedProducts();
-        } else {
-            debouncedFetchData();
-        }
-    }, [currentPage, selectedItem, searchTerm]);
+
+	useEffect(() => {
+		if (selectedItem === 'Sellers') {
+			fetchSellers();
+		} else if (selectedItem === 'Process') {
+			fetchProcessedOrders();
+		} else if (selectedItem === 'reported') {
+			fetchReportedProducts();
+		} else {
+			debouncedFetchData();
+		}
+	}, [currentPage, selectedItem, searchTerm]);
 
 	const fetchReportedProducts = async () => {
 		setReportLoading(true); // Start loading for reported products
@@ -273,25 +274,25 @@ const AllProducts = ({ user }) => {
 			setTableLoading(false);       // Stop main loading
 		}
 	};
-	
-    const fetchSellers = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            });
-            if (response.status === 200) {
-				
-                setSellers(response.data.sellers);
-                setTotalPages(response.data.totalPages);
-            }
-        } catch (error) {
-            console.error('Error fetching sellers:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+
+	const fetchSellers = async () => {
+		try {
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+			if (response.status === 200) {
+
+				setSellers(response.data.sellers);
+				setTotalPages(response.data.totalPages);
+			}
+		} catch (error) {
+			console.error('Error fetching sellers:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const handleAcceptSeller = async (sellerId) => {
 		try {
@@ -306,7 +307,7 @@ const AllProducts = ({ user }) => {
 			console.error('Error accepting seller:', error);
 		}
 	};
-	
+
 	const handleRejectSeller = async (sellerId) => {
 		try {
 			await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers/reject/${sellerId}`, {}, {
@@ -321,27 +322,27 @@ const AllProducts = ({ user }) => {
 		}
 	};
 
-    const SellerTablecolumns = [
-        {
-            header: 'Name',
-            render: (sellers) => sellers.name,
-        },
-        {
-            header: 'Email',
-            render: (sellers) => sellers.email,
-        },
-        {
-            header: 'Actions',
-            render: (sellers) => (
-                <>
-                    <Button onClick={() => handleAcceptSeller(sellers._id)} variant="success">Accept</Button>
-                    <Button onClick={() => handleRejectSeller(sellers._id)} variant="danger" className="ms-2">Reject</Button>
-                </>
-            ),
-        },
-    ];
+	const SellerTablecolumns = [
+		{
+			header: 'Name',
+			render: (sellers) => sellers.name,
+		},
+		{
+			header: 'Email',
+			render: (sellers) => sellers.email,
+		},
+		{
+			header: 'Actions',
+			render: (sellers) => (
+				<>
+					<Button onClick={() => handleAcceptSeller(sellers._id)} variant="success">Accept</Button>
+					<Button onClick={() => handleRejectSeller(sellers._id)} variant="danger" className="ms-2">Reject</Button>
+				</>
+			),
+		},
+	];
 
-	
+
 	// Product table column styling
 	const ProductsTablecolumns = [
 		{
@@ -385,7 +386,7 @@ const AllProducts = ({ user }) => {
 			),
 		},
 	]
-	
+
 	const handleBlockProduct = async (productId) => {
 		try {
 			const response = await axios.patch(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/block/${productId}`, {}, {
@@ -402,7 +403,7 @@ const AllProducts = ({ user }) => {
 			// Handle error here, such as updating state or showing an error message
 		}
 	};
-	
+
 
 	const handleCancelReport = async (reportId) => {
 		try {
@@ -420,33 +421,33 @@ const AllProducts = ({ user }) => {
 			// Handle error here, such as updating state or showing an error message
 		}
 	};
-	
 
-    const ReportedProductsTableColumns = [
-        // Define columns for reported products table
-        {
-            header: 'Reported Product',
-            render: (report) => report.product.description,
-        },
+
+	const ReportedProductsTableColumns = [
+		// Define columns for reported products table
 		{
-            header: 'Report by',
-            render: (report) => report.user.name,
-        },
+			header: 'Reported Product',
+			render: (report) => report.product.description,
+		},
 		{
-            header: 'Reason',
-            render: (report) => report.text,
-        },
-        // ... other columns for product details
-        {
-            header: 'Actions',
-            render: (report) => (
-                <>
-                    <Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
-                    <Button onClick={() => handleCancelReport(report._id)} variant="secondary" className="ms-2">Cancel Report</Button>
-                </>
-            ),
-        },
-    ];
+			header: 'Report by',
+			render: (report) => report.user.name,
+		},
+		{
+			header: 'Reason',
+			render: (report) => report.text,
+		},
+		// ... other columns for product details
+		{
+			header: 'Actions',
+			render: (report) => (
+				<>
+					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
+					<Button onClick={() => handleCancelReport(report._id)} variant="secondary" className="ms-2">Cancel Report</Button>
+				</>
+			),
+		},
+	];
 
 	// Order table column styling
 	const OrdersTablecolumns = [
@@ -506,7 +507,7 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
-    const ProcessedOrdersTableColumns = [
+	const ProcessedOrdersTableColumns = [
 		{
 			header: 'Date',
 			width: '17rem',
@@ -537,29 +538,29 @@ const AllProducts = ({ user }) => {
 			}
 		},
 		{
-		header: 'Action',
+			header: 'Action',
 			render: (item) => (
-				<>
-				<Button
-					onClick={() => handleShip(item._id)}
-					variant="info"
-					disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
-				>
-					Ship
-				</Button>
-				<Button
-					onClick={() => handleDeliver(item._id)}
-					variant="success"
-					className="ms-2"
-					disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
-				>
-					Deliver
-				</Button>
-				</>
+				<div className='d-flex'>
+					<Button
+						onClick={() => handleShip(item._id)}
+						variant="info"
+						disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
+					>
+						Ship
+					</Button>
+					<Button
+						onClick={() => handleDeliver(item._id)}
+						variant="success"
+						className="ms-2"
+						disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
+					>
+						Deliver
+					</Button>
+				</div>
 			),
 		},
 	];
-  
+
 	return (
 		<>
 			{loading || reportLoading ? (
@@ -583,12 +584,12 @@ const AllProducts = ({ user }) => {
 										<>
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
-												<Form.Control 
-													className='pe-5' 
-													type="text" 
-													value={searchTerm} 
-													placeholder={`Search by ${selectedItem}`} 
-													onChange={handleSearchChange} 
+												<Form.Control
+													className='pe-5'
+													type="text"
+													value={searchTerm}
+													placeholder={`Search by ${selectedItem}`}
+													onChange={handleSearchChange}
 													ref={searchInputRef}
 												/>
 											</Form.Group>
@@ -604,12 +605,12 @@ const AllProducts = ({ user }) => {
 										data={reportedProducts}
 										columns={ReportedProductsTableColumns}
 									/>
-								) :selectedItem === 'Process' ? (
+								) : selectedItem === 'Process' ? (
 									<DetailsTable
 										data={processedOrders}
 										columns={ProcessedOrdersTableColumns}
 									/>
-								) :selectedItem === 'Sellers' ? (
+								) : selectedItem === 'Sellers' ? (
 									<DetailsTable
 										data={sellers}
 										columns={SellerTablecolumns}
@@ -635,7 +636,7 @@ const AllProducts = ({ user }) => {
 							/>
 						</Col>
 					</Row>
-	
+
 					{fetchDataError && (
 						<AlertComp
 							variant='danger'
@@ -643,7 +644,7 @@ const AllProducts = ({ user }) => {
 							onClose={() => setFetchDataError(false)}
 						/>
 					)}
-	
+
 					{showDeleteModal && (
 						<DeleteConfirmationModal
 							showDeleteModal={showDeleteModal}
@@ -651,7 +652,7 @@ const AllProducts = ({ user }) => {
 							handleDeleteConfirmation={handleDeleteConfirmation}
 						/>
 					)}
-					
+
 					{showOrderCanvas && (
 						<OffCanvasComp
 							placement={'end'}
@@ -662,7 +663,7 @@ const AllProducts = ({ user }) => {
 							token={user.token}
 						/>
 					)}
-	
+
 					{showProductCanvas && (
 						<ProductCanvas
 							placement={'end'}
@@ -677,7 +678,7 @@ const AllProducts = ({ user }) => {
 			)}
 		</>
 	);
-	
+
 
 }
 
