@@ -1,6 +1,6 @@
 // Import the necessary models
-import Product from '../../models/product';
-import Report from '../../models/report';
+import Product from '../../models/product.js';
+import Report from '../../models/report.js';
 
 const blockProduct = async (productId, user) => {
   if (user.role !== 'admin' && user.role !== 'seller') {

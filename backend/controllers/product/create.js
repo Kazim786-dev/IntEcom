@@ -1,11 +1,13 @@
 import fs from 'fs';
 import axios from 'axios';
-
+import 'dotenv/config'
 import cloudinary from '../../middleware/cloudinary.js';
 
 import Product from '../../models/product';
-
 import User from '../../models/user'; // Import the User model
+
+// getting environment variable
+const {Flask_URL}= process.env
 
 const createProduct = async ({productData, imageFile, user}) => {
   if (user.role !== 'admin' && user.role !== 'seller' ) {
@@ -57,7 +59,7 @@ const createProduct = async ({productData, imageFile, user}) => {
           const savedProduct = await newProduct.save();
 
           // adding to vector Database
-          axios.post('http://localhost:5000/add', savedProduct)
+          axios.post(`${Flask_URL}/add`, savedProduct)
           .then(response => {
           }).catch(e=>{
           })

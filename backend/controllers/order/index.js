@@ -1,13 +1,13 @@
-import getAllOrders from "./get-all-orders"
-import getAllUserOrders from "./get-user-orders"
-import createOrder from "./create"
-import updateOrder from "./update"
-import deleteOrder from "./delete"
-import getAllOrderProducts from "./all-order-products"
-import getOrderSummary from "./get-summary"
-import checkout from "./checkout"
-import getSellerOrders from "./seller-all-orders"
-import updateOrderDeliveryStatus from "./update-status"
+import getAllOrders from "./get-all-orders.js"
+import getAllUserOrders from "./get-user-orders.js"
+import createOrder from "./create.js"
+import updateOrder from "./update.js"
+import deleteOrder from "./delete.js"
+import getAllOrderProducts from "./all-order-products.js"
+import getOrderSummary from "./get-summary.js"
+import checkout from "./checkout.js"
+import getSellerOrders from "./seller-all-orders.js"
+import updateOrderDeliveryStatus from "./update-status.js"
 module.exports = {
   getAllOrders,
   getAllUserOrders,

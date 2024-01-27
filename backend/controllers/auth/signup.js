@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../../models/user';
+import User from '../../models/user.js';
 import { sendEmail } from '../../mail/index.js';
 
 const { secret_key } = process.env

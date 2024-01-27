@@ -1,5 +1,9 @@
-import Product from '../../models/product';
+import Product from '../../models/product.js';
 import axios from 'axios';
+import 'dotenv/config.js'
+
+// getting environment variable
+const {Flask_URL}= process.env
 
 const getProducts = async ({ query }) => {
   try {
@@ -14,7 +18,7 @@ const getProducts = async ({ query }) => {
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
     
-    const response = await axios.get('http://localhost:5000/search', { params: { prod: queryName } });
+    const response = await axios.get(`${Flask_URL}/search`, { params: { prod: queryName } });
     const foundProducts = response.data.products
 
     const findQuery = {

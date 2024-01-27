@@ -1,4 +1,4 @@
-import Order from '../../models/order';
+import Order from '../../models/order.js';
 
 // const deleteOrder = async (req, res) => {
 //     const { id } = req.params;

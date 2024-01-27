@@ -1,15 +1,15 @@
 
-import getProducts from "./get-products"
-import getProductById from "./get-by-id"
-import createProduct from "./create"
-import updateProduct from "./update"
-import deleteProduct from "./delete"
-import reportProduct from "./report-product"
-import { checkUserReports } from "./is-reported_by_user"
-import getProductsBySeller from "./get-product-by-seller"
-import getReportedProducts from "./all-reports"
-import blockProduct from "./block-product"
-import cancelReport from "./delete-or-cancel-report"
+import getProducts from "./get-products.js"
+import getProductById from "./get-by-id.js"
+import createProduct from "./create.js"
+import updateProduct from "./update.js"
+import deleteProduct from "./delete.js"
+import reportProduct from "./report-product.js"
+import { checkUserReports } from "./is-reported_by_user.js"
+import getProductsBySeller from "./get-product-by-seller.js"
+import getReportedProducts from "./all-reports.js"
+import blockProduct from "./block-product.js"
+import cancelReport from "./delete-or-cancel-report.js"
 module.exports = {
   getProducts,
   getProductById,

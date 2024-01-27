@@ -1,4 +1,4 @@
-import AllModels from '../models/all-models'
+import AllModels from '../models/all-models.js'
 
 import { connection, connect, set } from 'mongoose';
 

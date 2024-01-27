@@ -1,5 +1,5 @@
-import Product from '../../models/product'; // Import your Product model
-import Report from '../../models/report'; // Import your Report model
+import Product from '../../models/product.js'; // Import your Product model
+import Report from '../../models/report.js'; // Import your Report model
 
 const reportProduct = async (reportData, user) => {
   try {

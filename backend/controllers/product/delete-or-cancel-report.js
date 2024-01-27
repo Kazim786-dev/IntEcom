@@ -1,4 +1,4 @@
-import Report from '../../models/report';
+import Report from '../../models/report.js';
 const cancelReport = async (reportId, user) => {
     if (user.role !== 'admin' && user.role !== 'seller') {
       return { status: 401, data: { error: 'Unauthorized' } };

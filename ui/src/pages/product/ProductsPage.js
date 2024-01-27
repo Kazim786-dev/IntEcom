@@ -11,6 +11,7 @@ import AlertComp from '../../components/alert'
 import Footer from '../../components/footer'
 import ProductCard from '../../components/product/ProductCard'
 import SpinnerComp from '../../components/spinner'
+import SpeakSearch from '../../components/speak-search';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux'
@@ -18,7 +19,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { add, increase } from '../../redux/slice/cart/cart-slice'
 
 const AllProductsPage = ({ user }) => {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const dispatch = useDispatch()
 	const searchInputRef = useRef(null)
@@ -51,7 +52,7 @@ const AllProductsPage = ({ user }) => {
 
 	const fetchWishlist = async () => {
 		setIsError(false); // Reset error state before making a new request
-	
+
 		try {
 			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/get`, {
 				headers: {
@@ -74,18 +75,18 @@ const AllProductsPage = ({ user }) => {
 		fetchWishlist();
 
 		debouncedFetchData()
-		
+
 		// Cleanup the debounced function when the component is unmounted
 		return () => {
 			debouncedFetchData.cancel()
 		}
 	}, [currentPage, priceFilter, searchTerm])
 
-	useEffect(()=>{
-		if(searchInputRef.current){
-			searchInputRef.current.focus()
-		}	
-	})
+	// useEffect(() => {
+	// 	if (searchInputRef.current) {
+	// 		searchInputRef.current.focus()
+	// 	}
+	// })
 
 	const fetchProducts = async () => {
 		let response = ''
@@ -126,12 +127,12 @@ const AllProductsPage = ({ user }) => {
 			setFetchProductError(true)
 			// console.error('Error fetching data:', error)
 		}
-		
+
 	}
 
 	// Debounced version of fetchProducts
 	const debouncedFetchData = debounce(fetchProducts, 1000)
-	
+
 	const handleSearchChange = (event) => {
 		const { value } = event.target
 		setSearchTerm(value)
@@ -150,7 +151,7 @@ const AllProductsPage = ({ user }) => {
 			dispatch(add(item))
 			setAddedToCart(true)
 		}
-		else{
+		else {
 			dispatch(increase(product._id))
 		}
 	}
@@ -164,35 +165,53 @@ const AllProductsPage = ({ user }) => {
 	}
 
 	const addToWishlist = async (product) => {
-        // API call to add product to wishlist
-        try {
-            const res = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/add`, {
-                productId: product._id
-            },
-			{
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			});
-            if (res.status == 200) {
-                setWishlist(currentWishlist => {
+		// API call to add product to wishlist
+		try {
+			const res = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/add`, {
+				productId: product._id
+			},
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				});
+			if (res.status == 200) {
+				setWishlist(currentWishlist => {
 					// Add the product to the wishlist if not already present
 					if (!currentWishlist.some(item => item._id === product._id)) {
 						return [...currentWishlist, product];
 					}
 					return currentWishlist;
 				});
-            }
-			
-        } catch (error) {
-            console.error('Error adding to wishlist:', error);
-        }
-    };
+			}
 
-    const isAlreadyInWishlist = (product) => {
-        const foundProduct = wishlist.find((item) => item._id ==product._id )
+		} catch (error) {
+			console.error('Error adding to wishlist:', error);
+		}
+	};
+
+	const isAlreadyInWishlist = (product) => {
+		const foundProduct = wishlist.find((item) => item._id == product._id)
 		return foundProduct ? true : false
-    };
+	};
+
+	// send audio file to server
+	const handleAudioSearch = (blob) => {
+		// Create a FormData instance
+		let data = new FormData();
+
+		// Append the audio blob to the FormData instance
+		data.append('audio', blob, 'audio.wav');
+
+		// Send the FormData instance to the server
+		axios.post('http://localhost:5000/audio', data)
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
 
 	return (
 		<>
@@ -210,13 +229,16 @@ const AllProductsPage = ({ user }) => {
 								<Col md='auto' className='d-flex align-items-center'>
 									<Form.Label className='me-2'><b>Search:</b></Form.Label>
 									<Form.Group className='mb-1'>
-										<Form.Control 
-											type='text' 
-											value={searchTerm} 
-											placeholder='Search by name' 
-											onChange={handleSearchChange} 
+										<Form.Control
+											type='text'
+											value={searchTerm}
+											placeholder='Search by name'
+											onChange={handleSearchChange}
 											ref={searchInputRef}
 										/>
+									</Form.Group>
+									<Form.Group className='mb-1 ms-2'>
+										<SpeakSearch handleAudioSearch={handleAudioSearch} />
 									</Form.Group>
 								</Col>
 								<Col md='auto' className='d-flex align-items-center pe-0'>
@@ -230,7 +252,7 @@ const AllProductsPage = ({ user }) => {
 								</Col>
 							</Row>
 
-							<div style={{minHeight:'60vh'}}>
+							<div style={{ minHeight: '60vh' }}>
 								{/*Map all products */}
 								<Row className='justify-content-center'>
 									{/* Desktop: Display 4 products per row 
@@ -240,12 +262,12 @@ const AllProductsPage = ({ user }) => {
 										<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
 											<div onClick={() => handleProductClick(product._id)}>
 
-												<ProductCard 
-													name={user.name} 
-													product={product} 
-													addToCart={addToCart} 
+												<ProductCard
+													name={user.name}
+													product={product}
+													addToCart={addToCart}
 													addToWishlist={addToWishlist}
-													addedToCart={isAlreadyAdded(product)} 
+													addedToCart={isAlreadyAdded(product)}
 													isInWishlist={() => isAlreadyInWishlist(product)} // Pass this prop
 												/>
 											</div>

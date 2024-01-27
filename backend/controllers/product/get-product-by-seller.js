@@ -1,4 +1,4 @@
-import Product from '../../models/product';
+import Product from '../../models/product.js';
 
 const getProductsBySeller = async ({query, userId}) => {
   try {
@@ -11,7 +11,7 @@ const getProductsBySeller = async ({query, userId}) => {
     const pageSize = parseInt(query.size) || 8;
     const queryName = query.name;
     const sortField = 'price';
-    const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+    const sortOptions = { [sortField]: sortOrder === 'desc' ? -1 : 1 };
 
     // Update the findQuery to include the current user's ID
     const findQuery = {

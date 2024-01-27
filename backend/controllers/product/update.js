@@ -1,11 +1,15 @@
 import fs from 'fs';
 import axios from 'axios';
+import 'dotenv/config'
 import cloudinary from '../../middleware/cloudinary.js';
 
-import Product from '../../models/product';
-import Wishlist from '../../models/wishlist';
-import User from '../../models/user';
+import Product from '../../models/product.js';
+import Wishlist from '../../models/wishlist.js';
+import User from '../../models/user.js';
 import { sendEmail } from '../../mail/index.js';
+
+// getting environment variable
+const {Flask_URL}= process.env
 
 const updateProduct = async ({ id, productData, imageFile, user }) => {
   if (user.role !== 'admin' && user.role !== 'seller') {
@@ -44,7 +48,7 @@ const updateProduct = async ({ id, productData, imageFile, user }) => {
           const updatedProduct = await product.save();
 
           // adding to vector Database
-          axios.post('http://localhost:5000/add', updatedProduct)
+          axios.post(`${Flask_URL}/add`, updatedProduct)
             .then(response => {
             }).catch(e => {
             })
@@ -66,17 +70,23 @@ const updateProduct = async ({ id, productData, imageFile, user }) => {
       })
     }
     else {
+
+      const oldDescription = product.description
       product.description = description || product.description;
+      product.name = description || product.name
       product.price = price || product.price;
       product.quantity = quantity || product.quantity;
       product.uid = product.uid
 
       const updatedProduct = await product.save();
-      // adding to vector Database
-      axios.post('http://localhost:5000/add', updatedProduct)
-      .then(response => {
-      }).catch(e => {
-      })
+      
+      // adding to vector Database if description is changed
+      if(description!=oldDescription){
+        axios.put(`${Flask_URL}/update`, updatedProduct)
+        .then(response => {
+        }).catch(e => {
+        })
+      }
 
       // If the updated quantity is 1 or more, notify users whose wishlist contains this product
       if (quantity >= 1 && oldQuant == 0) {

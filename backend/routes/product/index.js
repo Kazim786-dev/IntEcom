@@ -22,7 +22,7 @@ import authMiddleware from '../../middleware/auth.js'
 
 const router = Router();
 
-// Get Products
+// Get Products by seller
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.user._id;  // Get the user ID from req.user
@@ -88,7 +88,7 @@ router.get('/reports/:productId', authMiddleware, async (req, res) => {
       res.status(500).json({ error: 'An error occurred while fetching reports.' });
   }
 });
-// Get Products
+// Get all Products
 router.get('/allproducts', async (req, res) => {
   try {
     const result = await getProducts({query: req.query});

@@ -53,7 +53,7 @@
 }
 
 .background-image {
-  background-image: url('C:\Users\Taha Asif\Desktop\FYP\IntEcom\ui\src\static\images\ecom.png'); /* Replace with your image source */
+  background-image: url('../images/ecom.png'); /* Replace with your image source */
   background-size: cover ; 
   background-position: center;
   width: 115%;

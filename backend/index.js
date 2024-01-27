@@ -6,8 +6,8 @@ import productRouter from './routes/product/index.js'
 import orderRouter from './routes/order/index.js'
 import authRouter from './routes/auth/index.js'
 import wishlistRouter from './routes/wishlist/index.js'
-import './config/database'
-import authMiddleware from './middleware/auth'
+import './config/database.js'
+import authMiddleware from './middleware/auth.js'
 import ApplyMiddlewares from './middleware/index.js'
 
 const app = express()

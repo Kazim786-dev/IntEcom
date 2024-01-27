@@ -1,5 +1,5 @@
 // controllers/reportController.js
-import Report from '../../models/report'; // Import your Report model
+import Report from '../../models/report.js'; // Import your Report model
 
 const checkUserReports = async (userId, productId) => {
     try {
