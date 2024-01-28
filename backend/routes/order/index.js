@@ -67,8 +67,9 @@ router.get('/summary', VerifyRole({ roleToCheck: 'admin' }), async (req, res) =>
 // Route to get orders for a specific seller
 router.get('/seller-orders', authMiddleware, async (req, res) => {
     const userId = req.user.user._id;  // Get the user ID from req.user
+    const {orderNumber} = req.query
     try {
-        const result = await getSellerOrders(userId);
+        const result = await getSellerOrders(userId, orderNumber);
         res.status(result.status).json(result);
     } catch (error) {
         console.log(error);

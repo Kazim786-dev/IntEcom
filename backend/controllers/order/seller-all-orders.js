@@ -1,7 +1,7 @@
 import Order from '../../models/order.js';
 import Product from '../../models/product.js';
 
-const getSellerOrders = async (sellerId) => {
+const getSellerOrders = async (sellerId, orderNumber) => {
   try {
     // Find products that belong to the seller
     const sellerProducts = await Product.find({ user: sellerId }).select('_id');
@@ -9,12 +9,18 @@ const getSellerOrders = async (sellerId) => {
 
     const pageSize = 9;
 
-    // Find orders that contain any of the seller's products
-    const orders = await Order.find({ 'products.product': { $in: productIds } })
+    const findOrderQuery = {
+      ...(orderNumber && {
+        orderNumber: { $regex: orderNumber, $options: 'i' }
+      }),
+      'products.product': { $in: productIds }
+     };
+     
+     const orders = await Order.find(findOrderQuery)
       .populate('user')
       .populate({
-        path: 'products.product',
-        match: { user: sellerId }
+         path: 'products.product',
+         match: { user: sellerId }
       });
 
       let totalPages = 0;

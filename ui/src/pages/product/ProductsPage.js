@@ -232,7 +232,7 @@ const AllProductsPage = ({ user }) => {
 										<Form.Control
 											type='text'
 											value={searchTerm}
-											placeholder='Search by name'
+											placeholder='Search product'
 											onChange={handleSearchChange}
 											ref={searchInputRef}
 										/>

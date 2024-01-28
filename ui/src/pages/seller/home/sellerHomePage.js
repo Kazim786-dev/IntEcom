@@ -62,12 +62,21 @@ const AllProducts = ({ user }) => {
 		}
 	}, [])
 
+	useEffect(() => {
+		if (selectedItem === 'Process') {
+			fetchProcessedOrders();
+		} else {
+			debouncedFetchData();
+		}
+	}, [currentPage, selectedItem, searchTerm]);
+
 	const fetchData = () => {
 
 		setFetchDataError(false)
-		if (selectedItem !== 'Sellers' && selectedItem !== 'Process') {
+		setTableLoading(true)
+		if (selectedItem =='Products') {
 			axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -113,7 +122,7 @@ const AllProducts = ({ user }) => {
 	const fetchProcessedOrders = async () => {
 		try {
 			setTableLoading(true); // Start loading
-			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders?orderNumber=${searchTerm}`, {
 				headers: { Authorization: `Bearer ${user.token}` }
 			});
 			const { totalPages, data } = response.data
@@ -129,6 +138,7 @@ const AllProducts = ({ user }) => {
 			setTableLoading(false); // Stop table loading
 		}
 	};
+
 	const handleDeleteConfirmation = () => {
 		if (product) {
 
@@ -205,22 +215,13 @@ const AllProducts = ({ user }) => {
 	}
 
 	const handleItemClick = (item) => {
-		setCurrentPage(1);
-		setTableLoading(true);
+		setSearchTerm('')
 		setSelectedItem(item);
-		// setTotalPages(0)
-		if (item === 'Process') {
-			fetchProcessedOrders();
-		} else {
-			debouncedFetchData();
-		}
 	};
 
 	const handleShouldFetchAgain = () => {
 		fetchData()
 	}
-
-
 
 	const handleOrderDetailButtonClick = (item) => {
 		setOrderItem(item)
@@ -232,20 +233,13 @@ const AllProducts = ({ user }) => {
 		setCurrentPage(page)
 	}
 
-
-
-	useEffect(() => {
-		if (selectedItem === 'Process') {
-			fetchProcessedOrders();
-		} else {
-			debouncedFetchData();
-		}
-	}, [currentPage, selectedItem, searchTerm]);
-
+	const handleSearchChange = (event) => {
+		const { value } = event.target
+		setSearchTerm(value)
+		// setCurrentPage(1)
+	}
 
 	const OrdersTablecolumns = []
-
-
 
 	// Product table column styling
 	const ProductsTablecolumns = [
@@ -282,7 +276,7 @@ const AllProducts = ({ user }) => {
 					<button
 						style={{ backgroundColor: 'inherit', border: 'none', paddingLeft: '0px' }}>
 						<>
-							<Trash onClick={() => handleTrashClick(item)} className='me-3' />
+							<Trash onClick={() => handleTrashClick(item)} className='me-2' />
 							<Edit onClick={() => handleEditClick(item)} />
 						</>
 					</button>
@@ -326,21 +320,21 @@ const AllProducts = ({ user }) => {
 			render: (item) => (
 				<>
 					<div className='d-flex'>
-					<Button
-						onClick={() => handleShip(item._id)}
-						variant="info"
-						disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
-					>
-						Ship
-					</Button>
-					<Button
-						onClick={() => handleDeliver(item._id)}
-						variant="success"
-						className="ms-2"
-						disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
-					>
-						Deliver
-					</Button>
+						<Button
+							onClick={() => handleShip(item._id)}
+							variant="info"
+							disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
+						>
+							Ship
+						</Button>
+						<Button
+							onClick={() => handleDeliver(item._id)}
+							variant="success"
+							className="ms-2"
+							disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
+						>
+							Deliver
+						</Button>
 					</div>
 				</>
 			),
@@ -364,13 +358,19 @@ const AllProducts = ({ user }) => {
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									{selectedItem === 'Products' ? (
-										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-									) : selectedItem !== 'Sellers' && (
-										<>
-
-										</>
-									)}
+									<Form.Label className='me-2 mt-1'><b>Search:</b></Form.Label>
+									<Form.Group className='mb-1 mt-1'>
+										<Form.Control
+											type='text'
+											value={searchTerm}
+											placeholder='Search'
+											onChange={handleSearchChange}
+											ref={searchInputRef}
+										/>
+									</Form.Group>
+									{selectedItem === 'Products' &&
+										<Button onClick={handleAddClick} className='px-3 ms-2'>Add New</Button>
+									}
 								</Col>
 							</Row>
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
