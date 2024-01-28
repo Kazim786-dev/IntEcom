@@ -9,7 +9,7 @@ const getProductsBySeller = async ({query, userId}) => {
 
     const page = parseInt(query.page) || 1;
     const pageSize = parseInt(query.size) || 8;
-    const queryName = query.name;
+    // const queryName = query.name;
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'desc' ? -1 : 1 };
 
@@ -17,12 +17,12 @@ const getProductsBySeller = async ({query, userId}) => {
     const findQuery = {
       isDeleted: false,
       user: userId,  // Filter by user ID
-      ...(queryName && {
-        $or: [
-          { name: { $regex: queryName, $options: 'i' } },
-          { description: { $regex: queryName, $options: 'i' } },
-        ]
-      })
+      // ...(queryName && {
+      //   $or: [
+      //     { name: { $regex: queryName, $options: 'i' } },
+      //     { description: { $regex: queryName, $options: 'i' } },
+      //   ]
+      // })
     };
 
     const totalCount = await Product.countDocuments(findQuery);
