@@ -1,17 +1,7 @@
 import React from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
 
-const SpeakSearch = ({
-	handleAudioSearch
-})=> {
-
-	const addAudioElement = (blob) => {
-		const url = URL.createObjectURL(blob);
-		const audio = document.createElement('audio');
-		audio.src = url;
-		audio.controls = true;
-		document.body.appendChild(audio);
-	};
+const SpeakSearch = ({ handleAudioSearch })=> {
 
 	return (
 		<div className='speak-search'>
@@ -22,7 +12,7 @@ const SpeakSearch = ({
 					echoCancellation: true,
 				}}
 				downloadOnSavePress={false}
-				downloadFileExtension='mp3'
+				downloadFileExtension='wav'
 				showVisualizer={true}
 			/>
 		</div>
