@@ -64,7 +64,7 @@ const AllProducts = ({ user }) => {
 
 	useEffect(() => {
 		if (selectedItem === 'Process') {
-			fetchProcessedOrders();
+			debouncedfetchOrders();
 		} else {
 			debouncedFetchData();
 		}
@@ -111,14 +111,7 @@ const AllProducts = ({ user }) => {
 
 	}
 
-	// Debounced version of fetchData
-	const debouncedFetchData = debounce(fetchData, 1000)
-
-	const handleTrashClick = (itemId) => {
-		setproduct(itemId)
-		setShowDeleteModal(true)
-	}
-
+	// fetch orders
 	const fetchProcessedOrders = async () => {
 		try {
 			setTableLoading(true); // Start loading
@@ -138,6 +131,17 @@ const AllProducts = ({ user }) => {
 			setTableLoading(false); // Stop table loading
 		}
 	};
+
+	// Debounced version of fetchData
+	const debouncedFetchData = debounce(fetchData, 1000)
+
+	//Debounced version of fetchProcessedOrders
+	const debouncedfetchOrders= debounce(fetchProcessedOrders, 1000);
+
+	const handleTrashClick = (itemId) => {
+		setproduct(itemId)
+		setShowDeleteModal(true)
+	}
 
 	const handleDeleteConfirmation = () => {
 		if (product) {
@@ -261,7 +265,7 @@ const AllProducts = ({ user }) => {
 			header: 'Price',
 			width: '17rem',
 			render: (product) => (
-				product.price
+				product.price.toFixed(2)
 			),
 		},
 		{

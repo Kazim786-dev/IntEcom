@@ -206,7 +206,8 @@ const AllProductsPage = ({ user }) => {
 		// Send the FormData instance to the server
 		axios.post('http://localhost:5000/audio', data)
 			.then((response) => {
-				console.log(response);
+				const {text} = response.data
+				setSearchTerm(text)
 			})
 			.catch((error) => {
 				console.error(error);
