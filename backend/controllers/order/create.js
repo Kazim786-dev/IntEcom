@@ -28,10 +28,11 @@ const createOrder = async ({ user, body }) => {
         throw new Error(`Invalid quantity for product with ID ${p.product}.`);
       }
 
-      return { 
-        product: p.product, 
-        quantity: p.quantity, 
-        deliveryStatus: 'Pending'  // Add the deliveryStatus here
+      return {
+        product: p.product,
+        quantity: p.quantity,
+        sellingPrice: product.price, // Set sellingPrice equal to the current price of the product
+        deliveryStatus: 'Pending'
       };
     });
 
@@ -60,4 +61,3 @@ const createOrder = async ({ user, body }) => {
 };
 
 export default createOrder;
-

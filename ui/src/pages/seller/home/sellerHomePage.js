@@ -3,6 +3,7 @@ import axios from 'axios'
 import debounce from 'lodash.debounce'
 //react-bootstrap
 import { Container, Row, Col, Form, Image, Button } from 'react-bootstrap'
+import Chart from 'chart.js/auto';
 
 //components
 import AlertComp from '../../../components/alert'
@@ -44,7 +45,8 @@ const AllProducts = ({ user }) => {
 
 	const [selectedItem, setSelectedItem] = useState('Products')
 	const [searchTerm, setSearchTerm] = useState('')
-
+	const [salesAnalytics, setSalesAnalytics] = useState(null);
+	const chartRef = useRef(null);
 	const searchInputRef = useRef(null)
 
 	useEffect(() => {
@@ -65,11 +67,44 @@ const AllProducts = ({ user }) => {
 	useEffect(() => {
 		if (selectedItem === 'Process') {
 			debouncedfetchOrders();
+		}else if (selectedItem === 'Analytics') {
+			fetchSalesAnalytics()
 		} else {
 			debouncedFetchData();
 		}
 	}, [currentPage, selectedItem, searchTerm]);
+	const fetchSalesAnalytics = async () => {
+		try {
+			setTableLoading(true);
+			axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/detailsAnalytics?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			).then((response)=>{
+				console.log(response);
 
+				if (response.status && response.status === 200) {
+					console.log(response);
+					const  totalPages = response.totalPages
+					setSalesAnalytics(response.data)
+					setFetchDataError(false)
+					setTotalPages(totalPages)
+				}
+				setTimeout(() => {
+					setLoading(false)
+					setTableLoading(false)
+				}, 1000)
+			})
+			
+		} catch (error) {
+			console.error('Error fetching sales analytics:', error);
+			setFetchDataError(true);
+		} finally {
+			setTableLoading(false);
+		}
+	};
 	const fetchData = () => {
 
 		setFetchDataError(false)
@@ -212,6 +247,69 @@ const AllProducts = ({ user }) => {
 			console.error('Error delivering order:', error);
 		}
 	};
+
+	
+
+	//seller analytics information
+
+	const SellersTablecolumns = [
+		{
+			header: 'Name',
+			render: (seller) => seller._id,
+		},
+		{
+			header: 'Total Quantity Sold',
+			render: (seller) => seller.totalQuantitySold,
+		},
+		{
+			header: 'Total Price Earned',
+			render: (seller) => seller.totalCost.toFixed(2),
+		},
+	];
+
+
+
+	useEffect(() => {
+		if (salesAnalytics) {
+			const ctx = chartRef.current.getContext('2d');
+
+			const data = {
+				labels: salesAnalytics.map(item => item._id),
+				datasets: [
+					{
+						label: 'Total Quantity Sold',
+						data: salesAnalytics.map(item => item.totalQuantitySold),
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1,
+					},
+					{
+						label: 'Total Price Earned',
+						data: salesAnalytics.map(item => item.totalCost),
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgba(255, 99, 132, 1)',
+						borderWidth: 1,
+					},
+				],
+			};
+
+			const options = {
+				indexAxis: 'y', // Use 'y' for horizontal bar chart
+				scales: {
+					x: {
+						beginAtZero: true,
+					},
+				},
+			};
+
+			new Chart(ctx, {
+				type: 'bar',
+				data,
+				options,
+			});
+		}
+	}, [salesAnalytics]);
+
 
 	const handleAddClick = () => {
 		setproduct(null)
@@ -356,26 +454,38 @@ const AllProducts = ({ user }) => {
 							<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
 						<Col className="mt-4 px-3">
-							{selectedItem === 'Orders' && <OrderSummary user={user} setErrorText={setErrorText} />}
+							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									<Form.Label className='me-2 mt-1'><b>Search:</b></Form.Label>
-									<Form.Group className='mb-1 mt-1'>
-										<Form.Control
-											type='text'
-											value={searchTerm}
-											placeholder='Search'
-											onChange={handleSearchChange}
-											ref={searchInputRef}
-										/>
-									</Form.Group>
-									{selectedItem === 'Products' &&
-										<Button onClick={handleAddClick} className='px-3 ms-2'>Add New</Button>
-									}
+								{selectedItem === 'Products' ? (
+										<>
+										
+											<Form.Label className="me-2"><b>Search:</b></Form.Label>
+											<Form.Group className="mb-1">
+												<Form.Control
+													className='pe-5'
+													type="text"
+													value={searchTerm}
+													placeholder={`Search by ${selectedItem}`}
+													onChange={handleSearchChange}
+													ref={searchInputRef}
+												/>
+											</Form.Group>
+											<Button onClick={handleAddClick} className='px-3'>Add New</Button>
+
+										</>
+									) : <></>}
 								</Col>
+							</Row>
+							<Row>
+								{selectedItem === 'Analytics' && salesAnalytics && (
+									<div className="my-4">
+										<canvas ref={chartRef} id="salesChart" width="400" height="200"></canvas>
+									</div>
+								)}
 							</Row>
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
 								{tableLoading ? (
@@ -384,6 +494,11 @@ const AllProducts = ({ user }) => {
 									<DetailsTable
 										data={processedOrders}
 										columns={ProcessedOrdersTableColumns}
+									/>
+								) : selectedItem === 'Analytics' && salesAnalytics ? (
+									<DetailsTable
+										data={salesAnalytics}
+										columns={SellersTablecolumns }
 									/>
 								) : selectedItem === 'Products' ? (
 									<DetailsTable

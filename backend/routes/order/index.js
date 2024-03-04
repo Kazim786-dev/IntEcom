@@ -10,7 +10,9 @@ import {
     getOrderSummary,
     checkout,
     getSellerOrders,
-    updateOrderDeliveryStatus
+    updateOrderDeliveryStatus,
+    getSellerOrderSummary,
+    getSellerProductSales
 } from '../../controllers/order/index.js';
 
 import VerifyRole from '../../middleware/role-verification.js';
@@ -57,6 +59,33 @@ router.get('/summary', VerifyRole({ roleToCheck: 'admin' }), async (req, res) =>
     try {
         // Calling the controller function to get order summary
         const result = await getOrderSummary();
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching the order summary.' });
+    }
+});
+
+
+// Route for fetching order analytics (accessible only to seller)
+router.get('/analytics', authMiddleware, async (req, res) => {
+    try {
+        // Calling the controller function to get analytice summary
+        const userId = req.user.user._id; 
+        const result = await getSellerOrderSummary(userId);
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching the order summary.' });
+    }
+});
+
+// Route for fetching order analytics details(accessible only to seller)
+router.get('/detailsAnalytics', authMiddleware, async (req, res) => {
+    try {
+        // Calling the controller function to get analytice summary
+        const userId = req.user.user._id; 
+        const result = await getSellerProductSales(userId);
         res.status(result.status).json(result.data);
     } catch (error) {
         console.error(error);

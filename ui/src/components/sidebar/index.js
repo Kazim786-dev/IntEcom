@@ -34,6 +34,13 @@ const Sidebar = ({ selectedItem, handleItemClick }) => {
 			<hr />
 			<SidebarItem
 				icon={<ArrowRight />}
+				text="Seller Analytics"
+				isSelected={selectedItem === 'Analytics'}
+				onItemClick={() => handleItemClick('Analytics')}
+			/>
+			<hr />
+			<SidebarItem
+				icon={<ArrowRight />}
 				text="Sellers"
 				isSelected={selectedItem === 'Sellers'}
 				onItemClick={() => handleItemClick('Sellers')}
