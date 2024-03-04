@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 //react-bootstrap
-import { Container, Row, Col, Form, Image, Button } from 'react-bootstrap'
+import { Container, Row, Col, Form, Image, Button, Modal  } from 'react-bootstrap'
 import Chart from 'chart.js/auto';
 
 //components
@@ -54,6 +54,17 @@ const AllProducts = ({ user }) => {
 	const searchInputRef = useRef(null)
 	const [salesAnalytics, setSalesAnalytics] = useState(null);
 	const chartRef = useRef(null);
+
+
+
+
+	const [selectedProducts, setSelectedProducts] = useState([]);
+	const [showSaleConfirmationModal, setShowSaleConfirmationModal] = useState(false);
+	const [salePercentage, setSalePercentage] = useState(0);
+	const [notOnSale, setNotOnSale] = useState([])
+
+
+
 
 	useEffect(() => {
 		debouncedFetchData()
@@ -108,7 +119,7 @@ const AllProducts = ({ user }) => {
 	const fetchData = () => {
 
 		setFetchDataError(false)
-		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics') {
+		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && selectedItem !== 'Discount Management') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -296,7 +307,9 @@ const AllProducts = ({ user }) => {
 			fetchReportedProducts();
 		}else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics();
-		}  else {
+		}  else if (selectedItem === 'Discount Management') {
+			loadNotOnDiscount()
+		}else {
 			debouncedFetchData();
 		}
 	}, [currentPage, selectedItem, searchTerm]);
@@ -407,46 +420,46 @@ const AllProducts = ({ user }) => {
 
 
 
-useEffect(() => {
-    if (salesAnalytics) {
-        const ctx = chartRef.current.getContext('2d');
+    useEffect(() => {
+        if (chartRef.current && salesAnalytics) {
+            const ctx = chartRef.current.getContext('2d');
 
-        const data = {
-            labels: salesAnalytics.map(item => item._id),
-            datasets: [
-                {
-                    label: 'Total Quantity Sold',
-                    data: salesAnalytics.map(item => item.totalQuantitySold),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Total Price Earned',
-                    data: salesAnalytics.map(item => item.totalCost),
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                },
-            ],
-        };
+            const data = {
+                labels: salesAnalytics.map(item => item._id),
+                datasets: [
+                    {
+                        label: 'Total Quantity Sold',
+                        data: salesAnalytics.map(item => item.totalQuantitySold),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Total Price Earned',
+                        data: salesAnalytics.map(item => item.totalCost),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            };
 
-        const options = {
-            indexAxis: 'y', // Use 'y' for horizontal bar chart
-            scales: {
-                x: {
-                    beginAtZero: true,
+            const options = {
+                indexAxis: 'y', // Use 'y' for horizontal bar chart
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                    },
                 },
-            },
-        };
+            };
 
-        new Chart(ctx, {
-            type: 'bar',
-            data,
-            options,
-        });
-    }
-}, [salesAnalytics]);
+            new Chart(ctx, {
+                type: 'bar',
+                data,
+                options,
+            });
+        }
+    }, [salesAnalytics]);
 
 
 
@@ -668,6 +681,130 @@ useEffect(() => {
 		},
 	];
 
+
+
+
+
+
+
+
+
+
+
+
+
+	const handleCheckboxChange = (productId) => {
+		const updatedSelectedProducts = [...selectedProducts];
+		if (updatedSelectedProducts.includes(productId)) {
+		// Product is already selected, remove it
+			const index = updatedSelectedProducts.indexOf(productId);
+			updatedSelectedProducts.splice(index, 1);
+		} else {
+			// Product is not selected, add it
+			updatedSelectedProducts.push(productId);
+		}
+			setSelectedProducts(updatedSelectedProducts);
+		};
+	
+		const handleConfirmSale = async () => {
+			try {
+				// Prepare the data to be sent to the server
+				const saleData = {
+					productIds: selectedProducts,
+					offPercent: salePercentage,
+				};
+		
+				// Send the data to the server
+				const response = await axios.post(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/put-on-sale`,
+					saleData,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+		
+				// Handle the response here, such as updating state or showing a success message
+				if (response.status==200) {
+					// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+					setNotOnSale((prevProducts) =>
+					prevProducts.filter((product) => !selectedProducts.includes(product._id))
+					);
+				}
+		
+				// After processing the sale, you can reset the state
+				setSelectedProducts([]);
+				setSalePercentage(0);
+		
+				// Close the confirmation modal
+				setShowSaleConfirmationModal(false);
+			} catch (error) {
+				console.error('Error confirming sale:', error);
+				// Handle error here, such as updating state or showing an error message
+			}
+		};
+		
+///////for on sale management table
+	const productsColumns = [
+		{
+			header: 'Product',
+			width: '32rem',
+			render: (item) => item.description,
+
+		},{
+			header: 'Price',
+			width: '15rem',
+			render: (item) => item.price,
+
+		},{
+			header: 'Stock',
+			width: '15rem',
+			render: (item) => item.quantity,
+
+		},
+		{
+			header: 'Put on Sale',
+			render: (item) => (
+				<Form.Check
+					type="checkbox"
+					checked={selectedProducts.includes(item._id)}
+					onChange={() => handleCheckboxChange(item._id)}
+				/>
+			),
+		},
+		];
+
+		const loadNotOnDiscount = async () => {
+			try {
+
+				setTableLoading(true);
+				const response = await axios.get(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/not-on-discount?page=${currentPage}&size=${pageSize}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+				if (response.status === 200) {
+					setNotOnSale(response.data.data);
+					setFetchDataError(false);
+					setTotalPages(response.data.totalPages);
+				}
+			} catch (error) {
+				console.error('Error fetching products not on discount:', error);
+				setFetchDataError(true);
+			} finally {
+				setTableLoading(false);
+			}
+		};
+
+
+
+
+
+
 	return (
 		<>
 			{loading || reportLoading ? (
@@ -689,7 +826,7 @@ useEffect(() => {
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-									) : selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && (
+									) : selectedItem !== 'Sellers' && selectedItem !== 'Process'&& selectedItem !== 'Discount Management' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && (
 										<>
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
@@ -713,6 +850,57 @@ useEffect(() => {
 									</div>
 								)}
 							</Row>
+
+
+
+
+
+
+
+							{/* Sale confirmation modal */}
+							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+								<Modal.Title>Confirm Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+								Are you sure you want to put the selected products on sale with a {salePercentage}% discount?
+								</Modal.Body>
+								<Modal.Footer>
+								<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
+									Cancel
+								</Button>
+								<Button variant="primary" onClick={handleConfirmSale}>
+									Confirm
+								</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+
+							<Row>
+								{selectedItem === 'Discount Management' && (
+								<>
+									<Col className='d-flex justify-content-end pe-0 align-items-center'>
+									<Button onClick={() => setShowSaleConfirmationModal(true)}>Put on Sale</Button>
+									<Form.Group className="mb-1 ms-2">
+										<Form.Control
+										type="number"
+										value={salePercentage}
+										placeholder="Discount Percentage"
+										onChange={(e) => setSalePercentage(e.target.value)}
+										min="0"
+										/>
+									</Form.Group>
+									</Col>
+								</>
+								)}
+							</Row>
+							<br/>
+
+
+
+
+
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
 								{tableLoading ? (
 									<SpinnerComp />
@@ -736,7 +924,12 @@ useEffect(() => {
 										data={salesAnalytics}
 										columns={SellersTablecolumns }
 									/>
-								) : selectedItem === 'Products' ? (
+								) : selectedItem === 'Discount Management'?  (
+									<DetailsTable
+										data={notOnSale}
+										columns={productsColumns }
+									/>
+								) :selectedItem === 'Products' ? (
 									<DetailsTable
 										data={data}
 										columns={ProductsTablecolumns}

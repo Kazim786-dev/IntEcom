@@ -269,46 +269,46 @@ const AllProducts = ({ user }) => {
 
 
 
-	useEffect(() => {
-		if (salesAnalytics) {
-			const ctx = chartRef.current.getContext('2d');
+    useEffect(() => {
+        if (chartRef.current && salesAnalytics) {
+            const ctx = chartRef.current.getContext('2d');
 
-			const data = {
-				labels: salesAnalytics.map(item => item._id),
-				datasets: [
-					{
-						label: 'Total Quantity Sold',
-						data: salesAnalytics.map(item => item.totalQuantitySold),
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgba(75, 192, 192, 1)',
-						borderWidth: 1,
-					},
-					{
-						label: 'Total Price Earned',
-						data: salesAnalytics.map(item => item.totalCost),
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgba(255, 99, 132, 1)',
-						borderWidth: 1,
-					},
-				],
-			};
+            const data = {
+                labels: salesAnalytics.map(item => item._id),
+                datasets: [
+                    {
+                        label: 'Total Quantity Sold',
+                        data: salesAnalytics.map(item => item.totalQuantitySold),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Total Price Earned',
+                        data: salesAnalytics.map(item => item.totalCost),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            };
 
-			const options = {
-				indexAxis: 'y', // Use 'y' for horizontal bar chart
-				scales: {
-					x: {
-						beginAtZero: true,
-					},
-				},
-			};
+            const options = {
+                indexAxis: 'y', // Use 'y' for horizontal bar chart
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                    },
+                },
+            };
 
-			new Chart(ctx, {
-				type: 'bar',
-				data,
-				options,
-			});
-		}
-	}, [salesAnalytics]);
+            new Chart(ctx, {
+                type: 'bar',
+                data,
+                options,
+            });
+        }
+    }, [salesAnalytics]);
 
 
 	const handleAddClick = () => {
