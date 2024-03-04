@@ -8,6 +8,8 @@ import getOrderSummary from "./get-summary.js"
 import checkout from "./checkout.js"
 import getSellerOrders from "./seller-all-orders.js"
 import updateOrderDeliveryStatus from "./update-status.js"
+import getSellerOrderSummary from "./seller-analytics"
+import getSellerProductSales from "./seller-analytics-details"
 module.exports = {
   getAllOrders,
   getAllUserOrders,
@@ -18,5 +20,7 @@ module.exports = {
   getOrderSummary,
   checkout,
   getSellerOrders,
-  updateOrderDeliveryStatus
+  updateOrderDeliveryStatus,
+  getSellerOrderSummary,
+  getSellerProductSales
 }

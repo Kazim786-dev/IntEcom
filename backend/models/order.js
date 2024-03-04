@@ -27,6 +27,10 @@ const orderSchema = new Schema({
       type: Number,
       required: true
     }, 
+    sellingPrice: {
+      type: Number, 
+      required: true
+    },
     deliverStatus:{
       type: String,
       enum: ['Pending', 'Shipped', 'Delivered'],

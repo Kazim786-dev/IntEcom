@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import SummaryElement from './summary-element'
 
-const OrderSummary = ({ user, setErrorText }) => {
+const OrderSummary = ({ user, setErrorText, selectedItem}) => {
 
 	const [orderSummary, setOrderSummary] = useState({
 		totalAmount: 0,
@@ -12,13 +12,42 @@ const OrderSummary = ({ user, setErrorText }) => {
 
 	useEffect(() => {
 		const fetchSummary = async () => {
-			const data = await fetchOrderSummary()
-			setOrderSummary(data)
-		}
+			if (selectedItem=='Orders') {
+				const data = await fetchOrderSummary()
+				setOrderSummary(data)
+			}else if(selectedItem=='Analytics'){
+				const data = await fetchAnalytics()
+				setOrderSummary(data)
 
+			}
+		}
 		fetchSummary()
+		
 	}, [])
 
+	const fetchAnalytics = async ()=>{
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/analytics`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			)
+			const data = response.data
+			return data
+
+		} catch (error) {
+			setErrorText('Error fetching order summary')
+			console.error('Error fetching order summary:', error)
+		}
+		return {
+			totalAmount: 0,
+			totalOrders: 0,
+			totalUnits: 0
+		}
+	}
 	const fetchOrderSummary = async () => {
 		try {
 			const response = await axios.get(
