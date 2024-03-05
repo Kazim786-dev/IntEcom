@@ -24,15 +24,20 @@ const loadNotOnDiscount = async (req, res) => {
 };
 
 
-const applyDiscount = async (productIds, offPercent) => {
+const applyDiscount = async (productIds, offPercent, flag) => {
   
-
   try {
     // Validate input here if necessary
+    // Construct the filter based on the flag
+    let filter = { _id: { $in: productIds } };
+    if (flag) {
+      // If flag is true, update all products
+      filter = {};
+    }
 
-    // Update the products to apply the discount
+    // Update the products to end the discount
     await Product.updateMany(
-      { _id: { $in: productIds } },
+      filter,
       { isOnSale: true, offPercent }
     );
 
@@ -69,23 +74,30 @@ const loadOnDiscount = async (req, res) => {
 
 
 
-const endDiscount = async (productIds, offPercent) => {
-  
-
+const endDiscount = async (productIds, offPercent, flag) => {
   try {
     // Validate input here if necessary
 
-    // Update the products to apply the discount
+    // Construct the filter based on the flag
+    let filter = { _id: { $in: productIds } };
+    if (flag) {
+      // If flag is true, update all products
+      filter = {};
+    }
+
+    // Update the products to end the discount
     await Product.updateMany(
-      { _id: { $in: productIds } },
+      filter,
       { isOnSale: false, offPercent }
     );
 
-    return {status: 200, data: "updated successfully"}
+    return { status: 200, data: "updated successfully" };
   } catch (error) {
-    console.error('Error applying discount:', error);
+    console.error('Error ending discount:', error);
+    throw error; // Rethrow the error to be handled by the caller
   }
 };
+
 
 
 module.exports = { loadNotOnDiscount, applyDiscount, loadOnDiscount, endDiscount };
