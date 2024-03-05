@@ -64,6 +64,10 @@ const AllProducts = ({ user }) => {
 	const [notOnSale, setNotOnSale] = useState([])
 
 
+	const [selectedProductsNotOnSale, setselectedProductsNotOnSale] = useState([]);
+	const [showEndSaleConfirmationModal, setShowEndSaleConfirmationModal] = useState(false);
+	const [OnSale, setOnSale] = useState([])
+
 
 
 	useEffect(() => {
@@ -119,7 +123,7 @@ const AllProducts = ({ user }) => {
 	const fetchData = () => {
 
 		setFetchDataError(false)
-		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && selectedItem !== 'Discount Management') {
+		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && selectedItem !== 'Discount Management' && selectedItem !== 'End Sale') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -309,6 +313,8 @@ const AllProducts = ({ user }) => {
 			fetchSalesAnalytics();
 		}  else if (selectedItem === 'Discount Management') {
 			loadNotOnDiscount()
+		}else if (selectedItem === 'End Sale') {
+			loadOnDiscount()
 		}else {
 			debouncedFetchData();
 		}
@@ -802,6 +808,122 @@ const AllProducts = ({ user }) => {
 
 
 
+		/////end sale
+		const loadOnDiscount = async () => {
+			try {
+
+				setTableLoading(true);
+				const response = await axios.get(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/on-discount?page=${currentPage}&size=${pageSize}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+				if (response.status === 200) {
+					setOnSale(response.data.data);
+					setFetchDataError(false);
+					setTotalPages(response.data.totalPages);
+				}
+			} catch (error) {
+				console.error('Error fetching products not on discount:', error);
+				setFetchDataError(true);
+			} finally {
+				setTableLoading(false);
+			}
+		};
+
+		const EndSaleProductsColumns = [
+			{
+				header: 'Product',
+				width: '32rem',
+				render: (item) => item.description,
+	
+			},{
+				header: 'Price',
+				width: '15rem',
+				render: (item) => (item.offPercent/100)*item.price,
+	
+			},{
+				header: 'Stock',
+				width: '15rem',
+				render: (item) => item.quantity,
+	
+			},
+			{
+				header: 'Sale Percentage',
+				width: '15rem',
+				render: (item) => item.offPercent,
+	
+			},
+			{
+				header: 'End Sale',
+				render: (item) => (
+					<Form.Check
+						type="checkbox"
+						checked={selectedProductsNotOnSale.includes(item._id)}
+						onChange={() => handleCheckboxChangEndSale(item._id)}
+					/>
+				),
+			},
+			];
+			const handleConfirmEndSale = async () => {
+				try {
+					// Prepare the data to be sent to the server
+					const saleData = {
+						productIds: selectedProductsNotOnSale,
+					};
+					// Send the data to the server
+					const response = await axios.post(
+						`${process.env.REACT_APP_DEV_BACKEND_URL}/products/end-sale`,
+						saleData,
+						{
+							headers: {
+								Authorization: `Bearer ${user.token}`,
+							},
+						}
+					);
+			
+					// Handle the response here, such as updating state or showing a success message
+					if (response.status==200) {
+						// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+						setOnSale((prevProducts) =>
+						prevProducts.filter((product) => !selectedProductsNotOnSale.includes(product._id))
+						);
+					}
+			
+					// After processing the sale, you can reset the state
+					setselectedProductsNotOnSale([]);
+			
+					// Close the confirmation modal
+					setShowEndSaleConfirmationModal(false);
+				} catch (error) {
+					console.error('Error confirming sale:', error);
+					// Handle error here, such as updating state or showing an error message
+				}
+			};
+
+			const handleCheckboxChangEndSale = (productId) => {
+				const updatedSelectedProducts = [...selectedProductsNotOnSale];
+				if (updatedSelectedProducts.includes(productId)) {
+				// Product is already selected, remove it
+					const index = updatedSelectedProducts.indexOf(productId);
+					updatedSelectedProducts.splice(index, 1);
+				} else {
+					// Product is not selected, add it
+					updatedSelectedProducts.push(productId);
+				}
+				setselectedProductsNotOnSale(updatedSelectedProducts);
+				};
+			
+
+
+
+
+
+
+
 
 
 
@@ -826,7 +948,7 @@ const AllProducts = ({ user }) => {
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-									) : selectedItem !== 'Sellers' && selectedItem !== 'Process'&& selectedItem !== 'Discount Management' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && (
+									) : selectedItem !== 'Sellers' && selectedItem !== 'Process'&& selectedItem !== 'Discount Management'&& selectedItem !== 'End Sale' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && (
 										<>
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
@@ -863,7 +985,7 @@ const AllProducts = ({ user }) => {
 								<Modal.Title>Confirm Sale</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-								Are you sure you want to put the selected products on sale with a {salePercentage}% discount?
+								Are you sure you want to put the products on sale with a {salePercentage}% discount?
 								</Modal.Body>
 								<Modal.Footer>
 								<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
@@ -897,6 +1019,34 @@ const AllProducts = ({ user }) => {
 							</Row>
 							<br/>
 
+							{/* end Sale confirmation modal */}
+							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+								<Modal.Title>Confirm End Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+								Are you sure you want to put products on back on origional price?
+								</Modal.Body>
+								<Modal.Footer>
+								<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
+									Cancel
+								</Button>
+								<Button variant="primary" onClick={handleConfirmEndSale}>
+									Confirm
+								</Button>
+								</Modal.Footer>
+							</Modal>
+
+							<Row>
+								{selectedItem === 'End Sale' && (
+								<>
+									<Col className='d-flex justify-content-end pe-0 align-items-center'>
+									<Button onClick={() => setShowEndSaleConfirmationModal(true)}>End Sale</Button>
+									</Col>
+								</>
+								)}
+							</Row>
+							<br/>
 
 
 
@@ -928,6 +1078,11 @@ const AllProducts = ({ user }) => {
 									<DetailsTable
 										data={notOnSale}
 										columns={productsColumns }
+									/>
+								) : selectedItem === 'End Sale'?  (
+									<DetailsTable
+										data={OnSale}
+										columns={EndSaleProductsColumns }
 									/>
 								) :selectedItem === 'Products' ? (
 									<DetailsTable

@@ -17,7 +17,9 @@ import {
   blockProduct,
   cancelReport,
   loadNotOnDiscount,
-  applyDiscount
+  applyDiscount,
+  loadOnDiscount,
+  endDiscount
 } from '../../controllers/product/index.js';
 
 import authMiddleware from '../../middleware/auth.js'
@@ -113,7 +115,7 @@ router.get('/not-on-discount', async (req, res) => {
 });
 
 
-// put all Products on sale
+// put Products on sale
 router.post('/put-on-sale', async (req, res) => {
   const { productIds, offPercent } = req.body;
   try {
@@ -124,6 +126,28 @@ router.post('/put-on-sale', async (req, res) => {
   }
 });
 
+
+// Get all Products on sale
+router.get('/on-discount', async (req, res) => {
+  try {
+    const result = await loadOnDiscount({query: req.query});
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// end sale
+router.post('/end-sale', async (req, res) => {
+  const { productIds } = req.body;
+  try {
+    const offPercent = 0;
+    const result = await endDiscount(productIds, offPercent);
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
 
 // Get Product by ID
 router.get('/:id', authMiddleware, async (req, res) => {
