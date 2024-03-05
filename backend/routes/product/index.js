@@ -117,9 +117,9 @@ router.get('/not-on-discount', async (req, res) => {
 
 // put Products on sale
 router.post('/put-on-sale', async (req, res) => {
-  const { productIds, offPercent } = req.body;
+  const { productIds, offPercent, flag } = req.body;
   try {
-    const result = await applyDiscount(productIds, offPercent);
+    const result = await applyDiscount(productIds, offPercent, flag);
     return res.status(result.status).json(result.data);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error.' });
@@ -139,10 +139,10 @@ router.get('/on-discount', async (req, res) => {
 
 // end sale
 router.post('/end-sale', async (req, res) => {
-  const { productIds } = req.body;
+  const { productIds, flag } = req.body;
   try {
     const offPercent = 0;
-    const result = await endDiscount(productIds, offPercent);
+    const result = await endDiscount(productIds, offPercent, flag);
     return res.status(result.status).json(result.data);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error.' });

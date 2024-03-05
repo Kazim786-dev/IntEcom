@@ -67,6 +67,8 @@ const AllProducts = ({ user }) => {
 	const [selectedProductsNotOnSale, setselectedProductsNotOnSale] = useState([]);
 	const [showEndSaleConfirmationModal, setShowEndSaleConfirmationModal] = useState(false);
 	const [OnSale, setOnSale] = useState([])
+	const [isAllEnd, setisAllEnd] = useState(false)
+	const [isAllStart, setisAllStart] = useState(false)
 
 
 
@@ -715,11 +717,14 @@ const AllProducts = ({ user }) => {
 		const handleConfirmSale = async () => {
 			try {
 				// Prepare the data to be sent to the server
-				const saleData = {
+				let saleData = {
 					productIds: selectedProducts,
 					offPercent: salePercentage,
+					flag: false
 				};
-		
+				if (isAllStart) {
+					saleData.flag = true
+				}
 				// Send the data to the server
 				const response = await axios.post(
 					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/put-on-sale`,
@@ -737,6 +742,11 @@ const AllProducts = ({ user }) => {
 					setNotOnSale((prevProducts) =>
 					prevProducts.filter((product) => !selectedProducts.includes(product._id))
 					);
+				}
+				if (isAllStart) {
+					setNotOnSale([])
+					setisAllStart(false)
+					setShowSaleConfirmationModal(false);
 				}
 		
 				// After processing the sale, you can reset the state
@@ -871,13 +881,19 @@ const AllProducts = ({ user }) => {
 			const handleConfirmEndSale = async () => {
 				try {
 					// Prepare the data to be sent to the server
-					const saleData = {
+					let saleData = {
 						productIds: selectedProductsNotOnSale,
+						flag: false
 					};
+
+					if (isAllEnd) {
+						saleData.flag = true
+					}
 					// Send the data to the server
 					const response = await axios.post(
 						`${process.env.REACT_APP_DEV_BACKEND_URL}/products/end-sale`,
 						saleData,
+						
 						{
 							headers: {
 								Authorization: `Bearer ${user.token}`,
@@ -892,7 +908,12 @@ const AllProducts = ({ user }) => {
 						prevProducts.filter((product) => !selectedProductsNotOnSale.includes(product._id))
 						);
 					}
-			
+					if (isAllEnd) {
+						setOnSale([])
+						setisAllEnd(false)
+						setShowEndSaleConfirmationModal(false);
+					}
+					
 					// After processing the sale, you can reset the state
 					setselectedProductsNotOnSale([]);
 			
@@ -1003,7 +1024,12 @@ const AllProducts = ({ user }) => {
 								{selectedItem === 'Discount Management' && (
 								<>
 									<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									<Button onClick={() => setShowSaleConfirmationModal(true)}>Put on Sale</Button>
+									<Button onClick={() => {
+										setShowSaleConfirmationModal(true)
+										setisAllStart(true)
+										}} disabled = {salePercentage<=0 || notOnSale.length==0}>Put All Products on Sale</Button>
+									<div style={{ marginRight: '10px' }}></div>
+									<Button onClick={() => setShowSaleConfirmationModal(true)} disabled = {salePercentage<=0 || selectedProducts.length==0}>Put Selected Products on Sale</Button>
 									<Form.Group className="mb-1 ms-2">
 										<Form.Control
 										type="number"
@@ -1041,7 +1067,12 @@ const AllProducts = ({ user }) => {
 								{selectedItem === 'End Sale' && (
 								<>
 									<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									<Button onClick={() => setShowEndSaleConfirmationModal(true)}>End Sale</Button>
+									<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled = {selectedProductsNotOnSale.length==0}>End Sale</Button>
+									<div style={{ marginRight: '10px' }}></div>
+									<Button onClick={() => {
+										setShowEndSaleConfirmationModal(true)
+										setisAllEnd(true)
+									}} disabled= {OnSale.length==0}>End Sale for all</Button>
 									</Col>
 								</>
 								)}
