@@ -14,7 +14,7 @@ const createProduct = async ({productData, imageFile, user}) => {
     return { status: 401, data: { error: 'Unauthorized' } };
   }
 
-  const { name, description, price, quantity, size, color } = productData;
+  const { name, description, price, quantity, size, color, catagory } = productData;
 
   try {
     if (quantity < 1) {
@@ -49,6 +49,7 @@ const createProduct = async ({productData, imageFile, user}) => {
           const newProduct = new Product({
             name:description,
             description,
+            catagory,
             price,
             originalPrice: price,
             quantity,
