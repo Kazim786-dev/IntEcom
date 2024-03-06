@@ -57,6 +57,10 @@ const productSchema = new Schema({
   offPercent: {
     type: Number,
     default: 0
+  },
+  originalPrice: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true
