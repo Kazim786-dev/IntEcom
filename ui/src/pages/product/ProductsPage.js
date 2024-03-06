@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce'
 import { useNavigate } from 'react-router-dom';
 
 //react-bootstrap
-import { Container, Row, Col, Form } from 'react-bootstrap'
+import { Container, Row, Col, Form, Button, Offcanvas } from 'react-bootstrap'
 
 //components
 import AlertComp from '../../components/alert'
@@ -50,6 +50,26 @@ const AllProductsPage = ({ user }) => {
 	const cartProducts = useSelector((state) => state.cart.products)
 
 
+
+
+
+
+
+	const [showFilters, setShowFilters] = useState(false);
+    const [filters, setFilters] = useState([]);
+	const [selectedFilters, setSelectedFilters] = useState([]);
+
+
+
+
+
+
+
+
+
+
+
+
 	const fetchWishlist = async () => {
 		setIsError(false); // Reset error state before making a new request
 
@@ -75,7 +95,7 @@ const AllProductsPage = ({ user }) => {
 		fetchWishlist();
 
 		debouncedFetchData()
-
+		fetchFilters();
 		// Cleanup the debounced function when the component is unmounted
 		return () => {
 			debouncedFetchData.cancel()
@@ -87,6 +107,81 @@ const AllProductsPage = ({ user }) => {
 	// 		searchInputRef.current.focus()
 	// 	}
 	// })
+
+
+
+
+
+
+
+	
+
+
+    const fetchFilters = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/all-filters`);
+            if (response.status === 200) {
+				console.log(response.data);
+                setFilters(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching filters:', error);
+        }
+    };
+
+    const handleToggleFilters = () => setShowFilters(!showFilters);
+
+const handleFilterChange = async (selectedFilter) => {
+    setSelectedFilters((prevFilters) => {
+        // Ensure prevFilters is always treated as an array
+        const currentFilters = Array.isArray(prevFilters) ? prevFilters : [];
+        
+        let updatedFilters;
+        // Check if the filter is already selected
+        if (currentFilters.includes(selectedFilter)) {
+            // If it is, remove it from the selected filters
+            updatedFilters = currentFilters.filter(filter => filter !== selectedFilter);
+        } else {
+            // If it's not, add it to the selected filters
+            updatedFilters = [...currentFilters, selectedFilter];
+        }
+
+        // Now, send updatedFilters to the backend
+        sendFiltersToBackend(updatedFilters);
+
+        // Return updatedFilters to update the state
+        return updatedFilters;
+    });
+};
+
+const sendFiltersToBackend = async (filters) => {
+	const filtersString = filters.join(',');
+	console.log(filtersString);
+
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}categories=${encodeURIComponent(filtersString)}`, {
+            filters: filters
+        });
+        console.log('Filters sent successfully', response.data);
+        // Handle response data or perform actions based on the response
+    } catch (error) {
+        console.error('Error sending filters to backend:', error);
+        // Handle errors, such as by displaying an error message to the user
+    }
+};
+
+
+useEffect(() => {
+    // Call fetchProducts again whenever selectedFilters changes
+    debouncedFetchData();
+}, [selectedFilters]);
+
+
+
+
+
+
+
 
 	const fetchProducts = async () => {
 		let response = ''
@@ -251,6 +346,20 @@ const AllProductsPage = ({ user }) => {
 										</Form.Select>
 									</Form.Group>
 								</Col>
+
+
+
+
+
+								<Col md='auto' className='d-flex align-items-center pe-0'>
+									<Button onClick={handleToggleFilters} variant="outline-primary">Filters</Button>
+								</Col>
+
+
+
+
+
+
 							</Row>
 
 							<div style={{ minHeight: '60vh' }}>
@@ -291,6 +400,37 @@ const AllProductsPage = ({ user }) => {
 									onClose={() => setFetchProductError(false)}
 								/>
 							)}
+
+
+
+
+						<Offcanvas show={showFilters} onHide={handleToggleFilters} placement="end">
+                            <Offcanvas.Header closeButton>
+                                <Offcanvas.Title>Filters</Offcanvas.Title>
+                            </Offcanvas.Header>
+                            <Offcanvas.Body>
+                                {/* Dynamically generate filter options */}
+                                {filters.map((filter, index) => (
+									<div key={index}>
+										<Form.Check 
+										type="checkbox" 
+										label={filter} // Directly use filter as the label since it's a string
+										id={`filter-${index}`} // Generate a unique ID for each checkbox
+										onChange={() => handleFilterChange(filter)}
+										/>
+									</div>
+									))}
+
+                            </Offcanvas.Body>
+                        </Offcanvas>
+
+
+
+
+
+
+
+
 						</Container>
 					</>
 				)

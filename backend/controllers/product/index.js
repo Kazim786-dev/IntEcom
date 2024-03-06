@@ -12,6 +12,7 @@ import blockProduct from "./block-product.js"
 import cancelReport from "./delete-or-cancel-report.js"
 import {loadNotOnDiscount, applyDiscount, loadOnDiscount, endDiscount} from "./discount-management.js"
 import {UserloadNotOnDiscount, UserapplyDiscount, UserloadOnDiscount, UserendDiscount} from "./discount-management-by-seller.js"
+import getUniqueCategories from "./get-filters.js"
 module.exports = {
   getProducts,
   getProductById,
@@ -31,5 +32,6 @@ module.exports = {
   UserloadNotOnDiscount,
   UserapplyDiscount,
   UserloadOnDiscount,
-  UserendDiscount
+  UserendDiscount,
+  getUniqueCategories
 }

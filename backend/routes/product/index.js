@@ -23,7 +23,8 @@ import {
   UserloadNotOnDiscount, 
   UserapplyDiscount, 
   UserloadOnDiscount, 
-  UserendDiscount
+  UserendDiscount,
+  getUniqueCategories
 } from '../../controllers/product/index.js';
 
 
@@ -107,7 +108,15 @@ router.get('/allproducts', async (req, res) => {
   }
 });
 
-
+// Get all Products filters
+router.get('/all-filters', async (req, res) => {
+  try {
+    const result = await getUniqueCategories();
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
 
 // Get all Products not on sale
 router.get('/not-on-discount', async (req, res) => {
