@@ -19,8 +19,13 @@ import {
   loadNotOnDiscount,
   applyDiscount,
   loadOnDiscount,
-  endDiscount
+  endDiscount,
+  UserloadNotOnDiscount, 
+  UserapplyDiscount, 
+  UserloadOnDiscount, 
+  UserendDiscount
 } from '../../controllers/product/index.js';
+
 
 import authMiddleware from '../../middleware/auth.js'
 
@@ -148,6 +153,69 @@ router.post('/end-sale', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
+
+
+
+
+
+
+
+// Get all Products not on sale
+router.get('/user-not-on-discount',authMiddleware, async (req, res) => {
+  try {
+    const { page = 1, size = 9 } = req.query;
+    const userId = req.user.user._id;
+    const result = await UserloadNotOnDiscount(page, size, userId);
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
+// put Products on sale
+router.post('/user-put-on-sale', authMiddleware, async (req, res) => {
+  const { productIds, offPercent, flag } = req.body;
+  try {
+    const userId = req.user.user._id;
+    const result = await UserapplyDiscount(productIds, offPercent, flag, userId);
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
+// Get all Products on sale
+router.get('/user-on-discount',authMiddleware, async (req, res) => {
+  try {
+    const { page = 1, size = 9 } = req.query;
+    const userId = req.user.user._id;
+    const result = await UserloadOnDiscount(page, size, userId);
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// end sale
+router.post('/user-end-sale',authMiddleware, async (req, res) => {
+  const { productIds, flag } = req.body;
+  try {
+    const userId = req.user.user._id;
+    const offPercent = 0;
+    const result = await UserendDiscount(productIds, offPercent, flag, userId);
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
+
+
+
 
 // Get Product by ID
 router.get('/:id', authMiddleware, async (req, res) => {

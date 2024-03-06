@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 //react-bootstrap
-import { Container, Row, Col, Form, Image, Button } from 'react-bootstrap'
+import { Container, Row, Col, Form, Image, Button, Modal } from 'react-bootstrap'
 import Chart from 'chart.js/auto';
 
 //components
@@ -49,12 +49,31 @@ const AllProducts = ({ user }) => {
 	const chartRef = useRef(null);
 	const searchInputRef = useRef(null)
 
+
+	
+	const [selectedProducts, setSelectedProducts] = useState([]);
+	const [showSaleConfirmationModal, setShowSaleConfirmationModal] = useState(false);
+	const [salePercentage, setSalePercentage] = useState(0);
+	const [notOnSale, setNotOnSale] = useState([])
+
+
+	const [selectedProductsNotOnSale, setselectedProductsNotOnSale] = useState([]);
+	const [showEndSaleConfirmationModal, setShowEndSaleConfirmationModal] = useState(false);
+	const [OnSale, setOnSale] = useState([])
+	const [isAllEnd, setisAllEnd] = useState(false)
+	const [isAllStart, setisAllStart] = useState(false)
+
+
+
 	useEffect(() => {
-		debouncedFetchData()
-		// Cleanup the debounced function when the component is unmounted
-		return () => {
-			debouncedFetchData.cancel()
+		if (selectedItem==='Products') {
+			debouncedFetchData()
+			// Cleanup the debounced function when the component is unmounted
+			return () => {
+				debouncedFetchData.cancel()
+			}	
 		}
+		
 	}, [currentPage, selectedItem, searchTerm])
 
 	useEffect(() => {
@@ -66,10 +85,14 @@ const AllProducts = ({ user }) => {
 
 	useEffect(() => {
 		if (selectedItem === 'Process') {
-			debouncedfetchOrders();
+			fetchProcessedOrders();
 		}else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics()
-		} else {
+		}  else if (selectedItem === 'Discount Management') {
+			loadNotOnDiscount()
+		}else if (selectedItem === 'End Sale') {
+			loadOnDiscount()
+		}else {
 			debouncedFetchData();
 		}
 	}, [currentPage, selectedItem, searchTerm]);
@@ -83,7 +106,6 @@ const AllProducts = ({ user }) => {
 					},
 				}
 			).then((response)=>{
-				console.log(response);
 
 				if (response.status && response.status === 200) {
 					console.log(response);
@@ -169,9 +191,6 @@ const AllProducts = ({ user }) => {
 
 	// Debounced version of fetchData
 	const debouncedFetchData = debounce(fetchData, 1000)
-
-	//Debounced version of fetchProcessedOrders
-	const debouncedfetchOrders= debounce(fetchProcessedOrders, 1000);
 
 	const handleTrashClick = (itemId) => {
 		setproduct(itemId)
@@ -302,24 +321,39 @@ const AllProducts = ({ user }) => {
                 },
             };
 
-            new Chart(ctx, {
-                type: 'bar',
-                data,
-                options,
-            });
+            let myChart = new Chart(ctx, {
+				type: 'bar',
+				data,
+				options,
+			});
+	
+			// Ensure that the previous Chart instance is destroyed
+			return () => {
+				myChart.destroy();
+			};
         }
     }, [salesAnalytics]);
-
+	const handleItemClick = (item) => {
+		setCurrentPage(1);
+		setTableLoading(true);
+		setSelectedItem(item);
+		if (item === 'Process') {
+			fetchProcessedOrders();
+		} else if(selectedItem == 'Orders' || selectedItem ==='Products') {
+			fetchData();
+		}else if(selectedItem == 'Analytics'){
+			fetchSalesAnalytics()
+		}
+		else{
+			debouncedFetchData();
+		}
+	};
 
 	const handleAddClick = () => {
 		setproduct(null)
 		setShowProductCanvas(true)
 	}
 
-	const handleItemClick = (item) => {
-		setSearchTerm('')
-		setSelectedItem(item);
-	};
 
 	const handleShouldFetchAgain = () => {
 		fetchData()
@@ -443,6 +477,269 @@ const AllProducts = ({ user }) => {
 		},
 	];
 
+
+
+
+
+
+
+
+
+
+	
+	const handleCheckboxChange = (productId) => {
+		const updatedSelectedProducts = [...selectedProducts];
+		if (updatedSelectedProducts.includes(productId)) {
+		// Product is already selected, remove it
+			const index = updatedSelectedProducts.indexOf(productId);
+			updatedSelectedProducts.splice(index, 1);
+		} else {
+			// Product is not selected, add it
+			updatedSelectedProducts.push(productId);
+		}
+			setSelectedProducts(updatedSelectedProducts);
+		};
+	
+		const handleConfirmSale = async () => {
+			try {
+				// Prepare the data to be sent to the server
+				let saleData = {
+					productIds: selectedProducts,
+					offPercent: salePercentage,
+					flag: false
+				};
+				if (isAllStart) {
+					saleData.flag = true
+				}
+				// Send the data to the server
+				const response = await axios.post(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-put-on-sale`,
+					saleData,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+		
+				// Handle the response here, such as updating state or showing a success message
+				if (response.status==200) {
+					// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+					setNotOnSale((prevProducts) =>
+					prevProducts.filter((product) => !selectedProducts.includes(product._id))
+					);
+				}
+				if (isAllStart) {
+					setNotOnSale([])
+					setisAllStart(false)
+					setShowSaleConfirmationModal(false);
+				}
+		
+				// After processing the sale, you can reset the state
+				setSelectedProducts([]);
+				setSalePercentage(0);
+		
+				// Close the confirmation modal
+				setShowSaleConfirmationModal(false);
+			} catch (error) {
+				console.error('Error confirming sale:', error);
+				// Handle error here, such as updating state or showing an error message
+			}
+		};
+		
+///////for on sale management table
+	const productsColumns = [
+		{
+			header: 'Product',
+			width: '32rem',
+			render: (item) => item.description,
+
+		},{
+			header: 'Price',
+			width: '15rem',
+			render: (item) => item.price,
+
+		},{
+			header: 'Stock',
+			width: '15rem',
+			render: (item) => item.quantity,
+
+		},
+		{
+			header: 'Put on Sale',
+			render: (item) => (
+				<Form.Check
+					type="checkbox"
+					checked={selectedProducts.includes(item._id)}
+					onChange={() => handleCheckboxChange(item._id)}
+				/>
+			),
+		},
+		];
+
+		const loadNotOnDiscount = async () => {
+			try {
+				setTableLoading(true);
+				const response = await axios.get(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+				if (response.status === 200) {
+					setNotOnSale(response.data.data);
+					setFetchDataError(false);
+					setTotalPages(response.data.totalPages);
+					setTableLoading(false)
+				}
+			} catch (error) {
+				console.error('Error fetching products not on discount:', error);
+				setFetchDataError(true);
+			} finally {
+				setTableLoading(false);
+			}
+		};
+
+
+
+		/////end sale
+		const loadOnDiscount = async () => {
+			try {
+
+				setTableLoading(true);
+
+				const response = await axios.get(
+					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+				if (response.status === 200) {
+					setOnSale(response.data.data);
+					setFetchDataError(false);
+					setTotalPages(response.data.totalPages);
+				}
+				setTableLoading(false);
+			} catch (error) {
+				console.error('Error fetching products not on discount:', error);
+				setFetchDataError(true);
+			} finally {
+				setTableLoading(false);
+			}
+		};
+
+		const EndSaleProductsColumns = [
+			{
+				header: 'Product',
+				width: '32rem',
+				render: (item) => item.description,
+	
+			},{
+				header: 'Price',
+				width: '15rem',
+				render: (item) => (item.offPercent/100)*item.price,
+	
+			},{
+				header: 'Stock',
+				width: '15rem',
+				render: (item) => item.quantity,
+	
+			},
+			{
+				header: 'Sale Percentage',
+				width: '15rem',
+				render: (item) => item.offPercent,
+	
+			},
+			{
+				header: 'End Sale',
+				render: (item) => (
+					<Form.Check
+						type="checkbox"
+						checked={selectedProductsNotOnSale.includes(item._id)}
+						onChange={() => handleCheckboxChangEndSale(item._id)}
+					/>
+				),
+			},
+			];
+			const handleConfirmEndSale = async () => {
+				try {
+					// Prepare the data to be sent to the server
+					let saleData = {
+						productIds: selectedProductsNotOnSale,
+						flag: false
+					};
+
+					if (isAllEnd) {
+						saleData.flag = true
+					}
+					// Send the data to the server
+					const response = await axios.post(
+						`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-end-sale`,
+						saleData,
+						
+						{
+							headers: {
+								Authorization: `Bearer ${user.token}`,
+							},
+						}
+					);
+			
+					// Handle the response here, such as updating state or showing a success message
+					if (response.status==200) {
+						// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+						setOnSale((prevProducts) =>
+						prevProducts.filter((product) => !selectedProductsNotOnSale.includes(product._id))
+						);
+					}
+					if (isAllEnd) {
+						setOnSale([])
+						setisAllEnd(false)
+						setShowEndSaleConfirmationModal(false);
+					}
+					
+					// After processing the sale, you can reset the state
+					setselectedProductsNotOnSale([]);
+			
+					// Close the confirmation modal
+					setShowEndSaleConfirmationModal(false);
+				} catch (error) {
+					console.error('Error confirming sale:', error);
+					// Handle error here, such as updating state or showing an error message
+				}
+			};
+
+			const handleCheckboxChangEndSale = (productId) => {
+				const updatedSelectedProducts = [...selectedProductsNotOnSale];
+				if (updatedSelectedProducts.includes(productId)) {
+				// Product is already selected, remove it
+					const index = updatedSelectedProducts.indexOf(productId);
+					updatedSelectedProducts.splice(index, 1);
+				} else {
+					// Product is not selected, add it
+					updatedSelectedProducts.push(productId);
+				}
+				setselectedProductsNotOnSale(updatedSelectedProducts);
+				};
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	return (
 		<>
 			{loading ? (
@@ -487,8 +784,123 @@ const AllProducts = ({ user }) => {
 									</div>
 								)}
 							</Row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+									
+
+							{/* Sale confirmation modal */}
+							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+								<Modal.Title>Confirm Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+								Are you sure you want to put the products on sale with a {salePercentage}% discount?
+								</Modal.Body>
+								<Modal.Footer>
+								<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
+									Cancel
+								</Button>
+								<Button variant="primary" onClick={handleConfirmSale}>
+									Confirm
+								</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+
+							<Row>
+								{selectedItem === 'Discount Management' && (
+								<>
+									<Col className='d-flex justify-content-end pe-0 align-items-center'>
+									<Button onClick={() => {
+										setShowSaleConfirmationModal(true)
+										setisAllStart(true)
+										}} disabled = {salePercentage<=0 || notOnSale.length==0}>Put All Products on Sale</Button>
+									<div style={{ marginRight: '10px' }}></div>
+									<Button onClick={() => setShowSaleConfirmationModal(true)} disabled = {salePercentage<=0 || selectedProducts.length==0}>Put Selected Products on Sale</Button>
+									<Form.Group className="mb-1 ms-2">
+										<Form.Control
+										type="number"
+										value={salePercentage}
+										placeholder="Discount Percentage"
+										onChange={(e) => setSalePercentage(e.target.value)}
+										min="0"
+										/>
+									</Form.Group>
+									</Col>
+								</>
+								)}
+							</Row>
+							<br/>
+
+							{/* end Sale confirmation modal */}
+							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+								<Modal.Title>Confirm End Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+								Are you sure you want to put products on back on origional price?
+								</Modal.Body>
+								<Modal.Footer>
+								<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
+									Cancel
+								</Button>
+								<Button variant="primary" onClick={handleConfirmEndSale}>
+									Confirm
+								</Button>
+								</Modal.Footer>
+							</Modal>
+
+							<Row>
+								{selectedItem === 'End Sale' && (
+								<>
+									<Col className='d-flex justify-content-end pe-0 align-items-center'>
+									<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled = {selectedProductsNotOnSale.length==0}>End Sale</Button>
+									<div style={{ marginRight: '10px' }}></div>
+									<Button onClick={() => {
+										setShowEndSaleConfirmationModal(true)
+										setisAllEnd(true)
+									}} disabled= {OnSale.length==0}>End Sale for all</Button>
+									</Col>
+								</>
+								)}
+							</Row>
+							<br/>
+
+
+
+
+
+
+
+
+
+
+
+
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{tableLoading ? (
+								{selectedItem === 'Discount Management' && notOnSale?  (
+									<DetailsTable
+										data={notOnSale}
+										columns={productsColumns }
+									/>
+								) : selectedItem === 'End Sale' && OnSale?  (
+									<DetailsTable
+										data={OnSale}
+										columns={EndSaleProductsColumns }
+									/>
+								) :tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'Process' ? (
 									<DetailsTable
@@ -500,7 +912,7 @@ const AllProducts = ({ user }) => {
 										data={salesAnalytics}
 										columns={SellersTablecolumns }
 									/>
-								) : selectedItem === 'Products' ? (
+								): selectedItem === 'Products' ? (
 									<DetailsTable
 										data={data}
 										columns={ProductsTablecolumns}
@@ -511,6 +923,7 @@ const AllProducts = ({ user }) => {
 										columns={OrdersTablecolumns}
 									/>
 								)}
+								
 							</div>
 							<Footer
 								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
