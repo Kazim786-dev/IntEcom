@@ -23,24 +23,37 @@ const UserloadNotOnDiscount = async (page, size, userId) => {
   };
   
 
-
   const UserapplyDiscount = async (productIds, offPercent, flag, userId) => {
-    
     try {
-      let filter = { _id: { $in: productIds }, user: userId };
-      if (flag) {
-        filter = { user: userId };
-      }
-  
-      await Product.updateMany(filter, { $set: { isOnSale: true, offPercent } });
-      
-      return { status: 200, data: "successful" };
-        } catch (error) {
-      console.error('Error applying discount:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        let filter = { _id: { $in: productIds }, user: userId };
+        if (flag) {
+            filter = { user: userId };
+        }
+
+        // Use the aggregation pipeline in the updateMany function to calculate the new price
+        await Product.updateMany(filter, [
+            {
+                $set: {
+                    isOnSale: true,
+                    offPercent: offPercent,
+                    price: {
+                        $subtract: [
+                            "$originalPrice",
+                            { $multiply: ["$originalPrice", offPercent / 100] }
+                        ]
+                    }
+                }
+            }
+        ]);
+        
+        return { status: 200, data: "successful" };
+    } catch (error) {
+        console.error('Error applying discount:', error);
+        // Assuming you are in an async function outside of express route handler. If not, replace with appropriate error handling.
+        throw new Error('Internal Server Error');
     }
-  };
-  
+};
+
 
 
 
@@ -66,20 +79,32 @@ const UserloadNotOnDiscount = async (page, size, userId) => {
   };
 
 
-  const UserendDiscount = async (productIds, offPercent, flag, userId) => {
 
+
+  const UserendDiscount = async (productIds, offPercent, flag, userId) => {
     try {
-      let filter = { _id: { $in: productIds }, user: userId };
-      if (flag) {
-        filter = { user: userId };
-      }
-  
-      await Product.updateMany(filter, { $set: { isOnSale: false, offPercent } }); 
-      return { status: 200, data: "successful" };
+        let filter = { _id: { $in: productIds }, user: userId };
+        if (flag) {
+            filter = { user: userId };
+        }
+
+        // Use the aggregation pipeline in the updateMany function to calculate the new price
+        await Product.updateMany(filter, [
+            {
+                $set: {
+                    isOnSale: false,
+                    offPercent: offPercent,
+                    price: "$originalPrice"
+                }
+            }
+        ]);
+        
+        return { status: 200, data: "successful" };
     } catch (error) {
-      console.error('Error ending discount:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error applying discount:', error);
+        // Assuming you are in an async function outside of express route handler. If not, replace with appropriate error handling.
+        throw new Error('Internal Server Error');
     }
-  };
+};
   
   module.exports = { UserloadNotOnDiscount, UserapplyDiscount, UserloadOnDiscount, UserendDiscount };

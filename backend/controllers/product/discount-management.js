@@ -36,10 +36,20 @@ const applyDiscount = async (productIds, offPercent, flag) => {
     }
 
     // Update the products to end the discount
-    await Product.updateMany(
-      filter,
-      { isOnSale: true, offPercent }
-    );
+    await Product.updateMany(filter, [
+      {
+          $set: {
+              isOnSale: true,
+              offPercent: offPercent,
+              price: {
+                  $subtract: [
+                      "$originalPrice",
+                      { $multiply: ["$originalPrice", offPercent / 100] }
+                  ]
+              }
+          }
+      }
+  ]);
 
     return {status: 200, data: "updated successfully"}
   } catch (error) {
@@ -86,10 +96,15 @@ const endDiscount = async (productIds, offPercent, flag) => {
     }
 
     // Update the products to end the discount
-    await Product.updateMany(
-      filter,
-      { isOnSale: false, offPercent }
-    );
+    await Product.updateMany(filter, [
+      {
+          $set: {
+              isOnSale: false,
+              offPercent: offPercent,
+              price: "$originalPrice"
+          }
+      }
+  ]);
 
     return { status: 200, data: "updated successfully" };
   } catch (error) {

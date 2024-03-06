@@ -50,6 +50,7 @@ const createProduct = async ({productData, imageFile, user}) => {
             name:description,
             description,
             price,
+            originalPrice: price,
             quantity,
             image,
             user: existingUser._id, // set the user reference
