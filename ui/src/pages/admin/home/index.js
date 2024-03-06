@@ -461,11 +461,16 @@ const AllProducts = ({ user }) => {
                 },
             };
 
-            new Chart(ctx, {
-                type: 'bar',
-                data,
-                options,
-            });
+            let myChart = new Chart(ctx, {
+				type: 'bar',
+				data,
+				options,
+			});
+	
+			// Ensure that the previous Chart instance is destroyed
+			return () => {
+				myChart.destroy();
+			};
         }
     }, [salesAnalytics]);
 
