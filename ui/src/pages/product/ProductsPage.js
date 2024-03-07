@@ -95,7 +95,6 @@ const AllProductsPage = ({ user }) => {
 	useEffect(() => {
 		fetchWishlist();
 		if (selectedFilters.length==0) {
-			console.log('main');
 			debouncedFetchData()
 		fetchFilters();
 		// Cleanup the debounced function when the component is unmounted
@@ -103,7 +102,6 @@ const AllProductsPage = ({ user }) => {
 			debouncedFetchData.cancel()
 		}
 		}else{
-			console.log('filter');
 			handleFilterChange()
 		}
 		
@@ -213,14 +211,12 @@ useEffect( () => {
 		try {
 			setLoading(true);
 			setFetchProductError(false);
-			console.log(showSaleProducts);
 			const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
 				filters: selectedFilters,
 				isSaleOnly: showSaleProducts
 			});
 			if (response.status && response.status === 200) {
 				const { totalPages, data } = response.data;
-				console.log(data);
 				setProducts(data);
 				setTotalPages(totalPages);
 				setTimeout(() => {
@@ -264,7 +260,6 @@ useEffect( () => {
 			setLoading(true)
 			setFetchProductError(false)
 			// Make an API request to route with the selected price filter and searchTerm as query parameters
-			console.log(selectedFilters);
 			response = await axios.post(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
 				, {
