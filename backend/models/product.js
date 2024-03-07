@@ -12,7 +12,8 @@ const productSchema = new Schema({
   },
   catagory: {
     type: String,
-    required: true
+    required: true,
+    default: "Electronics"
   },
   price: {
     type: Number,
