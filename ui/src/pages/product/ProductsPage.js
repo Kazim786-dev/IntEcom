@@ -58,6 +58,7 @@ const AllProductsPage = ({ user }) => {
 	const [showFilters, setShowFilters] = useState(false);
     const [filters, setFilters] = useState([]);
 	const [selectedFilters, setSelectedFilters] = useState([]);
+	const [showSaleProducts, setShowSaleProducts] = useState(false);
 
 
 
@@ -93,14 +94,30 @@ const AllProductsPage = ({ user }) => {
 
 	useEffect(() => {
 		fetchWishlist();
-
-		debouncedFetchData()
+		if (selectedFilters.length==0) {
+			console.log('main');
+			debouncedFetchData()
 		fetchFilters();
 		// Cleanup the debounced function when the component is unmounted
 		return () => {
 			debouncedFetchData.cancel()
 		}
+		}else{
+			console.log('filter');
+			handleFilterChange()
+		}
+		
 	}, [currentPage, priceFilter, searchTerm])
+
+
+
+	// Check if selectedFilters array is empty and call fetchAllProducts
+useEffect(() => {
+    if (selectedFilters.length === 0) {
+        fetchProducts();
+    }
+}, [selectedFilters]);
+	// Check if selectedFilters array is empty and call fetchAllProducts
 
 	// useEffect(() => {
 	// 	if (searchInputRef.current) {
@@ -121,7 +138,6 @@ const AllProductsPage = ({ user }) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/all-filters`);
             if (response.status === 200) {
-				console.log(response.data);
                 setFilters(response.data);
             }
         } catch (error) {
@@ -145,7 +161,7 @@ const handleFilterChange = async (selectedFilter) => {
             // If it's not, add it to the selected filters
             updatedFilters = [...currentFilters, selectedFilter];
         }
-
+		
         // Now, send updatedFilters to the backend
         sendFiltersToBackend(updatedFilters);
 
@@ -155,26 +171,85 @@ const handleFilterChange = async (selectedFilter) => {
 };
 
 const sendFiltersToBackend = async (filters) => {
-	const filtersString = filters.join(',');
-	console.log(filtersString);
-
     try {
-        const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}categories=${encodeURIComponent(filtersString)}`, {
-            filters: filters
+        const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
+            filters: filters,
+			isSaleOnly: showSaleProducts
         });
-        console.log('Filters sent successfully', response.data);
+		if (response.status && response.status === 200) {
+			const { totalPages, data } = response.data
+			setProducts(data)
+			setTotalPages(totalPages)
+			setTimeout(() => {
+				setLoading(false)
+			}, 1000)
+		}
+		else {
+			setFetchProductError(true)
+			setErrorText('Error in fetching products')
+			setTimeout(() => {
+				setLoading(false)
+			}, 1000)
+		}
         // Handle response data or perform actions based on the response
     } catch (error) {
-        console.error('Error sending filters to backend:', error);
-        // Handle errors, such as by displaying an error message to the user
+        setTimeout(() => {
+			setLoading(false)
+		}, 1000)
+
+		if (error.response?.status && error.response.status === 404) {
+			setErrorText('No product with this name')
+		}
+		else {
+			setErrorText('Error in fetching products')
+		}
+		setFetchProductError(true)
+		// console.error('Error fetching data:', error)
     }
 };
 
+useEffect( () => {
+	const fectOnSaleOnly = async ()=>{
+		try {
+			setLoading(true);
+			setFetchProductError(false);
+			console.log(showSaleProducts);
+			const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
+				filters: selectedFilters,
+				isSaleOnly: showSaleProducts
+			});
+			if (response.status && response.status === 200) {
+				const { totalPages, data } = response.data;
+				console.log(data);
+				setProducts(data);
+				setTotalPages(totalPages);
+				setTimeout(() => {
+					setLoading(false);
+				}, 1000);
+			} else {
+				setFetchProductError(true);
+				setErrorText('Error in fetching products');
+				setTimeout(() => {
+					setLoading(false);
+				}, 1000);
+			}
+		} catch (error) {
+			setTimeout(() => {
+				setLoading(false);
+			}, 1000);
+	
+			if (error.response?.status && error.response.status === 404) {
+				setErrorText('No product with this name');
+			} else {
+				setErrorText('Error in fetching products');
+			}
+			setFetchProductError(true);
+		}
+	}
 
-useEffect(() => {
-    // Call fetchProducts again whenever selectedFilters changes
-    debouncedFetchData();
-}, [selectedFilters]);
+	fectOnSaleOnly()
+}, [showSaleProducts]);
+
 
 
 
@@ -189,9 +264,13 @@ useEffect(() => {
 			setLoading(true)
 			setFetchProductError(false)
 			// Make an API request to route with the selected price filter and searchTerm as query parameters
-			response = await axios.get(
+			console.log(selectedFilters);
+			response = await axios.post(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`
-			)
+				, {
+					filters: selectedFilters,
+					isSaleOnly: showSaleProducts
+				})
 			if (response.status && response.status === 200) {
 				const { totalPages, data } = response.data
 				setProducts(data)
@@ -331,10 +410,13 @@ useEffect(() => {
 											placeholder='Search product'
 											onChange={handleSearchChange}
 											ref={searchInputRef}
+											// disabled = {selectedFilters.length!==0}
 										/>
 									</Form.Group>
-									<Form.Group className='mb-1 ms-2'>
-										<SpeakSearch handleAudioSearch={handleAudioSearch} />
+									<Form.Group className='mb-1 ms-2' >
+									{
+									// selectedFilters.length === 0 && 
+									<SpeakSearch handleAudioSearch={handleAudioSearch} />}
 									</Form.Group>
 								</Col>
 								<Col md='auto' className='d-flex align-items-center pe-0'>
@@ -413,13 +495,23 @@ useEffect(() => {
                                 {filters.map((filter, index) => (
 									<div key={index}>
 										<Form.Check 
-										type="checkbox" 
-										label={filter} // Directly use filter as the label since it's a string
-										id={`filter-${index}`} // Generate a unique ID for each checkbox
-										onChange={() => handleFilterChange(filter)}
+											type="checkbox" 
+											label={filter} // Directly use filter as the label since it's a string
+											id={`filter-${index}`} // Generate a unique ID for each checkbox
+											checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
+											onChange={() => handleFilterChange(filter)}
 										/>
 									</div>
-									))}
+								))}
+								<br/>
+								<br/>
+								<Form.Check
+									type="switch"
+									id="saleSwitch"
+									label="Products on Sale"
+									checked={showSaleProducts}
+									onChange={() => setShowSaleProducts(!showSaleProducts)}
+								/>
 
                             </Offcanvas.Body>
                         </Offcanvas>
