@@ -24,7 +24,7 @@ import {
   UserapplyDiscount, 
   UserloadOnDiscount, 
   UserendDiscount,
-  getUniqueCategories
+  getUniqueCategories,
 } from '../../controllers/product/index.js';
 
 
@@ -98,6 +98,8 @@ router.get('/reports/:productId', authMiddleware, async (req, res) => {
       res.status(500).json({ error: 'An error occurred while fetching reports.' });
   }
 });
+
+
 // Get all Products
 router.get('/allproducts', async (req, res) => {
   try {
@@ -107,6 +109,29 @@ router.get('/allproducts', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
+// Get all Products
+router.post('/allproducts', async (req, res) => {
+  try {
+    const result = await getProducts({query: req.query, catagory: req.body.filters, isSaleOnly: req.body.isSaleOnly});
+    return res.status(result.status).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
+
+// // Get all Products filtered by catagory
+// router.post('/allFilteredProducts', async (req, res) => {
+//   try {
+//     console.log(req.body.filters);
+//     const result = await getProducts({query: req.query, catagory: req.body.filters});
+//     return res.status(result.status).json(result.data);
+//   } catch (error) {
+//     return res.status(500).json({ error: 'Internal server error.' });
+//   }
+// });
 
 // Get all Products filters
 router.get('/all-filters', async (req, res) => {
