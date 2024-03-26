@@ -13,7 +13,6 @@ const getProductsBySeller = async ({query, userId}) => {
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'desc' ? -1 : 1 };
 
-    // Update the findQuery to include the current user's ID
     const findQuery = {
       isDeleted: false,
       user: userId,  // Filter by user ID

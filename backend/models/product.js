@@ -71,6 +71,14 @@ const productSchema = new Schema({
   timestamps: true
 });
 
+//indexes
+productSchema.index({ isDeleted: 1, status: 1, uid: 1 }); // Create index on the relevant fields
+productSchema.index({ isDeleted: 1, user: 1 }); // Index for isDeleted and user
+productSchema.index({ user: 1 }); // Index for user
+productSchema.index({ isDeleted: 1, status: 1 }); // Index for isDeleted and status
+productSchema.index({ name: 'text', description: 'text' }); // Text index for name and description
+productSchema.index({ uid: 1 }); // Index for uid
+
 const Product = model('Product', productSchema);
 
 export default Product;

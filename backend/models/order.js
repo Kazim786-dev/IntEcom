@@ -61,6 +61,15 @@ const orderSchema = new Schema({
   timestamps:true
 });
 
+//create index for user
+orderSchema.index({user:1})
+// Create index for orderNumber field
+orderSchema.index({ orderNumber: 1 });
+// Create index for products.product field
+orderSchema.index({ 'products.product': 1 });
+// Create compound index for orderNumber and products.product fields
+orderSchema.index({ orderNumber: 1, 'products.product': 1 });
+
 const Order = model('Order', orderSchema);
 
 export default Order;
