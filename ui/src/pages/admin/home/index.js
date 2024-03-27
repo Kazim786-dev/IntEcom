@@ -76,6 +76,7 @@ const AllProducts = ({ user }) => {
 		debouncedFetchData()
 		// Cleanup the debounced function when the component is unmounted
 		return () => {
+			//return
 			debouncedFetchData.cancel()
 		}
 	}, [currentPage, selectedItem, searchTerm])
