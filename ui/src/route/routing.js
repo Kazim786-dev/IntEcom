@@ -28,14 +28,14 @@ const RouterLinks = ({
 	return (
 		<BrowserRouter>
 			<Routes>
-			<Route
+				<Route
 					path='/'
 					element={
 						<Layout user={user} showNavbar={true}>
-							{user.role === 'admin' ? <Navigate to='/admin' /> : 
-							user.role === 'seller' ? <Navigate to='/seller' /> : 
-							user.role === 'customer' ? <Navigate to='/products' /> : 
-							<Navigate to='/login' />}
+							{user.role === 'admin' ? <Navigate to='/admin' /> :
+								user.role === 'seller' ? <Navigate to='/seller' /> :
+									user.role === 'customer' ? <Navigate to='/products' /> :
+										<Navigate to='/login' />}
 						</Layout>
 					}
 				/>
@@ -51,7 +51,7 @@ const RouterLinks = ({
 					path='/signup'
 					element={
 						<Layout user={user} showNavbar={false} footer={false}>
-							{!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' /> }
+							{!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' />}
 						</Layout>
 					}
 				/>
@@ -97,37 +97,37 @@ const RouterLinks = ({
 								</Layout>
 							}
 						/>
-						<Route path="/product-detail/:productId" 
+						<Route path="/product-detail/:productId"
 							element={
 								<Layout user={user} showNavbar={true} footer={true}>
-									{user.isLoggedIn ? <ProductDetailPage  user={user} /> : <Navigate to='/login' />}
+									{user.isLoggedIn ? <ProductDetailPage user={user} /> : <Navigate to='/login' />}
 								</Layout>
 							}
 						/>
 					</>
 				}
-				{user.role ==='admin' &&
+				{user.role === 'admin' &&
 					<>
 						<Route path='/admin'>
 							<Route
 								path=''
 								element={
 									<Layout user={user} showNavbar={true} footer={true}>
-										{<AdminHome user={user}/>}
+										{<AdminHome user={user} />}
 									</Layout>
 								}
 							/>
 						</Route>
 					</>
 				}
-				{user.role ==='seller' &&
+				{user.role === 'seller' &&
 					<>
 						<Route path='/seller'>
 							<Route
 								path=''
 								element={
 									<Layout user={user} showNavbar={true} footer={true}>
-										{<SellerHome user={user}/>}
+										{<SellerHome user={user} />}
 									</Layout>
 								}
 							/>

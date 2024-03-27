@@ -1,5 +1,5 @@
-import React from 'react';
-import { AudioRecorder } from 'react-audio-voice-recorder';
+import React from 'react'
+import { AudioRecorder } from 'react-audio-voice-recorder'
 
 const SpeakSearch = ({ handleAudioSearch })=> {
 
@@ -16,7 +16,7 @@ const SpeakSearch = ({ handleAudioSearch })=> {
 				showVisualizer={true}
 			/>
 		</div>
-	);
+	)
 }
 
-export default SpeakSearch;
+export default SpeakSearch

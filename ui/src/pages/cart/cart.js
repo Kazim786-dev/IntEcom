@@ -1,6 +1,6 @@
 import { React, useState, useMemo } from 'react'
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 
 import { Container, Form, Image } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
@@ -25,8 +25,8 @@ import { remove, increase, decrease, placeOrder } from '../../redux/slice/cart/c
 import { useDispatch, useSelector } from 'react-redux'
 
 // Import the PaymentForm component
-import PaymentForm from '../checkout/paymentForm'; // Adjust the path as needed
-const stripePromise = loadStripe('pk_test_51OHrp2GPQMuSMoo9D37NyaFjrEBynzU7R9G97MOQyg07osataoLH51UKHgp4zovjokjt4gsHUb93TMXry9TrfwVl00qd0jwf9c');
+import PaymentForm from '../checkout/paymentForm' // Adjust the path as needed
+const stripePromise = loadStripe('pk_test_51OHrp2GPQMuSMoo9D37NyaFjrEBynzU7R9G97MOQyg07osataoLH51UKHgp4zovjokjt4gsHUb93TMXry9TrfwVl00qd0jwf9c')
 
 const ShoppingCart = ({ user }) => {
 	const taxRate = 0.1 // Assuming tax rate of 10%
@@ -45,12 +45,12 @@ const ShoppingCart = ({ user }) => {
 	//redux State
 	const cartItems = useSelector((state) => state.cart.products)
 
-	const [showPaymentForm, setShowPaymentForm] = useState(false);
+	const [showPaymentForm, setShowPaymentForm] = useState(false)
 
 	// Modify handlePlaceOrder to just show the payment form
 	const handleContinueToCheckout = () => {
-		setShowPaymentForm(true);
-	};
+		setShowPaymentForm(true)
+	}
 
 	// Function to handle quantity increase
 	const handleIncrease = (itemId) => {
@@ -240,7 +240,7 @@ const ShoppingCart = ({ user }) => {
 				</Container>
 			)}
 		</>
-	);
-};
+	)
+}
 
-export default ShoppingCart;
+export default ShoppingCart

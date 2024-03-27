@@ -3,7 +3,7 @@ import axios from 'axios'
 import debounce from 'lodash.debounce'
 //react-bootstrap
 import { Container, Row, Col, Form, Image, Button, Modal } from 'react-bootstrap'
-import Chart from 'chart.js/auto';
+import Chart from 'chart.js/auto'
 
 //components
 import AlertComp from '../../../components/alert'
@@ -28,7 +28,7 @@ const AllProducts = ({ user }) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize = 9
 
-	const [processedOrders, setProcessedOrders] = useState([]); // New state for processed orders
+	const [processedOrders, setProcessedOrders] = useState([]) // New state for processed orders
 
 	const [data, setData] = useState([])
 	const [orderItem, setOrderItem] = useState()
@@ -45,35 +45,30 @@ const AllProducts = ({ user }) => {
 
 	const [selectedItem, setSelectedItem] = useState('Products')
 	const [searchTerm, setSearchTerm] = useState('')
-	const [salesAnalytics, setSalesAnalytics] = useState(null);
-	const chartRef = useRef(null);
+	const [salesAnalytics, setSalesAnalytics] = useState(null)
+	const chartRef = useRef(null)
 	const searchInputRef = useRef(null)
 
-
-	
-	const [selectedProducts, setSelectedProducts] = useState([]);
-	const [showSaleConfirmationModal, setShowSaleConfirmationModal] = useState(false);
-	const [salePercentage, setSalePercentage] = useState(0);
+	const [selectedProducts, setSelectedProducts] = useState([])
+	const [showSaleConfirmationModal, setShowSaleConfirmationModal] = useState(false)
+	const [salePercentage, setSalePercentage] = useState(0)
 	const [notOnSale, setNotOnSale] = useState([])
 
-
-	const [selectedProductsNotOnSale, setselectedProductsNotOnSale] = useState([]);
-	const [showEndSaleConfirmationModal, setShowEndSaleConfirmationModal] = useState(false);
+	const [selectedProductsNotOnSale, setselectedProductsNotOnSale] = useState([])
+	const [showEndSaleConfirmationModal, setShowEndSaleConfirmationModal] = useState(false)
 	const [OnSale, setOnSale] = useState([])
 	const [isAllEnd, setisAllEnd] = useState(false)
 	const [isAllStart, setisAllStart] = useState(false)
 
-
-
 	useEffect(() => {
-		if (selectedItem==='Products') {
+		if (selectedItem === 'Products') {
 			debouncedFetchData()
 			// Cleanup the debounced function when the component is unmounted
 			return () => {
 				debouncedFetchData.cancel()
-			}	
+			}
 		}
-		
+
 	}, [currentPage, selectedItem, searchTerm])
 
 	useEffect(() => {
@@ -85,31 +80,31 @@ const AllProducts = ({ user }) => {
 
 	useEffect(() => {
 		if (selectedItem === 'Process') {
-			fetchProcessedOrders();
-		}else if (selectedItem === 'Analytics') {
+			fetchProcessedOrders()
+		} else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics()
-		}  else if (selectedItem === 'Discount Management') {
+		} else if (selectedItem === 'Discount Management') {
 			loadNotOnDiscount()
-		}else if (selectedItem === 'End Sale') {
+		} else if (selectedItem === 'End Sale') {
 			loadOnDiscount()
-		}else {
-			debouncedFetchData();
+		} else {
+			debouncedFetchData()
 		}
-	}, [currentPage, selectedItem, searchTerm]);
+	}, [currentPage, selectedItem, searchTerm])
 	const fetchSalesAnalytics = async () => {
 		try {
-			setTableLoading(true);
+			setTableLoading(true)
 			axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/detailsAnalytics?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,{
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/detailsAnalytics?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`, {
 					headers: {
 						Authorization: `Bearer ${user.token}`,
 					},
 				}
-			).then((response)=>{
+			).then((response) => {
 
 				if (response.status && response.status === 200) {
-					console.log(response);
-					const  totalPages = response.totalPages
+					console.log(response)
+					const totalPages = response.totalPages
 					setSalesAnalytics(response.data)
 					setFetchDataError(false)
 					setTotalPages(totalPages)
@@ -119,19 +114,19 @@ const AllProducts = ({ user }) => {
 					setTableLoading(false)
 				}, 1000)
 			})
-			
+
 		} catch (error) {
-			console.error('Error fetching sales analytics:', error);
-			setFetchDataError(true);
+			console.error('Error fetching sales analytics:', error)
+			setFetchDataError(true)
 		} finally {
-			setTableLoading(false);
+			setTableLoading(false)
 		}
-	};
+	}
 	const fetchData = () => {
 
 		setFetchDataError(false)
 		setTableLoading(true)
-		if (selectedItem =='Products') {
+		if (selectedItem == 'Products') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -171,23 +166,23 @@ const AllProducts = ({ user }) => {
 	// fetch orders
 	const fetchProcessedOrders = async () => {
 		try {
-			setTableLoading(true); // Start loading
+			setTableLoading(true) // Start loading
 			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders?orderNumber=${searchTerm}`, {
 				headers: { Authorization: `Bearer ${user.token}` }
-			});
+			})
 			const { totalPages, data } = response.data
-			setProcessedOrders(data);
-			setTotalPages(totalPages);
-			// console.log(response.data); // Log to check response
+			setProcessedOrders(data)
+			setTotalPages(totalPages)
+			// console.log(response.data) // Log to check response
 		} catch (error) {
-			// console.error('Error fetching processed orders:', error);
-			setErrorText('Error fetching processed orders');
-			setFetchDataError(true);
+			// console.error('Error fetching processed orders:', error)
+			setErrorText('Error fetching processed orders')
+			setFetchDataError(true)
 		} finally {
-			setLoading(false); // Stop loading
-			setTableLoading(false); // Stop table loading
+			setLoading(false) // Stop loading
+			setTableLoading(false) // Stop table loading
 		}
-	};
+	}
 
 	// Debounced version of fetchData
 	const debouncedFetchData = debounce(fetchData, 1000)
@@ -244,13 +239,13 @@ const AllProducts = ({ user }) => {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
-			});
+			})
 			// Refresh the processed orders list
-			fetchProcessedOrders();
+			fetchProcessedOrders()
 		} catch (error) {
-			console.error('Error shipping order:', error);
+			console.error('Error shipping order:', error)
 		}
-	};
+	}
 
 	// Function to handle delivering an order
 	const handleDeliver = async (orderId) => {
@@ -259,15 +254,15 @@ const AllProducts = ({ user }) => {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
-			});
+			})
 			// Refresh the processed orders list
-			fetchProcessedOrders();
+			fetchProcessedOrders()
 		} catch (error) {
-			console.error('Error delivering order:', error);
+			console.error('Error delivering order:', error)
 		}
-	};
+	}
 
-	
+
 
 	//seller analytics information
 
@@ -284,70 +279,70 @@ const AllProducts = ({ user }) => {
 			header: 'Total Price Earned',
 			render: (seller) => seller.totalCost.toFixed(2),
 		},
-	];
+	]
 
 
 
-    useEffect(() => {
-        if (chartRef.current && salesAnalytics) {
-            const ctx = chartRef.current.getContext('2d');
+	useEffect(() => {
+		if (chartRef.current && salesAnalytics) {
+			const ctx = chartRef.current.getContext('2d')
 
-            const data = {
-                labels: salesAnalytics.map(item => item._id),
-                datasets: [
-                    {
-                        label: 'Total Quantity Sold',
-                        data: salesAnalytics.map(item => item.totalQuantitySold),
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                    },
-                    {
-                        label: 'Total Price Earned',
-                        data: salesAnalytics.map(item => item.totalCost),
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                    },
-                ],
-            };
+			const data = {
+				labels: salesAnalytics.map(item => item._id),
+				datasets: [
+					{
+						label: 'Total Quantity Sold',
+						data: salesAnalytics.map(item => item.totalQuantitySold),
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1,
+					},
+					{
+						label: 'Total Price Earned',
+						data: salesAnalytics.map(item => item.totalCost),
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgba(255, 99, 132, 1)',
+						borderWidth: 1,
+					},
+				],
+			}
 
-            const options = {
-                indexAxis: 'y', // Use 'y' for horizontal bar chart
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                    },
-                },
-            };
+			const options = {
+				indexAxis: 'y', // Use 'y' for horizontal bar chart
+				scales: {
+					x: {
+						beginAtZero: true,
+					},
+				},
+			}
 
-            let myChart = new Chart(ctx, {
+			let myChart = new Chart(ctx, {
 				type: 'bar',
 				data,
 				options,
-			});
-	
+			})
+
 			// Ensure that the previous Chart instance is destroyed
 			return () => {
-				myChart.destroy();
-			};
-        }
-    }, [salesAnalytics]);
+				myChart.destroy()
+			}
+		}
+	}, [salesAnalytics])
 	const handleItemClick = (item) => {
-		setCurrentPage(1);
-		setTableLoading(true);
-		setSelectedItem(item);
+		setCurrentPage(1)
+		setTableLoading(true)
+		setSelectedItem(item)
 		if (item === 'Process') {
-			fetchProcessedOrders();
-		} else if(selectedItem == 'Orders' || selectedItem ==='Products') {
-			fetchData();
-		}else if(selectedItem == 'Analytics'){
+			fetchProcessedOrders()
+		} else if (selectedItem == 'Orders' || selectedItem === 'Products') {
+			fetchData()
+		} else if (selectedItem == 'Analytics') {
 			fetchSalesAnalytics()
 		}
-		else{
-			debouncedFetchData();
+		else {
+			debouncedFetchData()
 		}
-	};
+	}
 
 	const handleAddClick = () => {
 		setproduct(null)
@@ -426,9 +421,9 @@ const AllProducts = ({ user }) => {
 			header: 'Date',
 			width: '17rem',
 			render: (item) => {
-				const date = new Date(item.date);
-				const localDate = date.toLocaleString(undefined, { timeZoneName: 'short' });
-				return localDate;
+				const date = new Date(item.date)
+				const localDate = date.toLocaleString(undefined, { timeZoneName: 'short' })
+				return localDate
 			}
 		},
 		{
@@ -440,15 +435,15 @@ const AllProducts = ({ user }) => {
 			header: 'User Address',
 			width: '22rem',
 			render: (item) => {
-				const { shippingDetails } = item;
-				return `${shippingDetails.name}, ${shippingDetails.address}, ${shippingDetails.city}, ${shippingDetails.state}, ${shippingDetails.zip}, ${shippingDetails.country}`;
+				const { shippingDetails } = item
+				return `${shippingDetails.name}, ${shippingDetails.address}, ${shippingDetails.city}, ${shippingDetails.state}, ${shippingDetails.zip}, ${shippingDetails.country}`
 			}
 		},
 		{
 			header: 'Product(s) Description',
 			width: '28rem',
 			render: (item) => {
-				return item.products.map(p => `${p.product.description} (Qty: ${p.quantity})`).join(', ');
+				return item.products.map(p => `${p.product.description} (Qty: ${p.quantity})`).join(', ')
 			}
 		},
 		{
@@ -475,7 +470,7 @@ const AllProducts = ({ user }) => {
 				</>
 			),
 		},
-	];
+	]
 
 
 
@@ -486,80 +481,80 @@ const AllProducts = ({ user }) => {
 
 
 
-	
+
 	const handleCheckboxChange = (productId) => {
-		const updatedSelectedProducts = [...selectedProducts];
+		const updatedSelectedProducts = [...selectedProducts]
 		if (updatedSelectedProducts.includes(productId)) {
-		// Product is already selected, remove it
-			const index = updatedSelectedProducts.indexOf(productId);
-			updatedSelectedProducts.splice(index, 1);
+			// Product is already selected, remove it
+			const index = updatedSelectedProducts.indexOf(productId)
+			updatedSelectedProducts.splice(index, 1)
 		} else {
 			// Product is not selected, add it
-			updatedSelectedProducts.push(productId);
+			updatedSelectedProducts.push(productId)
 		}
-			setSelectedProducts(updatedSelectedProducts);
-		};
-	
-		const handleConfirmSale = async () => {
-			try {
-				// Prepare the data to be sent to the server
-				let saleData = {
-					productIds: selectedProducts,
-					offPercent: salePercentage,
-					flag: false
-				};
-				if (isAllStart) {
-					saleData.flag = true
-				}
-				// Send the data to the server
-				const response = await axios.post(
-					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-put-on-sale`,
-					saleData,
-					{
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					}
-				);
-		
-				// Handle the response here, such as updating state or showing a success message
-				if (response.status==200) {
-					// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
-					setNotOnSale((prevProducts) =>
-					prevProducts.filter((product) => !selectedProducts.includes(product._id))
-					);
-				}
-				if (isAllStart) {
-					setNotOnSale([])
-					setisAllStart(false)
-					setShowSaleConfirmationModal(false);
-				}
-		
-				// After processing the sale, you can reset the state
-				setSelectedProducts([]);
-				setSalePercentage(0);
-		
-				// Close the confirmation modal
-				setShowSaleConfirmationModal(false);
-			} catch (error) {
-				console.error('Error confirming sale:', error);
-				// Handle error here, such as updating state or showing an error message
+		setSelectedProducts(updatedSelectedProducts)
+	}
+
+	const handleConfirmSale = async () => {
+		try {
+			// Prepare the data to be sent to the server
+			let saleData = {
+				productIds: selectedProducts,
+				offPercent: salePercentage,
+				flag: false
 			}
-		};
-		
-///////for on sale management table
+			if (isAllStart) {
+				saleData.flag = true
+			}
+			// Send the data to the server
+			const response = await axios.post(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-put-on-sale`,
+				saleData,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			)
+
+			// Handle the response here, such as updating state or showing a success message
+			if (response.status == 200) {
+				// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+				setNotOnSale((prevProducts) =>
+					prevProducts.filter((product) => !selectedProducts.includes(product._id))
+				)
+			}
+			if (isAllStart) {
+				setNotOnSale([])
+				setisAllStart(false)
+				setShowSaleConfirmationModal(false)
+			}
+
+			// After processing the sale, you can reset the state
+			setSelectedProducts([])
+			setSalePercentage(0)
+
+			// Close the confirmation modal
+			setShowSaleConfirmationModal(false)
+		} catch (error) {
+			console.error('Error confirming sale:', error)
+			// Handle error here, such as updating state or showing an error message
+		}
+	}
+
+	///////for on sale management table
 	const productsColumns = [
 		{
 			header: 'Product',
 			width: '32rem',
 			render: (item) => item.description,
 
-		},{
+		}, {
 			header: 'Price',
 			width: '15rem',
 			render: (item) => item.price,
 
-		},{
+		}, {
 			header: 'Stock',
 			width: '15rem',
 			render: (item) => item.quantity,
@@ -575,157 +570,157 @@ const AllProducts = ({ user }) => {
 				/>
 			),
 		},
-		];
+	]
 
-		const loadNotOnDiscount = async () => {
-			try {
-				setTableLoading(true);
-				const response = await axios.get(
-					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
-					{
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					}
-				);
-				if (response.status === 200) {
-					setNotOnSale(response.data.data);
-					setFetchDataError(false);
-					setTotalPages(response.data.totalPages);
-					setTableLoading(false)
+	const loadNotOnDiscount = async () => {
+		try {
+			setTableLoading(true)
+			const response = await axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
 				}
-			} catch (error) {
-				console.error('Error fetching products not on discount:', error);
-				setFetchDataError(true);
-			} finally {
-				setTableLoading(false);
+			)
+			if (response.status === 200) {
+				setNotOnSale(response.data.data)
+				setFetchDataError(false)
+				setTotalPages(response.data.totalPages)
+				setTableLoading(false)
 			}
-		};
+		} catch (error) {
+			console.error('Error fetching products not on discount:', error)
+			setFetchDataError(true)
+		} finally {
+			setTableLoading(false)
+		}
+	}
 
 
 
-		/////end sale
-		const loadOnDiscount = async () => {
-			try {
+	/////end sale
+	const loadOnDiscount = async () => {
+		try {
 
-				setTableLoading(true);
+			setTableLoading(true)
 
-				const response = await axios.get(
-					`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
-					{
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					}
-				);
-				if (response.status === 200) {
-					setOnSale(response.data.data);
-					setFetchDataError(false);
-					setTotalPages(response.data.totalPages);
+			const response = await axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
 				}
-				setTableLoading(false);
-			} catch (error) {
-				console.error('Error fetching products not on discount:', error);
-				setFetchDataError(true);
-			} finally {
-				setTableLoading(false);
+			)
+			if (response.status === 200) {
+				setOnSale(response.data.data)
+				setFetchDataError(false)
+				setTotalPages(response.data.totalPages)
 			}
-		};
+			setTableLoading(false)
+		} catch (error) {
+			console.error('Error fetching products not on discount:', error)
+			setFetchDataError(true)
+		} finally {
+			setTableLoading(false)
+		}
+	}
 
-		const EndSaleProductsColumns = [
-			{
-				header: 'Product',
-				width: '32rem',
-				render: (item) => item.description,
-	
-			},{
-				header: 'Price',
-				width: '15rem',
-				render: (item) => (item.offPercent/100)*item.price,
-	
-			},{
-				header: 'Stock',
-				width: '15rem',
-				render: (item) => item.quantity,
-	
-			},
-			{
-				header: 'Sale Percentage',
-				width: '15rem',
-				render: (item) => item.offPercent,
-	
-			},
-			{
-				header: 'End Sale',
-				render: (item) => (
-					<Form.Check
-						type="checkbox"
-						checked={selectedProductsNotOnSale.includes(item._id)}
-						onChange={() => handleCheckboxChangEndSale(item._id)}
-					/>
-				),
-			},
-			];
-			const handleConfirmEndSale = async () => {
-				try {
-					// Prepare the data to be sent to the server
-					let saleData = {
-						productIds: selectedProductsNotOnSale,
-						flag: false
-					};
+	const EndSaleProductsColumns = [
+		{
+			header: 'Product',
+			width: '32rem',
+			render: (item) => item.description,
 
-					if (isAllEnd) {
-						saleData.flag = true
-					}
-					// Send the data to the server
-					const response = await axios.post(
-						`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-end-sale`,
-						saleData,
-						
-						{
-							headers: {
-								Authorization: `Bearer ${user.token}`,
-							},
-						}
-					);
-			
-					// Handle the response here, such as updating state or showing a success message
-					if (response.status==200) {
-						// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
-						setOnSale((prevProducts) =>
-						prevProducts.filter((product) => !selectedProductsNotOnSale.includes(product._id))
-						);
-					}
-					if (isAllEnd) {
-						setOnSale([])
-						setisAllEnd(false)
-						setShowEndSaleConfirmationModal(false);
-					}
-					
-					// After processing the sale, you can reset the state
-					setselectedProductsNotOnSale([]);
-			
-					// Close the confirmation modal
-					setShowEndSaleConfirmationModal(false);
-				} catch (error) {
-					console.error('Error confirming sale:', error);
-					// Handle error here, such as updating state or showing an error message
+		}, {
+			header: 'Price',
+			width: '15rem',
+			render: (item) => (item.offPercent / 100) * item.price,
+
+		}, {
+			header: 'Stock',
+			width: '15rem',
+			render: (item) => item.quantity,
+
+		},
+		{
+			header: 'Sale Percentage',
+			width: '15rem',
+			render: (item) => item.offPercent,
+
+		},
+		{
+			header: 'End Sale',
+			render: (item) => (
+				<Form.Check
+					type="checkbox"
+					checked={selectedProductsNotOnSale.includes(item._id)}
+					onChange={() => handleCheckboxChangEndSale(item._id)}
+				/>
+			),
+		},
+	]
+	const handleConfirmEndSale = async () => {
+		try {
+			// Prepare the data to be sent to the server
+			let saleData = {
+				productIds: selectedProductsNotOnSale,
+				flag: false
+			}
+
+			if (isAllEnd) {
+				saleData.flag = true
+			}
+			// Send the data to the server
+			const response = await axios.post(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-end-sale`,
+				saleData,
+
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
 				}
-			};
+			)
 
-			const handleCheckboxChangEndSale = (productId) => {
-				const updatedSelectedProducts = [...selectedProductsNotOnSale];
-				if (updatedSelectedProducts.includes(productId)) {
-				// Product is already selected, remove it
-					const index = updatedSelectedProducts.indexOf(productId);
-					updatedSelectedProducts.splice(index, 1);
-				} else {
-					// Product is not selected, add it
-					updatedSelectedProducts.push(productId);
-				}
-				setselectedProductsNotOnSale(updatedSelectedProducts);
-				};
-			
+			// Handle the response here, such as updating state or showing a success message
+			if (response.status == 200) {
+				// Update the state 'notOnSale' by filtering out the products that are in 'selectedProducts'
+				setOnSale((prevProducts) =>
+					prevProducts.filter((product) => !selectedProductsNotOnSale.includes(product._id))
+				)
+			}
+			if (isAllEnd) {
+				setOnSale([])
+				setisAllEnd(false)
+				setShowEndSaleConfirmationModal(false)
+			}
+
+			// After processing the sale, you can reset the state
+			setselectedProductsNotOnSale([])
+
+			// Close the confirmation modal
+			setShowEndSaleConfirmationModal(false)
+		} catch (error) {
+			console.error('Error confirming sale:', error)
+			// Handle error here, such as updating state or showing an error message
+		}
+	}
+
+	const handleCheckboxChangEndSale = (productId) => {
+		const updatedSelectedProducts = [...selectedProductsNotOnSale]
+		if (updatedSelectedProducts.includes(productId)) {
+			// Product is already selected, remove it
+			const index = updatedSelectedProducts.indexOf(productId)
+			updatedSelectedProducts.splice(index, 1)
+		} else {
+			// Product is not selected, add it
+			updatedSelectedProducts.push(productId)
+		}
+		setselectedProductsNotOnSale(updatedSelectedProducts)
+	}
+
 
 
 
@@ -757,9 +752,9 @@ const AllProducts = ({ user }) => {
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
-								{selectedItem === 'Products' ? (
+									{selectedItem === 'Products' ? (
 										<>
-										
+
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
 												<Form.Control
@@ -797,23 +792,23 @@ const AllProducts = ({ user }) => {
 
 
 
-									
+
 
 							{/* Sale confirmation modal */}
 							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
 								<Modal.Header closeButton>
-								<Modal.Title>Confirm Sale</Modal.Title>
+									<Modal.Title>Confirm Sale</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-								Are you sure you want to put the products on sale with a {salePercentage}% discount?
+									Are you sure you want to put the products on sale with a {salePercentage}% discount?
 								</Modal.Body>
 								<Modal.Footer>
-								<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
-									Cancel
-								</Button>
-								<Button variant="primary" onClick={handleConfirmSale}>
-									Confirm
-								</Button>
+									<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
+										Cancel
+									</Button>
+									<Button variant="primary" onClick={handleConfirmSale}>
+										Confirm
+									</Button>
 								</Modal.Footer>
 							</Modal>
 
@@ -821,62 +816,62 @@ const AllProducts = ({ user }) => {
 
 							<Row>
 								{selectedItem === 'Discount Management' && (
-								<>
-									<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									<Button onClick={() => {
-										setShowSaleConfirmationModal(true)
-										setisAllStart(true)
-										}} disabled = {salePercentage<=0 || notOnSale.length==0}>Put All Products on Sale</Button>
-									<div style={{ marginRight: '10px' }}></div>
-									<Button onClick={() => setShowSaleConfirmationModal(true)} disabled = {salePercentage<=0 || selectedProducts.length==0}>Put Selected Products on Sale</Button>
-									<Form.Group className="mb-1 ms-2">
-										<Form.Control
-										type="number"
-										value={salePercentage}
-										placeholder="Discount Percentage"
-										onChange={(e) => setSalePercentage(e.target.value)}
-										min="0"
-										/>
-									</Form.Group>
-									</Col>
-								</>
+									<>
+										<Col className='d-flex justify-content-end pe-0 align-items-center'>
+											<Button onClick={() => {
+												setShowSaleConfirmationModal(true)
+												setisAllStart(true)
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Put All Products on Sale</Button>
+											<div style={{ marginRight: '10px' }}></div>
+											<Button onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>Put Selected Products on Sale</Button>
+											<Form.Group className="mb-1 ms-2">
+												<Form.Control
+													type="number"
+													value={salePercentage}
+													placeholder="Discount Percentage"
+													onChange={(e) => setSalePercentage(e.target.value)}
+													min="0"
+												/>
+											</Form.Group>
+										</Col>
+									</>
 								)}
 							</Row>
-							<br/>
+							<br />
 
 							{/* end Sale confirmation modal */}
 							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
 								<Modal.Header closeButton>
-								<Modal.Title>Confirm End Sale</Modal.Title>
+									<Modal.Title>Confirm End Sale</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-								Are you sure you want to put products on back on origional price?
+									Are you sure you want to put products on back on origional price?
 								</Modal.Body>
 								<Modal.Footer>
-								<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
-									Cancel
-								</Button>
-								<Button variant="primary" onClick={handleConfirmEndSale}>
-									Confirm
-								</Button>
+									<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
+										Cancel
+									</Button>
+									<Button variant="primary" onClick={handleConfirmEndSale}>
+										Confirm
+									</Button>
 								</Modal.Footer>
 							</Modal>
 
 							<Row>
 								{selectedItem === 'End Sale' && (
-								<>
-									<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled = {selectedProductsNotOnSale.length==0}>End Sale</Button>
-									<div style={{ marginRight: '10px' }}></div>
-									<Button onClick={() => {
-										setShowEndSaleConfirmationModal(true)
-										setisAllEnd(true)
-									}} disabled= {OnSale.length==0}>End Sale for all</Button>
-									</Col>
-								</>
+									<>
+										<Col className='d-flex justify-content-end pe-0 align-items-center'>
+											<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
+											<div style={{ marginRight: '10px' }}></div>
+											<Button onClick={() => {
+												setShowEndSaleConfirmationModal(true)
+												setisAllEnd(true)
+											}} disabled={OnSale.length == 0}>End Sale for all</Button>
+										</Col>
+									</>
 								)}
 							</Row>
-							<br/>
+							<br />
 
 
 
@@ -890,17 +885,17 @@ const AllProducts = ({ user }) => {
 
 
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{selectedItem === 'Discount Management' && notOnSale?  (
+								{selectedItem === 'Discount Management' && notOnSale ? (
 									<DetailsTable
 										data={notOnSale}
-										columns={productsColumns }
+										columns={productsColumns}
 									/>
-								) : selectedItem === 'End Sale' && OnSale?  (
+								) : selectedItem === 'End Sale' && OnSale ? (
 									<DetailsTable
 										data={OnSale}
-										columns={EndSaleProductsColumns }
+										columns={EndSaleProductsColumns}
 									/>
-								) :tableLoading ? (
+								) : tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'Process' ? (
 									<DetailsTable
@@ -910,9 +905,9 @@ const AllProducts = ({ user }) => {
 								) : selectedItem === 'Analytics' && salesAnalytics ? (
 									<DetailsTable
 										data={salesAnalytics}
-										columns={SellersTablecolumns }
+										columns={SellersTablecolumns}
 									/>
-								): selectedItem === 'Products' ? (
+								) : selectedItem === 'Products' ? (
 									<DetailsTable
 										data={data}
 										columns={ProductsTablecolumns}
@@ -923,7 +918,7 @@ const AllProducts = ({ user }) => {
 										columns={OrdersTablecolumns}
 									/>
 								)}
-								
+
 							</div>
 							<Footer
 								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
@@ -966,7 +961,7 @@ const AllProducts = ({ user }) => {
 				</Container>
 			)}
 		</>
-	);
+	)
 
 
 }
