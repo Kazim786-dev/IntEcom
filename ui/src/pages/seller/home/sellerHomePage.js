@@ -721,20 +721,6 @@ const AllProducts = ({ user }) => {
 		setselectedProductsNotOnSale(updatedSelectedProducts)
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return (
 		<>
 			{loading ? (
@@ -755,8 +741,8 @@ const AllProducts = ({ user }) => {
 									{selectedItem === 'Products' ? (
 										<>
 
-											<Form.Label className="me-2"><b>Search:</b></Form.Label>
-											<Form.Group className="mb-1">
+											<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
+											<Form.Group className="mb-1 mt-1">
 												<Form.Control
 													className='pe-5'
 													type="text"
@@ -766,10 +752,42 @@ const AllProducts = ({ user }) => {
 													ref={searchInputRef}
 												/>
 											</Form.Group>
-											<Button onClick={handleAddClick} className='px-3'>Add New</Button>
+											<Button onClick={handleAddClick} className='px-3 ms-2'>Add New</Button>
 
 										</>
-									) : <></>}
+									) : selectedItem === 'Discount Management' ? (
+										<Col className='d-flex justify-content-end pe-0 align-items-center'>
+											<Button className='me-2' 
+											onClick={() => {
+												setShowSaleConfirmationModal(true)
+												setisAllStart(true)
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Sale on All</Button>
+											{/* <div style={{ marginRight: '10px' }}></div> */}
+											<Button onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>
+												Sale on Selected
+											</Button>
+											<Form.Group className="ms-2 p-0">
+												<Form.Control
+													type="number"
+													value={salePercentage}
+													placeholder="Discount Percentage"
+													onChange={(e) => setSalePercentage(e.target.value)}
+													min="0"
+												/>
+											</Form.Group>
+										</Col>
+									) : selectedItem === 'End Sale' ? (
+										<>
+											<Col className='d-flex justify-content-end pe-0 align-items-center'>
+												<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
+												<div style={{ marginRight: '10px' }}></div>
+												<Button onClick={() => {
+													setShowEndSaleConfirmationModal(true)
+													setisAllEnd(true)
+												}} disabled={OnSale.length == 0}>End Sale for all</Button>
+											</Col>
+										</>
+									): <></>}
 								</Col>
 							</Row>
 							<Row>
@@ -779,20 +797,6 @@ const AllProducts = ({ user }) => {
 									</div>
 								)}
 							</Row>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 							{/* Sale confirmation modal */}
 							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
@@ -812,33 +816,7 @@ const AllProducts = ({ user }) => {
 								</Modal.Footer>
 							</Modal>
 
-
-
-							<Row>
-								{selectedItem === 'Discount Management' && (
-									<>
-										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button onClick={() => {
-												setShowSaleConfirmationModal(true)
-												setisAllStart(true)
-											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Put All Products on Sale</Button>
-											<div style={{ marginRight: '10px' }}></div>
-											<Button onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>Put Selected Products on Sale</Button>
-											<Form.Group className="mb-1 ms-2">
-												<Form.Control
-													type="number"
-													value={salePercentage}
-													placeholder="Discount Percentage"
-													onChange={(e) => setSalePercentage(e.target.value)}
-													min="0"
-												/>
-											</Form.Group>
-										</Col>
-									</>
-								)}
-							</Row>
-							<br />
-
+							
 							{/* end Sale confirmation modal */}
 							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
 								<Modal.Header closeButton>
@@ -856,33 +834,6 @@ const AllProducts = ({ user }) => {
 									</Button>
 								</Modal.Footer>
 							</Modal>
-
-							<Row>
-								{selectedItem === 'End Sale' && (
-									<>
-										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
-											<div style={{ marginRight: '10px' }}></div>
-											<Button onClick={() => {
-												setShowEndSaleConfirmationModal(true)
-												setisAllEnd(true)
-											}} disabled={OnSale.length == 0}>End Sale for all</Button>
-										</Col>
-									</>
-								)}
-							</Row>
-							<br />
-
-
-
-
-
-
-
-
-
-
-
 
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
 								{selectedItem === 'Discount Management' && notOnSale ? (
