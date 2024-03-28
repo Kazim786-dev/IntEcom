@@ -72,7 +72,8 @@ const productSchema = new Schema({
 });
 
 //indexes
-productSchema.index({ isDeleted: 1, status: 1, uid: 1 }); // Create index on the relevant fields
+productSchema.index({ isDeleted: 1, status: 1, uid: 1 });
+productSchema.index({ isDeleted: 1, status: 1, uid: 1, isOnSale:1 });
 productSchema.index({ isDeleted: 1, user: 1 }); // Index for isDeleted and user
 productSchema.index({ user: 1 }); // Index for user
 productSchema.index({ isDeleted: 1, status: 1 }); // Index for isDeleted and status

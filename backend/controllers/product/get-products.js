@@ -17,80 +17,38 @@ const getProducts = async ({ query, catagory, isSaleOnly }) => {
     const queryName = query.name;
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
-    let newArray 
-    if (catagory.length!==0) {
-      newArray = catagory.filter(item => item !== null);
-
-    }
-
+    
     const response = await axios.get(`${Flask_URL}/search`, { params: { prod: queryName } });
     const foundProducts = response.data.products
-    let findQuery
-    if (isSaleOnly) {
-      if (catagory.length!==0) {
-        if (newArray.length!==0) {
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            isOnSale: true,
-            catagory: { $in: newArray },
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }else{
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            isOnSale: true,
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }
-        
-      }else{
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            isOnSale: true,
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }
-    }
-    else{
-      if (catagory.length!==0) {
-        if (newArray.length!==0) {
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            catagory: { $in: newArray },
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }else{
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }
-        
-      }else{
-          findQuery = {
-            isDeleted: false,
-            status: { $ne: 'blocked' },
-            $or: [
-              { uid: { $in: foundProducts } },
-            ]
-          };
-        }
-    }
+    
+    // Filter out null items from the category array
+	const filteredCategory = catagory.filter(item => item !== null);
+
+	// Prepare the base query object
+	const baseQuery = {
+		isDeleted: false,
+		status: { $ne: 'blocked' },
+		$or: [
+			{ uid: { $in: foundProducts } }
+		]
+	};
+
+	// Define the findQuery based on conditions
+	let findQuery;
+
+	if (isSaleOnly) {
+		findQuery = {
+			...baseQuery,
+			isOnSale: true,
+			...(filteredCategory.length !== 0 ? { category: { $in: filteredCategory } } : {})
+		};
+	} else {
+		findQuery = {
+			...baseQuery,
+			...(filteredCategory.length !== 0 ? { category: { $in: filteredCategory } } : {})
+		};
+	}
+
     
 
     // Update findQuery to exclude blocked products

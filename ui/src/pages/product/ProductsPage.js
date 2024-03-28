@@ -49,27 +49,10 @@ const AllProductsPage = ({ user }) => {
 	//redux state
 	const cartProducts = useSelector((state) => state.cart.products)
 
-
-
-
-
-
-
 	const [showFilters, setShowFilters] = useState(false)
 	const [filters, setFilters] = useState([])
 	const [selectedFilters, setSelectedFilters] = useState([])
 	const [showSaleProducts, setShowSaleProducts] = useState(false)
-
-
-
-
-
-
-
-
-
-
-
 
 	const fetchWishlist = async () => {
 		setIsError(false) // Reset error state before making a new request
@@ -108,7 +91,6 @@ const AllProductsPage = ({ user }) => {
 	}, [currentPage, priceFilter, searchTerm])
 
 
-
 	// Check if selectedFilters array is empty and call fetchAllProducts
 	useEffect(() => {
 		if (selectedFilters.length === 0) {
@@ -122,15 +104,6 @@ const AllProductsPage = ({ user }) => {
 	// 		searchInputRef.current.focus()
 	// 	}
 	// })
-
-
-
-
-
-
-
-
-
 
 	const fetchFilters = async () => {
 		try {
@@ -246,14 +219,6 @@ const AllProductsPage = ({ user }) => {
 		fectOnSaleOnly()
 	}, [showSaleProducts])
 
-
-
-
-
-
-
-
-
 	const fetchProducts = async () => {
 		let response = ''
 		try {
@@ -339,11 +304,11 @@ const AllProductsPage = ({ user }) => {
 			const res = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/wishlist/add`, {
 				productId: product._id
 			},
-			{
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			})
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				})
 			if (res.status == 200) {
 				setWishlist(currentWishlist => {
 					// Add the product to the wishlist if not already present
@@ -375,12 +340,15 @@ const AllProductsPage = ({ user }) => {
 		// Send the FormData instance to the server
 		axios.post('http://localhost:5000/audio', data)
 			.then((response) => {
-				const { text } = response.data
-				setSearchTerm(text)
+				const { text } = response.data;
+				if (text.indexOf('No text') === -1) { // Check if "No text" is not found in the text
+					setSearchTerm(text);
+				}
 			})
 			.catch((error) => {
-				console.error(error)
-			})
+				console.error(error);
+			});
+
 	}
 
 	return (
@@ -424,18 +392,9 @@ const AllProductsPage = ({ user }) => {
 									</Form.Group>
 								</Col>
 
-
-
-
-
-								<Col md='auto' className='d-flex align-items-center pe-0'>
+								<Col md='auto' className='d-flex align-items-center pe-0 h-0 mb-1'>
 									<Button onClick={handleToggleFilters} variant="outline-primary">Filters</Button>
 								</Col>
-
-
-
-
-
 
 							</Row>
 
