@@ -153,6 +153,9 @@ const ProductDetailPage = ({ user }) => {
 								<Card.Text>
 									<strong>Price:</strong> ${product.price.toFixed(2)}
 								</Card.Text>
+								<Card.Text>
+									<strong>Catagory:</strong> {product.catagory}
+								</Card.Text>
 								<Card.Text >
 									<Badge bg="secondary" className='pad'>{product.color}</Badge>
 									<Badge bg="secondary" className='pad'>{product.size}</Badge>

@@ -41,6 +41,17 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 				name='quantity'
 				placeholder={'100'}
 			/>
+			<FormField
+				required
+				controlId={'catagory'}
+				label={'Catagory'}
+				type='text'
+				className={'mb-4'}
+				value={formData.catagory}
+				onChange={handleChange}
+				name='catagory'
+				placeholder={'Clothing'}
+			/>
 			<div className='d-flex justify-content-end'>
                 
 				<Button className='w-25 py-2' variant='primary' type='submit'>
