@@ -79,6 +79,9 @@ const AllProducts = ({ user }) => {
 	}, [])
 
 	useEffect(() => {
+		if (selectedItem == 'Orders' || selectedItem === 'Products') {
+			fetchData()
+		}
 		if (selectedItem === 'Process') {
 			fetchProcessedOrders()
 		} else if (selectedItem === 'Analytics') {
@@ -90,7 +93,9 @@ const AllProducts = ({ user }) => {
 		} else {
 			debouncedFetchData()
 		}
+
 	}, [currentPage, selectedItem, searchTerm])
+
 	const fetchSalesAnalytics = async () => {
 		try {
 			setTableLoading(true)
@@ -118,10 +123,10 @@ const AllProducts = ({ user }) => {
 		} catch (error) {
 			console.error('Error fetching sales analytics:', error)
 			setFetchDataError(true)
-		} finally {
 			setTableLoading(false)
 		}
 	}
+
 	const fetchData = () => {
 
 		setFetchDataError(false)
@@ -262,26 +267,21 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
-
-
 	//seller analytics information
-
 	const SellersTablecolumns = [
 		{
 			header: 'Name',
-			render: (seller) => seller._id,
+			render: (detail) => detail.name,
 		},
 		{
 			header: 'Total Quantity Sold',
-			render: (seller) => seller.totalQuantitySold,
+			render: (detail) => detail.totalQuantitySold,
 		},
 		{
 			header: 'Total Price Earned',
-			render: (seller) => seller.totalCost.toFixed(2),
+			render: (detail) => detail.totalCost.toFixed(2),
 		},
 	]
-
-
 
 	useEffect(() => {
 		if (chartRef.current && salesAnalytics) {
@@ -328,20 +328,11 @@ const AllProducts = ({ user }) => {
 			}
 		}
 	}, [salesAnalytics])
+	
 	const handleItemClick = (item) => {
 		setCurrentPage(1)
 		setTableLoading(true)
 		setSelectedItem(item)
-		if (item === 'Process') {
-			fetchProcessedOrders()
-		} else if (selectedItem == 'Orders' || selectedItem === 'Products') {
-			fetchData()
-		} else if (selectedItem == 'Analytics') {
-			fetchSalesAnalytics()
-		}
-		else {
-			debouncedFetchData()
-		}
 	}
 
 	const handleAddClick = () => {
@@ -472,16 +463,6 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
-
-
-
-
-
-
-
-
-
-
 	const handleCheckboxChange = (productId) => {
 		const updatedSelectedProducts = [...selectedProducts]
 		if (updatedSelectedProducts.includes(productId)) {
@@ -597,8 +578,6 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
-
-
 	/////end sale
 	const loadOnDiscount = async () => {
 		try {
@@ -661,6 +640,7 @@ const AllProducts = ({ user }) => {
 			),
 		},
 	]
+
 	const handleConfirmEndSale = async () => {
 		try {
 			// Prepare the data to be sent to the server
@@ -732,7 +712,9 @@ const AllProducts = ({ user }) => {
 							<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
 						<Col className="mt-4 px-3">
-							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
+							{selectedItem === 'Analytics' && 
+								<OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />
+							}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
 									<h2 className='text-primary'>{selectedItem}</h2>
@@ -740,7 +722,6 @@ const AllProducts = ({ user }) => {
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<>
-
 											<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1 mt-1">
 												<Form.Control
@@ -836,7 +817,9 @@ const AllProducts = ({ user }) => {
 							</Modal>
 
 							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{selectedItem === 'Discount Management' && notOnSale ? (
+								{ tableLoading ? (
+									<SpinnerComp />
+								) : selectedItem === 'Discount Management' && notOnSale ? (
 									<DetailsTable
 										data={notOnSale}
 										columns={productsColumns}
@@ -846,8 +829,6 @@ const AllProducts = ({ user }) => {
 										data={OnSale}
 										columns={EndSaleProductsColumns}
 									/>
-								) : tableLoading ? (
-									<SpinnerComp />
 								) : selectedItem === 'Process' ? (
 									<DetailsTable
 										data={processedOrders}
