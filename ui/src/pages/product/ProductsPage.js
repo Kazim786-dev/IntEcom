@@ -341,7 +341,7 @@ const AllProductsPage = ({ user }) => {
 		axios.post('http://localhost:5000/audio', data)
 			.then((response) => {
 				const { text } = response.data;
-				if (text.indexOf('No text') === -1) { // Check if "No text" is not found in the text
+				if (text && text.indexOf('No text') === -1) { // Check if "No text" is not found in the text
 					setSearchTerm(text);
 				}
 			})
