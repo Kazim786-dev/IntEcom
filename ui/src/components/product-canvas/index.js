@@ -27,6 +27,7 @@ const ProductCanvas = ({
 		quantity: product?.quantity,
 		description: product?.description,
 		image: product?.image,
+		catagory: product?.catagory,
 	})
 
 	
@@ -55,6 +56,7 @@ const ProductCanvas = ({
 		Form.append('description', formData.description)
 		Form.append('price', formData.price)
 		Form.append('quantity', formData.quantity)
+		Form.append('catagory', formData.catagory)
 		if (formData.image) {
 			Form.append('image', formData.image)
 		}
@@ -108,6 +110,7 @@ const ProductCanvas = ({
 		Form.append('description', formData.description)
 		Form.append('price', formData.price)
 		Form.append('quantity', formData.quantity)
+		Form.append('catagory', formData.catagory)
 		if (formData.image) {
 			Form.append('image', formData.image)
 		}

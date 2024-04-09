@@ -124,17 +124,80 @@ const getProducts = async ({ query }) => {
     const queryName = query.name;
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
-    
+    let newArray 
+    if (catagory.length!==0) {
+      newArray = catagory.filter(item => item !== null);
+
+    }
+
     const response = await axios.get(`${Flask_URL}/search`, { params: { prod: queryName } });
     const foundProducts = response.data.products
-
-    const findQuery = {
-      isDeleted: false,
-      status: { $ne: 'blocked' },
-      $or: [
-        { uid: { $in: foundProducts } },
-      ]
-    };
+    let findQuery
+    if (isSaleOnly) {
+      if (catagory.length!==0) {
+        if (newArray.length!==0) {
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            isOnSale: true,
+            catagory: { $in: newArray },
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }else{
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            isOnSale: true,
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }
+        
+      }else{
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            isOnSale: true,
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }
+    }
+    else{
+      if (catagory.length!==0) {
+        if (newArray.length!==0) {
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            catagory: { $in: newArray },
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }else{
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }
+        
+      }else{
+          findQuery = {
+            isDeleted: false,
+            status: { $ne: 'blocked' },
+            $or: [
+              { uid: { $in: foundProducts } },
+            ]
+          };
+        }
+    }
     
 
     // Update findQuery to exclude blocked products
