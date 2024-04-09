@@ -38,7 +38,7 @@ const LoginPage = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 
-		if (validateEmail()==false){
+		if (validateEmail() == false) {
 			return
 		}
 
@@ -85,7 +85,7 @@ const LoginPage = () => {
 
 	const handleFieldChange = (e) => {
 		const { name, value } = e.target
-		if(name=='email'){
+		if (name == 'email') {
 			setEmailError('')
 		}
 		setFormData({
@@ -95,61 +95,76 @@ const LoginPage = () => {
 	}
 
 	return (
-		<FormContainer heading="Login">
-			<Form onSubmit={handleSubmit}>
-				<Row>
-					<FormField
-						controlId="email"
-						label="Enter email address"
-						type="text"
-						placeholder="Please enter your email"
-						name="email"
-						value={email}
-						onChange={handleFieldChange}
+
+		<div className="w-full overflow-hidden px-6">
+			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
+				<div className="hidden ps-5 lg:flex items-center justify-center">
+					<img
+						alt="Product"
+						className="aspect-[600/374] object-cover bg-gray-100"
+						// height="374"
+						src="/ecom.png"
+						// width="600"
 					/>
-					{emailError && <p className="text-danger">{emailError}</p>}
+				</div>
+				<div className="flex items-center justify-center p-6 lg:p-10">
+					<div className="mx-auto w-full max-w-md px-4 space-y-8">
+						<div className="space-y-2">
+							<h1 className="text-3xl font-bold">Welcome to IntEcom</h1>
+							<p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
+						</div>
+						<form onSubmit={handleSubmit} className='items-start'>
+							<div className="flex flex-col space-y-3">
+								<FormField
+									controlId="email"
+									label="Email"
+									type="text"
+									placeholder="james@gmail.com"
+									name="email"
+									value={email}
+									onChange={handleFieldChange}
+								/>
+								{emailError && <p className="text-danger">{emailError}</p>}
+								<FormField
+									controlId="password"
+									label="Password"
+									type="password"
+									placeholder=""
+									name="password"
+									value={password}
+									onChange={handleFieldChange}
+								/>
+								<CustomButton variant="primary" type="submit" className="w-full mt-3">
+									Login
+								</CustomButton>
+								<Row className="mt-3">
+									<Form.Group controlId="remember" className="mb-3">
+										<Form.Check className='font-semibold' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} />
+									</Form.Group>
+								</Row>
+								<div className="text-start">
+									<Link to='/forget-pass' className="text-black">Forgot your password?</Link>
+								</div>
+								<div className="border-t text-center border-gray-200 dark:border-gray-800">
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Don't have an account?
+										<Link className="underline underline-offset-2" to={'/signup'}>
+											Sign up
+										</Link>
+									</p>
+								</div>
+							</div>
+						</form>
+						{showAlert && (
+							<AlertComp variant="danger" text="Wrong username password, please enter correct credentials" onClose={() => setShowAlert(false)} />
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
 
-				</Row>
-				<Row className="mt-3">
-					<FormField
-						controlId="password"
-						label="Password"
-						type="password"
-						placeholder="Please enter password"
-						name="password"
-						value={password}
-						onChange={handleFieldChange}
-					/>
-				</Row>
-				<Row className="mt-2">
-					<Form.Group controlId="remember" className="mb-3">
-						{/* <Form.Check className='text-styles' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} /> */}
-					</Form.Group>
-				</Row>
-				<Row className='m-0 mt-4'>
-					<CustomButton variant="primary" type="submit" className="w-100" 
-						// isDisabled={emailError !== '' || password == ''}
-					>
-						Login
-					</CustomButton>
-				</Row>
-				<Row className="mt-3">
-					<Col>
-						<p className="text-center mb-2 text-styles">Forgot password! <Link to='/forget-pass' className="text-decoration-none">Reset</Link></p>
-					</Col>
-				</Row>
-				<Row className="mt-3">
-					<Col>
-						<p className="text-center mb-0 text-styles">I don't have an account! <Link to='/signup' className="text-decoration-none">SignUp</Link></p>
-					</Col>
-				</Row>
-			</Form>
 
-			{showAlert && (
-				<AlertComp variant="danger" text="Wrong username password, please enter correct credentials" onClose={() => setShowAlert(false)} />
-			)}
 
-		</FormContainer>
 	)
 }
 

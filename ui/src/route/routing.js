@@ -12,12 +12,16 @@ import SignUpPage from '../pages/auth/signup'
 import TotalOrders from '../pages/orders/cust-total-orders'
 import Wishlist from '../pages/wishlist/wishlist'
 import ProductDetailPage from '../pages/product/ProductDetails'
+
+import SignIn from '../pages/auth/sign-in'
+
 // admin pages
 import AdminHome from '../pages/admin/home'
 
 //seller pages
 import SellerHome from '../pages/seller/home/sellerHomePage'  // Import your SellerHome component
 
+import LandingPage from '../pages/landing'
 
 //components
 import Layout from '../components/layout'
@@ -29,21 +33,27 @@ const RouterLinks = ({
 		<BrowserRouter>
 			<Routes>
 				<Route
-					path='/'
+					path='/home'
 					element={
 						<Layout user={user} showNavbar={true}>
-							{user.role === 'admin' ? <Navigate to='/admin' /> :
-								user.role === 'seller' ? <Navigate to='/seller' /> :
-									user.role === 'customer' ? <Navigate to='/products' /> :
+							{user.role === 'admin' && user.isLoggedIn ? <Navigate to='/admin' /> :
+								user.role === 'seller' && user.isLoggedIn ? <Navigate to='/seller' /> :
+									user.role === 'customer' && user.isLoggedIn ? <Navigate to='/products' /> :
 										<Navigate to='/login' />}
 						</Layout>
+					}
+				/>
+				<Route
+					path='/'
+					element={
+						<LandingPage/>
 					}
 				/>
 				<Route
 					path='/login'
 					element={
 						<Layout user={user} showNavbar={false} footer={false}>
-							{!user.isLoggedIn ? <LoginPage /> : <Navigate to='/' />}
+							{!user.isLoggedIn ? <LoginPage /> : <Navigate to='/home' />}
 						</Layout>
 					}
 				/>
@@ -63,7 +73,7 @@ const RouterLinks = ({
 					path='/new-pass/:token'
 					element={<NewPassPage />}
 				/>
-				{user.role === 'customer' &&
+				{user.role === 'customer' && user.isLoggedIn &&
 					<>
 						<Route
 							path='/products'
@@ -106,7 +116,7 @@ const RouterLinks = ({
 						/>
 					</>
 				}
-				{user.role === 'admin' &&
+				{user.role === 'admin' && user.isLoggedIn &&
 					<>
 						<Route path='/admin'>
 							<Route
@@ -120,7 +130,7 @@ const RouterLinks = ({
 						</Route>
 					</>
 				}
-				{user.role === 'seller' &&
+				{user.role === 'seller' && user.isLoggedIn &&
 					<>
 						<Route path='/seller'>
 							<Route

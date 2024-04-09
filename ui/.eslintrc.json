@@ -15,18 +15,18 @@
         "react"
     ],
     "rules": {
-        "indent": [
-            "warn",
-            "tab"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "warn",
-            "never"
-        ],
+        // "indent": [
+        //     "warn",
+        //     "tab"
+        // ],
+        // "quotes": [
+        //     "error",
+        //     "single"
+        // ],
+        // "semi": [
+        //     "warn",
+        //     "never"
+        // ],
         "react/prop-types": "off",
 		"no-unused-vars": "off"
     }

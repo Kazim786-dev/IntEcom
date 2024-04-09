@@ -58,7 +58,7 @@ const PaginationComp = ({totalPages, currentPage, setCurrentPage }) => {
 
 	return (
 
-		<Pagination size="md" className="m-0">
+		<Pagination size="md" className="m-0 p-0">
 			<Pagination.Item onClick={() => previousPage()}>Previous</Pagination.Item>
 			{renderItems()}
 			<Pagination.Item onClick={() => nextPage()}>Next</Pagination.Item>

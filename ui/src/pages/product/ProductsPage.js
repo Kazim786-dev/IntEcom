@@ -3,6 +3,11 @@ import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { useNavigate } from 'react-router-dom'
 
+import NavbarSider from '../../components/navbar-sider/navbarSider'
+
+//icons
+import { HomeIcon, PackageIcon, BoxIcon, ShoppingCartIcon, UserIcon, HeartIcon } from '../../static/icons/navicons.js';
+
 //react-bootstrap
 import { Container, Row, Col, Form, Button, Offcanvas } from 'react-bootstrap'
 
@@ -96,7 +101,8 @@ const AllProductsPage = ({ user }) => {
 		if (selectedFilters.length === 0) {
 			fetchProducts()
 		}
-	}, [selectedFilters])
+	}, [selectedFilters]) //selectedFilters
+
 	// Check if selectedFilters array is empty and call fetchAllProducts
 
 	// useEffect(() => {
@@ -119,6 +125,9 @@ const AllProductsPage = ({ user }) => {
 	const handleToggleFilters = () => setShowFilters(!showFilters)
 
 	const handleFilterChange = async (selectedFilter) => {
+
+		console.log(selectedFilter)
+
 		setSelectedFilters((prevFilters) => {
 			// Ensure prevFilters is always treated as an array
 			const currentFilters = Array.isArray(prevFilters) ? prevFilters : []
@@ -217,7 +226,7 @@ const AllProductsPage = ({ user }) => {
 		}
 
 		fectOnSaleOnly()
-	}, [showSaleProducts])
+	}, [showSaleProducts]) //showSaleProducts
 
 	const fetchProducts = async () => {
 		let response = ''
@@ -276,6 +285,10 @@ const AllProductsPage = ({ user }) => {
 	const handlePriceFilterChange = (event) => {
 		setPriceFilter(event.target.value)
 	}
+	const handleSortChange = (sortValue) => {
+		// Implement your sorting logic here based on the selected sort value
+		setPriceFilter(sortValue)
+	};
 
 	const addToCart = (product) => {
 		const foundProduct = cartProducts.find((item) => item._id == product._id)
@@ -341,7 +354,7 @@ const AllProductsPage = ({ user }) => {
 		axios.post('http://localhost:5000/audio', data)
 			.then((response) => {
 				const { text } = response.data;
-				if (text && text.indexOf('No text') === -1) { // Check if "No text" is not found in the text
+				if (text && text.indexOf('No text') === -1) { // Check if 'No text' is not found in the text
 					setSearchTerm(text);
 				}
 			})
@@ -351,59 +364,87 @@ const AllProductsPage = ({ user }) => {
 
 	}
 
+	const cartLength = cartProducts.length;
+	const isChecked = (item) => {
+		selectedFilters.includes(item)
+	}
+
+	const navlinks = [
+		// { text: 'Home', link:'/', icon: <HomeIcon className="h-4 w-4" />, badge: '12' },
+		{ text: 'Products', link: '/products', icon: <PackageIcon className="h-4 w-4" /> },
+		{
+			text: 'Categories', icon: <BoxIcon className="h-4 w-4" />, checkbox: true,
+			dropdownItems: filters, checked: isChecked, onChange: handleFilterChange
+		},
+		{ text: 'Cart', link: '/cart', icon: <ShoppingCartIcon className="h-4 w-4" />, badge: cartLength > 0 ? cartLength : null },
+		{ text: 'Wishlist', link: '/wishlist', icon: <HeartIcon className="h-4 w-4" /> },
+		{ text: 'Account', dropdownItems: ['Logout'], to: '/login', icon: <UserIcon className="h-4 w-4" /> },
+	]
+
+
 	return (
 		<>
-			{loading ? (
-				<SpinnerComp />
-			) :
-				(
-					<>
-						<Container fluid className='pt-0 p-5 mt-5'>
+			<NavbarSider navLinks={navlinks} showSearch={true} onChange={handleSearchChange} value={searchTerm} ref={searchInputRef} >
 
-							<Row className='mb-3 m-0 ps-1 pe-1' >
-								<Col className='d-flex justify-content-start ps-0'>
-									<h2 className='text-primary'>All Products</h2>
-								</Col>
-								<Col md='auto' className='d-flex align-items-center'>
-									<Form.Label className='me-2'><b>Search:</b></Form.Label>
-									<Form.Group className='mb-1'>
-										<Form.Control
-											type='text'
-											value={searchTerm}
-											placeholder='Search product'
-											onChange={handleSearchChange}
-											ref={searchInputRef}
-										// disabled = {selectedFilters.length!==0}
-										/>
-									</Form.Group>
-									<Form.Group className='mb-1 ms-2' >
-										{
-											// selectedFilters.length === 0 && 
-											<SpeakSearch handleAudioSearch={handleAudioSearch} />}
-									</Form.Group>
-								</Col>
-								<Col md='auto' className='d-flex align-items-center pe-0'>
-									<Form.Label className='me-2'><b>Sort by:</b></Form.Label>
-									<Form.Group className='mb-1'>
-										<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
-											<option value='asc'>Low to High</option>
-											<option value='desc'>High to Low</option>
-										</Form.Select>
-									</Form.Group>
-								</Col>
+				{loading ? (
+					<SpinnerComp />
+				) :
+					(
+						<>
+							<Container fluid className='pt-0'>
 
-								<Col md='auto' className='d-flex align-items-center pe-0 h-0 mb-1'>
-									<Button onClick={handleToggleFilters} variant="outline-primary">Filters</Button>
-								</Col>
+								<Row className='mb-4 m-0' >
+									<Col className='d-flex justify-content-start ps-0'>
+										<h2 className='text-primary'>Products</h2>
+									</Col>
+									{/* <Col md='auto' className='d-flex align-items-center'>
+										<Form.Label className='me-2'><b>Search:</b></Form.Label>
+											<Form.Group className=''>
+												<Form.Control
+													type='text'
+													value={searchTerm}
+													placeholder='Search product'
+													onChange={handleSearchChange}
+													ref={searchInputRef}
+												/>
+											</Form.Group>
+										<Form.Group className='ms-2' >
+											{
+												<SpeakSearch handleAudioSearch={handleAudioSearch} />}
+										</Form.Group>
+									</Col> */}
+									<Col md='auto' className='d-flex align-items-center'>
+										<div className="d-flex align-items-center">
+											<span className="me-2 font-semibold">Try Urdu Audio</span>
+											<div className='ms-2'>
+												<Form.Group>
+													{/* Render SpeakSearch component */}
+													<SpeakSearch handleAudioSearch={handleAudioSearch} />
+												</Form.Group>
+											</div>
+										</div>
+									</Col>
+									<Col md='auto' className='d-flex align-items-center pe-0 gap-2'>
+										<Form.Label className='me-2 font-semibold'>Sort:</Form.Label>
+										<Form.Group className=''>
+											<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
+												<option value='asc'>Low to High</option>
+												<option value='desc'>High to Low</option>
+											</Form.Select>
+										</Form.Group>
 
-							</Row>
 
-							<div style={{ minHeight: '60vh' }}>
+										{/* <Button onClick={handleToggleFilters} className='' variant='outline-primary'>Filters</Button> */}
+									</Col>
+
+								</Row>
+
+								{/* <div style={{ minHeight: '60vh' }}> */}
 								{/*Map all products */}
 								<Row className='justify-content-center'>
 									{/* Desktop: Display 4 products per row 
-									Tablet: 2 Products per row
-									Mobile: 1 product per row */}
+										Tablet: 2 Products per row
+										Mobile: 1 product per row */}
 									{products.map((product, index) => (
 										<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
 											<div onClick={() => handleProductClick(product._id)}>
@@ -421,66 +462,58 @@ const AllProductsPage = ({ user }) => {
 									))}
 
 								</Row>
-							</div>
+								{/* </div> */}
 
-							<Footer className={'d-flex justify-content-between align-items-center ps-1 pe-1'}
-								text={`${products.length} products found`}
-								totalPages={totalPages}
-								currentPage={currentPage}
-								setCurrentPage={setCurrentPage}
-							/>
-							{fetchProductError && (
-								<AlertComp
-									variant='danger'
-									text={errorText}
-									onClose={() => setFetchProductError(false)}
+								<Footer className={'d-flex justify-content-between align-items-center'}
+									text={`${products.length} products found`}
+									totalPages={totalPages}
+									currentPage={currentPage}
+									setCurrentPage={setCurrentPage}
 								/>
-							)}
-
-
-
-
-							<Offcanvas show={showFilters} onHide={handleToggleFilters} placement="end">
-								<Offcanvas.Header closeButton>
-									<Offcanvas.Title>Filters</Offcanvas.Title>
-								</Offcanvas.Header>
-								<Offcanvas.Body>
-									{/* Dynamically generate filter options */}
-									{filters.map((filter, index) => (
-										<div key={index}>
-											<Form.Check
-												type="checkbox"
-												label={filter} // Directly use filter as the label since it's a string
-												id={`filter-${index}`} // Generate a unique ID for each checkbox
-												checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
-												onChange={() => handleFilterChange(filter)}
-											/>
-										</div>
-									))}
-									<br />
-									<br />
-									<Form.Check
-										type="switch"
-										id="saleSwitch"
-										label="Products on Sale"
-										checked={showSaleProducts}
-										onChange={() => setShowSaleProducts(!showSaleProducts)}
+								{fetchProductError && (
+									<AlertComp
+										variant='danger'
+										text={errorText}
+										onClose={() => setFetchProductError(false)}
 									/>
+								)}
 
-								</Offcanvas.Body>
-							</Offcanvas>
+								<Offcanvas show={showFilters} onHide={handleToggleFilters} placement='end'>
+									<Offcanvas.Header closeButton>
+										<Offcanvas.Title>Filters</Offcanvas.Title>
+									</Offcanvas.Header>
+									<Offcanvas.Body>
+										{/* Dynamically generate filter options */}
+										{filters.map((filter, index) => (
+											<div key={index}>
+												<Form.Check
+													type='checkbox'
+													label={filter} // Directly use filter as the label since it's a string
+													id={`filter-${index}`} // Generate a unique ID for each checkbox
+													checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
+													onChange={() => handleFilterChange(filter)}
+												/>
+											</div>
+										))}
+										<br />
+										<br />
+										<Form.Check
+											type='switch'
+											id='saleSwitch'
+											label='Products on Sale'
+											checked={showSaleProducts}
+											onChange={() => setShowSaleProducts(!showSaleProducts)}
+										/>
 
+									</Offcanvas.Body>
+								</Offcanvas>
 
+							</Container>
+						</>
+					)
+				}
 
-
-
-
-
-
-						</Container>
-					</>
-				)
-			}
+			</NavbarSider>
 		</>
 	)
 }

@@ -36,7 +36,7 @@ function SignUpPage() {
 		setShowAlert(false)
 		setAlertText('')
 
-		if(validateEmail()==false || validatePassword()==false ){
+		if (validateEmail() == false || validatePassword() == false) {
 			return
 		}
 
@@ -64,7 +64,7 @@ function SignUpPage() {
 				setAlertText(error.response.data.message)
 				setShowAlert(true)
 			}
-			else{
+			else {
 				setAlertText('Something went wrong!')
 				setShowAlert(true)
 			}
@@ -82,7 +82,7 @@ function SignUpPage() {
 
 	const validateEmail = () => {
 		// const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-		const  emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
+		const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
 		if (!emailRegex.test(formData.email)) {
 			setEmailError('Enter a valid email address')
 		} else {
@@ -118,103 +118,133 @@ function SignUpPage() {
 	}
 
 	return (
-		<FormContainer heading="SignUp">
-			<Form onSubmit={handleSubmit}>
-				<Row>
-					<FormField
-						controlId="name"
-						label="Fullname"
-						type="text"
-						placeholder="Fullname"
-						name="name"
-						value={formData.name}
-						onChange={handleFieldChange}
+		<div className="w-full overflow-hidden px-6">
+			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
+				<div className="hidden ps-5 lg:flex items-center justify-center">
+					<img
+						alt="Product"
+						className="aspect-[600/374] object-cover bg-gray-100"
+						// height="374"
+						src="/ecom.png"
+					// width="600"
 					/>
-					{nameError && <p className="text-danger">{nameError}</p>}
-				</Row>
-				<Row className="mt-3">
-					<FormField
-						controlId="email"
-						label="Email address"
-						type="text"
-						placeholder="email address"
-						name="email"
-						value={formData.email}
-						onChange={handleFieldChange}
-					/>
-					{emailError && <p className="text-danger">{emailError}</p>}
-				</Row>
-				<Row className="mt-3">
-					<FormField
-						controlId="password"
-						label="Password"
-						type="password"
-						placeholder="password"
-						name="password"
-						value={formData.password}
-						onChange={handleFieldChange}
-					/>
-					{passwordError && <p className="text-danger">{passwordError}</p>}
-				</Row>
-				<Row className="mt-3">
-					<FormField
-						controlId="mobile"
-						label="Mobile"
-						type="text"
-						placeholder="mobile number"
-						name="mobile"
-						value={formData.mobile}
-						onChange={handleFieldChange}
-					/>
-				</Row>
-				<Row className="mt-3">
-                    <Col>
-                        <Form.Label>Role</Form.Label>
-                        <Form.Select
-                            aria-label="Select Role"
-                            name="role"
-                            value={formData.role}
-                            onChange={handleFieldChange}
-                        >
-                            <option value="customer">Customer</option>
-                            <option value="seller">Seller</option>
-                        </Form.Select>
-                    </Col>
-                </Row>
-				<Row className="m-0 mt-4">
-					<CustomButton variant="primary" type="submit" className="w-100" 
-						// isDisabled={
-						// 	emailError !== '' ||
-						// 	passwordError !== '' ||
-						// 	formData.email == '' ||
-						// 	formData.password == '' ||
-						// 	formData.name == '' ||
-						// 	formData.mobile == ''}
-					>
-						SignUp
-					</CustomButton>
-				</Row>
-				<Row className="mt-3">
-					<Col>
-						<p className="text-center mb-0 text-styles">
-							Already have an account!{' '}
-							<Link to="/login" className="text-decoration-none">
-								Login
-							</Link>
-						</p>
-					</Col>
-				</Row>
-			</Form>
+				</div>
+				<div className="flex items-center justify-center p-6 lg:p-10">
+					<div className="mx-auto w-full max-w-md px-4 space-y-8">
+						<div className="space-y-2">
+							<h1 className="text-3xl font-bold">Welcome to IntEcom</h1>
+							<p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
+						</div>
+						<form onSubmit={handleSubmit} className='items-start'>
+							<div className="flex flex-col space-y-3">
 
-			{showAlert && (
-				<AlertComp
-					variant="danger"
-					text = {alertText}
-					onClose={() => setShowAlert(false)}
-				/>
-			)}
-		</FormContainer>
-	)
+								<Form onSubmit={handleSubmit}>
+									<Row>
+										<FormField
+											size='sm'
+											controlId="name"
+											label="Fullname"
+											type="text"
+											placeholder="James Smith"
+											name="name"
+											value={formData.name}
+											onChange={handleFieldChange}
+										/>
+										{nameError && <p className="text-danger">{nameError}</p>}
+									</Row>
+									<Row className="mt-2">
+										<FormField
+											size='sm'
+											controlId="email"
+											label="Email"
+											type="text"
+											placeholder="james@gmail.com"
+											name="email"
+											value={formData.email}
+											onChange={handleFieldChange}
+										/>
+										{emailError && <p className="text-danger">{emailError}</p>}
+									</Row>
+									<Row className="mt-2">
+										<FormField
+											size='sm'
+											controlId="password"
+											label="Password"
+											type="password"
+											placeholder=""
+											name="password"
+											value={formData.password}
+											onChange={handleFieldChange}
+										/>
+										{passwordError && <p className="text-danger">{passwordError}</p>}
+									</Row>
+									<Row className="mt-2">
+										<FormField
+											size='sm'
+											controlId="mobile"
+											label="Mobile"
+											type="text"
+											placeholder="+913216537857"
+											name="mobile"
+											value={formData.mobile}
+											onChange={handleFieldChange}
+										/>
+									</Row>
+									<Row className="mt-2">
+										<Col>
+											<Form.Label className='font-semibold'>Role</Form.Label>
+											<Form.Select
+												size='sm'
+												aria-label="Select Role"
+												name="role"
+												value={formData.role}
+												onChange={handleFieldChange}
+											>
+												<option value="customer">Customer</option>
+												<option value="seller">Seller</option>
+											</Form.Select>
+										</Col>
+									</Row>
+									<Row className="m-0 mt-3 mb-4">
+										<CustomButton variant="primary" type="submit" className="w-100">
+											SignUp
+										</CustomButton>
+									</Row>
+									{/* <Row className="mt-3">
+										<Col>
+											<p className="text-center mb-0 text-styles">
+												Already have an account!
+												<Link to="/login" className="text-decoration-none">
+													Login
+												</Link>
+											</p>
+										</Col>
+									</Row> */}
+									<div className="border-t text-center border-gray-200 dark:border-gray-800">
+										<p className="text-sm text-gray-500 dark:text-gray-400">
+											Already have an account?
+											<Link className="underline underline-offset-2" to={'/login'}>
+												Sign in
+											</Link>
+										</p>
+									</div>
+								</Form>
+
+								{showAlert && (
+									<AlertComp
+										variant="danger"
+										text={alertText}
+										onClose={() => setShowAlert(false)}
+									/>
+								)}
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+				)
 }
 
-export default SignUpPage
+				export default SignUpPage
