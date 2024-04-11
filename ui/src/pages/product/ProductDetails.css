@@ -1,18 +1,21 @@
-.product-detail-card {
+/* .product-detail-card {
     margin-top: 20px;
     padding: 15px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  }
+  } */
   
-  .product-detail-card img {
+.img1 {
     max-width: 100%;
     height: auto;
+    object-fit: fill
   }
+
+
   
-  .product-detail-card .btn {
+  /* .product-detail-card .btn {
     margin-top: 10px;
   }
   
   .pad{
     margin-right: 8px;
-  }
+  } */

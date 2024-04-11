@@ -213,6 +213,26 @@ const NavbarSider = ({ children, navLinks = [], showSearch = true, onChange, val
                             </Form>
                         </div>
                     )}
+                    {!showSearch && (
+                        <header 
+                        style={{ 
+                          display: 'flex', 
+                          justifyContent: 'center', 
+                          alignItems: 'center', 
+                          padding: '10px', 
+                          fontSize: '15px',
+                        }}
+                      >
+                        <h5 style={{ 
+                            color: '#005A9C',
+                            fontStyle: 'italic', 
+                            margin: 0 
+                          }}
+                        >
+                          Where Quality Meets Innovation
+                        </h5>
+                      </header>
+                    )}
                     <div>
                         {/* Dropdown Menu */}
 

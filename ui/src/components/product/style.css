@@ -1,0 +1,16 @@
+.sale-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: green;
+    color: white;
+    transform: rotate(-25deg);
+    transform-origin: left bottom;
+    font-size: 12px;
+    padding: 5px 10px;
+    text-align: center;
+    width: 70px; 
+    margin-top: 18px; 
+
+  }
+  

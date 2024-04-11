@@ -98,7 +98,7 @@ const LoginPage = () => {
 
 		<div className="w-full overflow-hidden px-6">
 			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
-				<div className="hidden ps-5 lg:flex items-center justify-center">
+				<div className="hidden ps-5 lg:flex items-center justify-center" >
 					<img
 						alt="Product"
 						className="aspect-[600/374] object-cover bg-gray-100"
@@ -110,7 +110,8 @@ const LoginPage = () => {
 				<div className="flex items-center justify-center p-6 lg:p-10">
 					<div className="mx-auto w-full max-w-md px-4 space-y-8">
 						<div className="space-y-2">
-							<h1 className="text-3xl font-bold">Welcome to IntEcom</h1>
+							<h1 className="text-3xl font-bold" style={{color: '#005A9C',
+                            fontStyle: 'italic', }}>Welcome to IntEcom</h1>
 							<p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
 						</div>
 						<form onSubmit={handleSubmit} className='items-start'>
@@ -129,7 +130,7 @@ const LoginPage = () => {
 									controlId="password"
 									label="Password"
 									type="password"
-									placeholder=""
+									placeholder="**************"
 									name="password"
 									value={password}
 									onChange={handleFieldChange}

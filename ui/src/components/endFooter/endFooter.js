@@ -41,6 +41,7 @@ const Footer = () => {
 					{/* Social Media Icons */}
 					<div className="col-md-3">
 						<h5>Follow Us</h5>
+						<div style={{display: 'flex', flexDirection: 'row'}}>
 						<a href="https://twitter.com/?lang=en" className="text-white me-2">
 							<img style={{ height: '45px' }} src={facebookIcon} alt="Facebook" />
 						</a>
@@ -50,15 +51,17 @@ const Footer = () => {
 						<a href="https://pk.linkedin.com/" className="text-white">
 							<img style={{ height: '45px' }} src={linkedinIcon} alt="LinkedIn" />
 						</a>
+						</div>
 					</div>
 				</div>
-
+					<br/>
 				{/* Copyright */}
 				<div className="row mt-3">
 					<div className="col text-center">
 						© 2023 IntECom Store. All rights reserved.
 					</div>
 				</div>
+				<br/>
 			</div>
 		</footer>
 	)
