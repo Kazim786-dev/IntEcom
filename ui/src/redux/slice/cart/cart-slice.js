@@ -40,6 +40,19 @@ export const cartSlice = createSlice({
 				product.orderQuantity -= 1
 			}
 		},
+		updateQuantity: (state, action) => {
+			const { itemId, newQuantity } = action.payload;
+			const product = state.products.find((product) => product._id === itemId);
+			if (product) {
+			if (newQuantity >= 1 && newQuantity <= product.quantity) {
+				product.orderQuantity = newQuantity;
+			}
+
+			else if (newQuantity > product.quantity) {
+				product.orderQuantity = product.quantity;
+			}
+			}
+		},
 		empty: (state) =>{
 			state.products.length=0
 		}
@@ -77,6 +90,6 @@ export const placeOrder = (products, totalAmount, token, shippingDetails, paymen
 
 
 // Action creators are generated for each case reducer function
-export const { add, remove, increase, decrease, empty } = cartSlice.actions
+export const { add, remove, increase, decrease, empty, updateQuantity } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -1,0 +1,17 @@
+/* Hide the default number input spinner */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-input {
+  -moz-appearance: textfield; /* Firefox */
+  width: 80px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #DFDFDF;
+}
+
+
+  

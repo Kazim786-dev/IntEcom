@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import NavbarSider from '../../components/navbar-sider/navbarSider'
 import { HomeIcon, PackageIcon, BoxIcon, ShoppingCartIcon, UserIcon, HeartIcon } from '../../static/icons/navicons.js';
+import { ReactComponent as ColorIcon } from '../../static/images/svg/Ellipse 1.svg'
 
 import './ProductDetails.css'
 import { Container, Row, Col, Button, Card, Image, Badge, Modal, Form } from 'react-bootstrap'
@@ -232,7 +233,11 @@ const ProductDetailPage = ({ user }) => {
 				</span>
 			)}
 			</p>        <p><strong>Category:</strong> {product.category}</p>
-        <p><strong>Colour:</strong> {product.color}</p>
+        <p style={{display:'flex', flexDirection:'row'}}><strong style={{marginRight:'5px' }}>Colour:</strong> {product.color}
+			
+					<ColorIcon width="28" height="28" fill={product.color} />
+				
+		</p>
         <p><strong>Size:</strong> {product.size}</p>
       </div>
       <Form>

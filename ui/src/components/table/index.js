@@ -23,7 +23,7 @@ const DetailsTable = ({
 			<tbody>
 				{data.length > 0 &&
 						data.map((item, index) => (
-							<tr key={index}>
+							<tr key={index} style={{border: 'none', height: '100px'}}>
 								{columns.map((column, index) => (
 									<td key={index} style={{ width: column.width }}>
 										{column.render(item)}
