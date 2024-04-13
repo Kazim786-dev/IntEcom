@@ -28,13 +28,12 @@ const NavbarSider = ({ children, user, onChange, value, ref }) => {
             <div className="w-full flex-1">
                 {/* Header */}
                 <header className="flex items-center justify-between gap-4 border-b bg-gray-100/50 p-2 ps-4">
-                    {user.role=='customer' && (
+                    {/* {user.role=='customer' && (
                         <div className="relative flex items-center w-full">
                             <Form className="w-full md:w-1/3">
                                 <SearchIcon className="absolute left-7.5 top-2.5 ms-2 h-4 w-4 text-gray-500 dark:text-gray-400" />
                                 <Form.Control
                                     className="bg-white shadow-none ps-5 dark:bg-gray-950"
-                                    // type="search"
                                     type='text'
                                     value={value}
                                     onChange={onChange}
@@ -43,8 +42,8 @@ const NavbarSider = ({ children, user, onChange, value, ref }) => {
                                 />
                             </Form>
                         </div>
-                    )}
-                    {!showSearch && (
+                    )} */}
+                    {/* {!showSearch && (
                         <header 
                         style={{ 
                           display: 'flex', 
@@ -63,7 +62,7 @@ const NavbarSider = ({ children, user, onChange, value, ref }) => {
                           Where Quality Meets Innovation
                         </h5>
                       </header>
-                    )}
+                    )} */}
                     <div>
                         {/* Dropdown Menu */}
 
@@ -90,13 +89,6 @@ const NavbarSider = ({ children, user, onChange, value, ref }) => {
                         {/* Dropdown Menu Content (to be implemented) */}
                     </div>
                 </header>
-
-                {/* Main Content Area */}
-                {/* <main className="flex-1 p-4 md:p-6" style={{ overflow: 'auto'}}>
-                    <div style={{ maxWidth: '100%', maxHeight: '100%', overflow: 'auto' }}>
-                        {children}
-                    </div>
-                </main> */}
             </div>
         </div>
     );

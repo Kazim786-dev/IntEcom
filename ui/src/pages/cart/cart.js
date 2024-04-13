@@ -59,7 +59,7 @@ const ShoppingCart = ({ user }) => {
 		const product = cartItems.find((product) => product._id === itemId)
 		if (product && (product.orderQuantity + 1) > product.quantity) {
 			setOrderError(true)
-			setErrorText('Not enough quantity. Available Quantity is ' +  product.quantity)
+			setErrorText('Not enough quantity. Available Quantity is ' + product.quantity)
 			setTimeout(() => {
 				setOrderError(false)
 			}, 2000)
@@ -103,17 +103,17 @@ const ShoppingCart = ({ user }) => {
 		const newQuantity = parseInt(e.target.value, 10);
 		const product = cartItems.find((product) => product._id === itemId);
 		if (newQuantity >= 1) {
-		if (product && newQuantity > product.quantity) {
-			setOrderError(true);
-			setErrorText('Not enough quantity. Available Quantity is ' +  product.quantity)
-			setTimeout(() => {
-			setOrderError(false);
-			}, 2000);
-		} else {
-			dispatch(updateQuantity({ itemId, newQuantity }));
+			if (product && newQuantity > product.quantity) {
+				setOrderError(true);
+				setErrorText('Not enough quantity. Available Quantity is ' + product.quantity)
+				setTimeout(() => {
+					setOrderError(false);
+				}, 2000);
+			} else {
+				dispatch(updateQuantity({ itemId, newQuantity }));
+			}
 		}
-		}
-	};  
+	};
 	// table column styling
 	const columns = [
 		// {
@@ -158,38 +158,38 @@ const ShoppingCart = ({ user }) => {
 			header: 'Qty',
 			width: '25%',
 			render: (item) => (
-			<div className="d-flex align-items-center">
-				<button
-				className="btn btn-sm"
-				style={{ borderColor: '#DFDFDF' }}
-				onClick={() => handleDecrease(item._id)}
-				>
-				<Decrease />
-				</button>
-				<input
-				type="number"
-				className="form-control quantity-input mx-3"
-				value={item.orderQuantity}
-				onChange={(e) => handleQuantityChange(e, item._id)}
-				min="1"
-				max={item.quantity} // Assuming you have a stock property
-				style={{
-					width: '80px',
-					textAlign: 'center',
-					borderRadius: '4px',
-					borderColor: '#DFDFDF',
-				}}
-				/>
-				<button
-				className="btn btn-sm"
-				style={{ borderColor: '#DFDFDF' }}
-				onClick={() => handleIncrease(item._id)}
-				>
-				<Increase />
-				</button>
-			</div>
+				<div className="d-flex align-items-center">
+					<button
+						className="btn btn-sm"
+						style={{ borderColor: '#DFDFDF' }}
+						onClick={() => handleDecrease(item._id)}
+					>
+						<Decrease />
+					</button>
+					<input
+						type="number"
+						className="form-control quantity-input mx-3"
+						value={item.orderQuantity}
+						onChange={(e) => handleQuantityChange(e, item._id)}
+						min="1"
+						max={item.quantity} // Assuming you have a stock property
+						style={{
+							width: '80px',
+							textAlign: 'center',
+							borderRadius: '4px',
+							borderColor: '#DFDFDF',
+						}}
+					/>
+					<button
+						className="btn btn-sm"
+						style={{ borderColor: '#DFDFDF' }}
+						onClick={() => handleIncrease(item._id)}
+					>
+						<Increase />
+					</button>
+				</div>
 			),
-		},		  
+		},
 		{
 			header: 'Price',
 			render: (item) => `$${item.price.toFixed(2)}`,
@@ -219,17 +219,16 @@ const ShoppingCart = ({ user }) => {
 			{loading ? (
 				<SpinnerComp />
 			) : (
-				<NavbarSider navLinks={navlinks} showSearch={false}  >
 
 				<Container fluid className="pt-0 p-5 mt-5">
-					
+
 
 					<div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
-						<div style={{  overflowY: 'auto', flex: 3 }}>
-						<div className="d-flex align-items-center heading-container">
-						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-						<h1 className="cart-heading ">Your Shopping Bag</h1>
-						</div>
+						<div style={{ overflowY: 'auto', flex: 3 }}>
+							<div className="d-flex align-items-center heading-container">
+								<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
+								<h1 className="cart-heading ">Your Shopping Bag</h1>
+							</div>
 							<DetailsTable data={cartItems} columns={columns} />
 						</div>
 
@@ -242,28 +241,28 @@ const ShoppingCart = ({ user }) => {
 							height: '40rem',
 							alignContent: 'center'
 						}}>
-						<h1 className="cart-heading " >Order Summary</h1>
-						<br/><br/>
-						<div><p>Total Items:</p><b>{cartLength}</b></div><hr/>
-						<div><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr/>
-						<div><p>Tax:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr/>
-						<div><p>Total:</p><b>${total.toFixed(2)}</b></div><hr/>
-						<br/>
-						<br/>
+							<h1 className="cart-heading " >Order Summary</h1>
+							<br /><br />
+							<div><p>Total Items:</p><b>{cartLength}</b></div><hr />
+							<div><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr />
+							<div><p>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
+							<div><p>Total:</p><b>${total.toFixed(2)}</b></div><hr />
+							<br />
+							<br />
 
-						<div className="d-flex justify-content-center">
-						<CustomButton
-							isDisabled={cartItems.length <= 0}
-							variant="success"
-							onClick={handleContinueToCheckout}
-						>
-							Continue
-						</CustomButton>
-					</div>
-					</div>
+							<div className="d-flex justify-content-center">
+								<CustomButton
+									isDisabled={cartItems.length <= 0}
+									variant="outline-primary"
+									onClick={handleContinueToCheckout}
+								>
+									<span className={'font-bold'}>Continue</span>
+								</CustomButton>
+							</div>
+						</div>
 					</div>
 
-					
+
 
 					{showPaymentForm && (
 						<Elements stripe={stripePromise}>
@@ -294,7 +293,6 @@ const ShoppingCart = ({ user }) => {
 						/>
 					)}
 				</Container>
-				</NavbarSider>
 			)}
 		</>
 	)

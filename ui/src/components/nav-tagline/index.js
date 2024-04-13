@@ -23,7 +23,7 @@ const NavTag = () => {
             <header className="flex items-center justify-between gap-4 border-b bg-gray-100/50 p-2 px-3">
                 <div className="">
                 {/* text-2xl sm:text-3xl md:text-4xl */}
-                    <h4 className="m-0 font-semibold tracking-tighter text-secondary">Fashion for Every Season <span className='blockquote-footer tracking-tighter animate-pulse text-dark'>where shopping meets technology</span>
+                    <h4 className="m-0 font-semibold tracking-tighter text-secondary">Fashion for Every Season <span className='blockquote-footer tracking-tighter animate-pulse text-primary'>where shopping meets technology</span>
                     </h4>
                     
                 </div>
