@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { Form, Button, Container, Row, Col, InputGroup } from 'react-bootstrap'
+import { Form, Button, Container, Row, Col, InputGroup, CloseButton } from 'react-bootstrap'
 import './PaymentForm.css' // This will be your custom CSS file
 import { useNavigate } from 'react-router-dom'
 import AlertComp from '../../components/alert'
@@ -34,6 +34,8 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 		country: 'US',
 	})
 
+	const [validated, setValidated] = useState(false);
+
 	const [orderPlaced, setOrderPlaced] = useState(false)
 	const [orderError, setOrderError] = useState(false)
 	const [errorText, setErrorText] = useState('')
@@ -44,6 +46,13 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 	}
 
 	const handlePaymentSubmit = async (event) => {
+		const form = event.currentTarget;
+		if (form.checkValidity() === false) {
+		event.preventDefault();
+		event.stopPropagation();
+		}
+	
+		setValidated(true);
 		event.preventDefault()
 
 		if (!stripe || !elements) {
@@ -136,56 +145,133 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 			setErrorText(error.message || 'Payment error')
 		}
 	}
-
+	const styles = {
+		paymentFormSlide: {
+		padding: '2rem',
+		backgroundColor: '#f7f7f7',
+		},
+		header: {
+		marginBottom: '1rem',
+		},
+		heading: {
+		color: '#0d6efd',
+		marginBottom: '1rem',
+		},
+		closeButton: {
+		padding: '0.5rem 1rem',
+		fontSize: '1rem',
+		backgroundColor: '#6c757d',
+		color: 'white',
+		border: 'none',
+		borderRadius: '0.3rem',
+		},
+		form: {
+		backgroundColor: 'white',
+		padding: '2rem',
+		},
+		fieldset: {
+		marginBottom: '1rem',
+		padding: '1rem',
+		borderRadius: '0.3rem',
+		},
+		legend: {
+		width: 'auto',
+		paddingBottom: '0.5rem',
+		fontWeight: 'bold',
+		color: '#495057',
+		},
+		formGroup: {
+		marginBottom: '1rem',
+		},
+		confirmButton: {
+		width: '100%',
+		padding: '0.75rem',
+		fontSize: '1.2rem',
+		backgroundColor: '#007bff',
+		color: 'white',
+		border: 'none',
+		borderRadius: '0.3rem',
+		boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+		},
+	};
 	return (
-		<div className="payment-form-slide">
-			<Container>
-				<div className="d-flex ">
-					<h2 className="mb-4">Shipping and Payment</h2>
-					<Button className="ms-auto p-2 h-50" variant="primary" onClick={() => setShowPaymentForm(false)}>
-						Close
-					</Button>
-				</div>
-				<Form onSubmit={handlePaymentSubmit}>
-					{/* Shipping Details */}
-					<fieldset>
-						<legend>Shipping Details</legend><br /><br />
-						<Form.Group as={Row} className="mb-3">
+
+
+
+
+
+
+
+
+
+	<div className="payment-form-slide" style={styles.paymentFormSlide}>
+	<Container>
+		<div className="d-flex justify-content-between align-items-center" style={styles.header}>
+		<h2 style={styles.heading}>Shipping and Payment</h2>
+		
+		<CloseButton onClick={() => setShowPaymentForm(false) } aria-label="Hide"/>
+		</div>
+		<Form onSubmit={handlePaymentSubmit} style={styles.form} noValidate validated={validated}>
+		{/* Shipping Details */}
+		<fieldset style={styles.fieldset}>
+			<legend style={styles.legend}>Shipping Details</legend>
+			<Form.Group as={Row} className="mb-3" controlId="validationCustom01">
 							<Form.Label column sm={2}>Name</Form.Label>
 							<Col sm={10}>
-								<Form.Control type="text" name="name" onChange={handleInputChange} />
+								<Form.Control type="text" name="name" onChange={handleInputChange} required/>
+								<Form.Control.Feedback type="invalid">
+								Please enter your name.
+								</Form.Control.Feedback>
 							</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} className="mb-3">
-							<Form.Label column sm={2}>Address</Form.Label>
-							<Col sm={10}>
-								<Form.Control type="text" name="address" onChange={handleInputChange} />
-							</Col>
+						<Form.Group as={Row} className="mb-3"controlId="validationCustom02">
+						<Form.Label column sm={2}>Address</Form.Label>
+						<Col sm={10}>
+							<Form.Control 
+							as="textarea" 
+							name="address" 
+							onChange={handleInputChange}
+							rows={3}  // You can adjust the number of rows depending on your needs
+							required
+							/>
+							<Form.Control.Feedback type="invalid">
+								Please enter your address.
+								</Form.Control.Feedback>
+						</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} className="mb-3">
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom03">
 							<Form.Label column sm={2}>City</Form.Label>
 							<Col sm={10}>
-								<Form.Control type="text" name="city" onChange={handleInputChange} />
+								<Form.Control type="text" name="city" onChange={handleInputChange}required />
+								<Form.Control.Feedback type="invalid">
+								Please enter your city.
+								</Form.Control.Feedback>
 							</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} className="mb-3">
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom04">
 							<Form.Label column sm={2}>State</Form.Label>
 							<Col sm={10}>
-								<Form.Control type="text" name="state" onChange={handleInputChange} />
+								<Form.Control type="text" name="state" onChange={handleInputChange} required/>
+								<Form.Control.Feedback type="invalid">
+								Please enter your state.
+								</Form.Control.Feedback>
 							</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} className="mb-3">
-							<Form.Label column sm={2}>Zip</Form.Label>
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom05">
+							<Form.Label column sm={2}>Postal Code</Form.Label>
 							<Col sm={10}>
-								<Form.Control type="text" name="zip" onChange={handleInputChange} />
+								<Form.Control type="text" name="zip" onChange={handleInputChange}required />
+								<Form.Control.Feedback type="invalid">
+								Please enter your postal code.
+								</Form.Control.Feedback>
 							</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} className="mb-3">
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom06">
 							<Form.Label column sm={2}>Country</Form.Label>
 							<Col sm={10}>
 								<Form.Control
@@ -193,6 +279,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 									name="country"
 									value={shippingInfo.country}
 									onChange={handleInputChange}
+									required
 								>
 									{countryOptions.map((option) => (
 										<option key={option.code} value={option.code}>
@@ -202,11 +289,12 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 								</Form.Control>
 							</Col>
 						</Form.Group>
-					</fieldset>
-
-					{/* Payment Details */}
-					<br /><br /><br /><legend>Payment Details</legend><br /><br />
-					<Form.Group as={Row} className="mb-3">
+		</fieldset>
+  
+		{/* Payment Details */}
+		<fieldset style={styles.fieldset}>
+			<legend style={styles.legend}>Payment Details</legend>
+			<Form.Group as={Row} className="mb-3">
 						<Form.Label column sm={2}>Card Information</Form.Label>
 						<Col sm={10}>
 							<InputGroup>
@@ -217,26 +305,40 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 					<Form.Group as={Row} className="mb-3">
 						<Form.Label column sm={2}>Name on Card</Form.Label>
 						<Col sm={10}>
-							<Form.Control type="text" name="Name on Card" onChange={handleInputChange} />
+							<Form.Control type="text" name="Name on Card" onChange={handleInputChange} required />
+							<Form.Control.Feedback type="invalid">
+								Please enter the name on card.
+								</Form.Control.Feedback>
 						</Col>
 					</Form.Group>
 
-					<br /><br /><br /><Button type="submit" variant="primary" disabled={!stripe}>
-						Confirm Payment
-					</Button>
-				</Form>
-				{orderPlaced && (
+		</fieldset>
+  
+		<Button type="submit" style={styles.confirmButton} disabled={!stripe}>
+			Confirm Payment
+		</Button>
+		</Form>
+		{orderPlaced && (
 					<AlertComp variant="success" text="Awesome, Your order has been placed successfully." onClose={() => setOrderPlaced(false)} />
 				)}
 				{orderError && (
 					<AlertComp variant="danger" text={errorText} onClose={() => setOrderError(false)} />
 				)}
-			</Container>
-		</div>
+	</Container>
+	</div>
+  
+  
+
+
+
 	)
 }
 
 export default PaymentForm
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-
+import './style.css'
 const ProductCard = ({
 	product,
 	addToCart,
@@ -58,10 +58,16 @@ const ProductCard = ({
 
 
 	return (
-		<Card className="product-card shadow pb-0" 
-			style={{ cursor: 'pointer' }}
-			onClick={navigateToProductDetail} >
+		<Card className="product-card bg-light pb-0" 
+		style={{ cursor: 'pointer', border: 'none', boxShadow: '0px 1px 1px rgba(0,0,0,0.15)', padding: '10px', position: 'relative' }}
+		onClick={navigateToProductDetail} >
+			{product.isOnSale && (
+				<div className="sale-badge">
+					{product.offPercent}% OFF
+				</div>
+			)}
 			<Card.Img variant="top" src={product.image} className="product-card-img" />
+			<hr/>
 			<Card.Body className="product-card-body py-3 px-3 d-flex flex-column justify-content-between">
 				<Card.Text className='font-semibold pr-1 m-0' style={{ height: '27px', overflow: 'hidden' }}>
 					{product.description}

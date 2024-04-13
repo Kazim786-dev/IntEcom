@@ -1,16 +1,18 @@
 import { React, useState, useMemo } from 'react'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
+import NavbarSider from '../../components/navbar-sider/navbarSider'
 
 import { Container, Form, Image } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-
+import './style.css'
 //svg
 import { ReactComponent as ArrowLeft } from '../../static/images/svg/Arrow left.svg'
 import { ReactComponent as ColorIcon } from '../../static/images/svg/Ellipse 1.svg'
 import { ReactComponent as Decrease } from '../../static/images/svg/Minus.svg'
 import { ReactComponent as Increase } from '../../static/images/svg/Plus.svg'
 import { ReactComponent as Trash } from '../../static/images/svg/Trash.svg'
+import { HomeIcon, PackageIcon, BoxIcon, ShoppingCartIcon, UserIcon, HeartIcon } from '../../static/icons/navicons.js';
 
 
 //components
@@ -21,7 +23,7 @@ import DeleteConfirmationModal from '../../components/modal/delete-confirmation'
 import SpinnerComp from '../../components/spinner'
 
 //redux
-import { remove, increase, decrease, placeOrder } from '../../redux/slice/cart/cart-slice'
+import { remove, increase, decrease, placeOrder, updateQuantity } from '../../redux/slice/cart/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Import the PaymentForm component
@@ -57,7 +59,7 @@ const ShoppingCart = ({ user }) => {
 		const product = cartItems.find((product) => product._id === itemId)
 		if (product && (product.orderQuantity + 1) > product.quantity) {
 			setOrderError(true)
-			setErrorText('Not enough quantity')
+			setErrorText('Not enough quantity. Available Quantity is ' +  product.quantity)
 			setTimeout(() => {
 				setOrderError(false)
 			}, 2000)
@@ -97,6 +99,21 @@ const ShoppingCart = ({ user }) => {
 			setShowDeleteModal(false)
 		}
 	}
+	const handleQuantityChange = (e, itemId) => {
+		const newQuantity = parseInt(e.target.value, 10);
+		const product = cartItems.find((product) => product._id === itemId);
+		if (newQuantity >= 1) {
+		if (product && newQuantity > product.quantity) {
+			setOrderError(true);
+			setErrorText('Not enough quantity. Available Quantity is ' +  product.quantity)
+			setTimeout(() => {
+			setOrderError(false);
+			}, 2000);
+		} else {
+			dispatch(updateQuantity({ itemId, newQuantity }));
+		}
+		}
+	};  
 	// table column styling
 	const columns = [
 		// {
@@ -141,28 +158,38 @@ const ShoppingCart = ({ user }) => {
 			header: 'Qty',
 			width: '25%',
 			render: (item) => (
-				<div className="d-flex align-items-center">
-					<button className="btn btn-sm" style={{ borderColor: '#DFDFDF' }} onClick={() => handleDecrease(item._id)}>
-						<Decrease />
-					</button>
-					<div
-						className="border-outline"
-						style={{
-							border: '1px solid #DFDFDF',
-							borderRadius: '4px',
-							display: 'inline-block',
-							margin: '0rem 0.625rem',
-							padding: '0.38rem 1.875rem',
-						}}
-					>
-						<span className="mx-3">{item.orderQuantity}</span>
-					</div>
-					<button className="btn btn-sm " style={{ borderColor: '#DFDFDF' }} onClick={() => handleIncrease(item._id)}>
-						<Increase />
-					</button>
-				</div>
+			<div className="d-flex align-items-center">
+				<button
+				className="btn btn-sm"
+				style={{ borderColor: '#DFDFDF' }}
+				onClick={() => handleDecrease(item._id)}
+				>
+				<Decrease />
+				</button>
+				<input
+				type="number"
+				className="form-control quantity-input mx-3"
+				value={item.orderQuantity}
+				onChange={(e) => handleQuantityChange(e, item._id)}
+				min="1"
+				max={item.quantity} // Assuming you have a stock property
+				style={{
+					width: '80px',
+					textAlign: 'center',
+					borderRadius: '4px',
+					borderColor: '#DFDFDF',
+				}}
+				/>
+				<button
+				className="btn btn-sm"
+				style={{ borderColor: '#DFDFDF' }}
+				onClick={() => handleIncrease(item._id)}
+				>
+				<Increase />
+				</button>
+			</div>
 			),
-		},
+		},		  
 		{
 			header: 'Price',
 			render: (item) => `$${item.price.toFixed(2)}`,
@@ -177,37 +204,66 @@ const ShoppingCart = ({ user }) => {
 			//   style: { textAlign: "center", cursor: "pointer" },
 		},
 	]
+	const cartLength = cartItems.length;
 
+	const navlinks = [
+		// { text: 'Home', link:'/', icon: <HomeIcon className="h-4 w-4" />, badge: '12' },
+		{ text: 'Products', link: '/products', icon: <PackageIcon className="h-4 w-4" /> },
+
+		{ text: 'Cart', link: '/cart', icon: <ShoppingCartIcon className="h-4 w-4" />, badge: cartLength > 0 ? cartLength : null },
+		{ text: 'Wishlist', link: '/wishlist', icon: <HeartIcon className="h-4 w-4" /> },
+		{ text: 'Account', dropdownItems: ['Logout'], to: '/login', icon: <UserIcon className="h-4 w-4" /> },
+	]
 	return (
 		<>
 			{loading ? (
 				<SpinnerComp />
 			) : (
+				<NavbarSider navLinks={navlinks} showSearch={false}  >
+
 				<Container fluid className="pt-0 p-5 mt-5">
-					<div className="d-flex align-items-center heading-container">
+					
+
+					<div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
+						<div style={{  overflowY: 'auto', flex: 3 }}>
+						<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
 						<h1 className="cart-heading ">Your Shopping Bag</h1>
-					</div>
+						</div>
+							<DetailsTable data={cartItems} columns={columns} />
+						</div>
 
-					<div style={{ height: '19rem', overflowY: 'auto' }}>
-						<DetailsTable data={cartItems} columns={columns} />
-					</div>
+						<div style={{
+							flex: 1,
+							backgroundColor: '#f8f9fa', // bg-light equivalent
+							boxShadow: '0 2px 4px rgba(0,0,0,.2)',
+							padding: '1rem',
+							textAlign: 'left',
+							height: '40rem',
+							alignContent: 'center'
+						}}>
+						<h1 className="cart-heading " >Order Summary</h1>
+						<br/><br/>
+						<div><p>Total Items:</p><b>{cartLength}</b></div><hr/>
+						<div><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr/>
+						<div><p>Tax:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr/>
+						<div><p>Total:</p><b>${total.toFixed(2)}</b></div><hr/>
+						<br/>
+						<br/>
 
-					<div className="total-container">
-						<div ><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div>
-						<div ><p>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div>
-						<div ><p>Total:</p><b>${total.toFixed(2)}</b></div>
-					</div>
-					<div className="d-flex justify-content-end">
+						<div className="d-flex justify-content-center">
 						<CustomButton
-							className="custom-button"
 							isDisabled={cartItems.length <= 0}
-							variant="primary"
+							variant="success"
 							onClick={handleContinueToCheckout}
 						>
 							Continue
 						</CustomButton>
 					</div>
+					</div>
+					</div>
+
+					
 
 					{showPaymentForm && (
 						<Elements stripe={stripePromise}>
@@ -238,6 +294,7 @@ const ShoppingCart = ({ user }) => {
 						/>
 					)}
 				</Container>
+				</NavbarSider>
 			)}
 		</>
 	)

@@ -18,7 +18,8 @@ const SignIn = () => {
                 <div className="flex items-center justify-center p-6 lg:p-10">
                     <div className="mx-auto w-full max-w-md space-y-8">
                         <div className="space-y-2">
-                            <h1 className="text-3xl font-bold">Welcome to IntEcom</h1>
+                            <h1 className="text-3xl font-bold" style={{color: '#005A9C',
+                            fontStyle: 'italic', }}>Welcome to IntEcom</h1>
                             <p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
                         </div>
                         <div className="space-y-4">
