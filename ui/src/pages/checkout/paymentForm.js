@@ -93,6 +93,12 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 						product: product._id,
 						quantity: product.orderQuantity,
 					}))
+					const ProductsforReceipt = cartItems.map((product) => ({
+						id: product._id,
+						name: product.name,
+						price: product.price,
+						quantity: product.orderQuantity,
+					}))
 
 					const orderSuccessful = dispatch(
 						placeOrder(products, total, user.token, shippingInfo, 'Paid')
@@ -101,7 +107,14 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 						setOrderPlaced(true)
 						setOrderError(false)
 						setErrorText('')
-						navigate('/total-orders')
+						
+						navigate('/order-confirm', {
+							state:{
+								shippingInfo,
+								products:ProductsforReceipt,
+								total
+							}
+						})
 						setTimeout(() => {
 							setLoading(false)
 						}, 1000)

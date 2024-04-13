@@ -12,6 +12,7 @@ import SignUpPage from '../pages/auth/signup'
 import TotalOrders from '../pages/orders/cust-total-orders'
 import Wishlist from '../pages/wishlist/wishlist'
 import ProductDetailPage from '../pages/product/ProductDetails'
+import OrderConfirm from '../pages/order-confirm'
 
 import SignIn from '../pages/auth/sign-in'
 
@@ -52,17 +53,19 @@ const RouterLinks = ({
 				<Route
 					path='/login'
 					element={
-						<Layout user={user} showNavbar={false} footer={false}>
-							{!user.isLoggedIn ? <LoginPage /> : <Navigate to='/home' />}
-						</Layout>
+						!user.isLoggedIn ? <LoginPage /> : <Navigate to='/home' />
+						// <Layout user={user} showNavbar={false} footer={false}>
+						// 	{!user.isLoggedIn ? <LoginPage /> : <Navigate to='/home' />}
+						// </Layout>
 					}
 				/>
 				<Route
 					path='/signup'
 					element={
-						<Layout user={user} showNavbar={false} footer={false}>
-							{!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' />}
-						</Layout>
+						!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' />
+						// <Layout user={user} showNavbar={false} footer={false}>
+						// 	{!user.isLoggedIn ? <SignUpPage /> : <Navigate to='/' />}
+						// </Layout>
 					}
 				/>
 				<Route
@@ -89,6 +92,12 @@ const RouterLinks = ({
 								<Layout user={user} showNavbar={true} footer={true}>
 									{user.isLoggedIn ? <CartPage user={user} /> : <Navigate to='/login' />}
 								</Layout>
+							}
+						/>
+						<Route
+							path='/order-confirm'
+							element={
+								user.isLoggedIn ? <OrderConfirm/> : <Navigate to='/login' />
 							}
 						/>
 						<Route

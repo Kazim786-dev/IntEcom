@@ -110,19 +110,20 @@ const OffCanvasComp = ({
 								<hr />
 								<Row className="order-info-row pt-1 pb-2">
 									<Col>
-										<p className='text-styles'>Order Date:</p> {localDate}
+									{/* text-styles */}
+										<p className='font-semibold text-primary'>Order Date:</p><span className='text-styles'> {localDate}</span>
 									</Col>
 									<Col>
-										<p className='text-styles'>Order #:</p> {orderItem.orderNumber}
+										<p className='font-semibold text-primary'>Order #:</p><span className='text-styles'> {orderItem.orderNumber}</span>
 									</Col>
 									<Col>
-										<p className='text-styles'>User:</p> {name}
+										<p className='font-semibold text-primary'>User:</p> <span className='text-styles'>{name}</span>
 									</Col>
 									<Col>
-										<p className='text-styles'>Products:</p> {orderItem.products.length}
+										<p className='font-semibold text-primary'>Products:</p><span className='text-styles'> {orderItem.products.length}</span>
 									</Col>
 									<Col>
-										<p className='text-styles'>Amount:</p> {'$'+orderItem.totalAmount.toFixed(2)}
+										<p className='font-semibold text-primary'>Amount:</p><span className='text-styles'> {'$'+orderItem.totalAmount.toFixed(2)}</span>
 									</Col>
 								</Row>
 								<hr />

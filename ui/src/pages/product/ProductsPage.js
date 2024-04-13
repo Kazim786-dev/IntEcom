@@ -3,13 +3,11 @@ import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { useNavigate } from 'react-router-dom'
 
-import NavbarSider from '../../components/navbar-sider/navbarSider'
-
-//icons
-import { HomeIcon, PackageIcon, BoxIcon, ShoppingCartIcon, UserIcon, HeartIcon } from '../../static/icons/navicons.js';
-
 //react-bootstrap
 import { Container, Row, Col, Form, Button, Offcanvas } from 'react-bootstrap'
+
+import FiltersRow from './filter-row/index.js'
+const MemoizedFiltersRow = React.memo(FiltersRow)
 
 //components
 import AlertComp from '../../components/alert'
@@ -22,6 +20,7 @@ import SpeakSearch from '../../components/speak-search'
 import { useSelector, useDispatch } from 'react-redux'
 //actions
 import { add, increase } from '../../redux/slice/cart/cart-slice'
+import SearchBar from '../../components/products-searchbar/index.js'
 
 const AllProductsPage = ({ user }) => {
 	const navigate = useNavigate()
@@ -369,62 +368,34 @@ const AllProductsPage = ({ user }) => {
 		selectedFilters.includes(item)
 	}
 
-	const navlinks = [
-		// { text: 'Home', link:'/', icon: <HomeIcon className="h-4 w-4" />, badge: '12' },
-		{ text: 'Products', link: '/products', icon: <PackageIcon className="h-4 w-4" /> },
-		{
-			text: 'Categories', icon: <BoxIcon className="h-4 w-4" />, checkbox: true,
-			dropdownItems: filters, checked: isChecked, onChange: handleFilterChange
-		},
-		{ text: 'Cart', link: '/cart', icon: <ShoppingCartIcon className="h-4 w-4" />, badge: cartLength > 0 ? cartLength : null },
-		{ text: 'Wishlist', link: '/wishlist', icon: <HeartIcon className="h-4 w-4" /> },
-		{ text: 'Account', dropdownItems: ['Logout'], to: '/login', icon: <UserIcon className="h-4 w-4" /> },
-	]
-
-
 	return (
 		<>
-			<NavbarSider navLinks={navlinks} showSearch={true} onChange={handleSearchChange} value={searchTerm} ref={searchInputRef} >
+			{/* <NavbarSider navLinks={navlinks} showSearch={true} onChange={handleSearchChange} value={searchTerm} ref={searchInputRef} > */}
 
-				{loading ? (
-					<SpinnerComp />
-				) :
-					(
-						<>
-							<Container fluid className='pt-0'>
+			{loading ? (
+				<SpinnerComp />
+			) :
+				(
+					<>
+						<Container fluid className='pt-0 min-vh-100 mb-5'>
 
-								<Row className='mb-4 m-0' >
-									<Col className='d-flex justify-content-start ps-0'>
-										<h2 className='text-primary'>Products</h2>
-									</Col>
-									{/* <Col md='auto' className='d-flex align-items-center'>
-										<Form.Label className='me-2'><b>Search:</b></Form.Label>
-											<Form.Group className=''>
-												<Form.Control
-													type='text'
-													value={searchTerm}
-													placeholder='Search product'
-													onChange={handleSearchChange}
-													ref={searchInputRef}
-												/>
+							{/* <Row className='mb-4 m-0' >
+								<Col className='d-flex justify-content-start ps-0'>
+									<h2 className='text-primary'>Products</h2>
+								</Col>
+								<Col md={'auto'} className='d-flex align-items-start ms-0 me-3 ps-0'>
+									<div className="d-flex align-items-center">
+										<span className="me-2 font-semibold">Try Urdu Audio</span>
+										<div className='ms-2'>
+											<Form.Group>
+												<SpeakSearch handleAudioSearch={handleAudioSearch} />
 											</Form.Group>
-										<Form.Group className='ms-2' >
-											{
-												<SpeakSearch handleAudioSearch={handleAudioSearch} />}
-										</Form.Group>
-									</Col> */}
-									<Col md='auto' className='d-flex align-items-center'>
-										<div className="d-flex align-items-center">
-											<span className="me-2 font-semibold">Try Urdu Audio</span>
-											<div className='ms-2'>
-												<Form.Group>
-													{/* Render SpeakSearch component */}
-													<SpeakSearch handleAudioSearch={handleAudioSearch} />
-												</Form.Group>
-											</div>
 										</div>
-									</Col>
-									<Col md='auto' className='d-flex align-items-center pe-0 gap-2'>
+									</div>
+								</Col>
+								<Col  md={'auto'} className='d-flex align-items-center pe-0 gap-2'>
+								
+									<>
 										<Form.Label className='me-2 font-semibold'>Sort:</Form.Label>
 										<Form.Group className=''>
 											<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
@@ -432,88 +403,93 @@ const AllProductsPage = ({ user }) => {
 												<option value='desc'>High to Low</option>
 											</Form.Select>
 										</Form.Group>
+									</>
+									<Button onClick={handleToggleFilters} className='' variant='outline-primary'>Filters</Button>
+								</Col>
 
+							</Row> */}
 
-										{/* <Button onClick={handleToggleFilters} className='' variant='outline-primary'>Filters</Button> */}
-									</Col>
+							<MemoizedFiltersRow searchTerm={searchTerm} handleToggleFilters={handleToggleFilters}
+								searchInputRef={searchInputRef} handleSearchChange={handleSearchChange}
+								handleAudioSearch={handleAudioSearch} priceFilter={priceFilter}
+								handlePriceFilterChange={handlePriceFilterChange}
+							/>
 
-								</Row>
-
-								{/* <div style={{ minHeight: '60vh' }}> */}
-								{/*Map all products */}
-								<Row className='justify-content-center'>
-									{/* Desktop: Display 4 products per row 
+							{/* <div style={{ minHeight: '60vh' }}> */}
+							{/*Map all products */}
+							<Row style={{ minHeight: '60vh' }} className='justify-content-center'>
+								{/* Desktop: Display 4 products per row 
 										Tablet: 2 Products per row
 										Mobile: 1 product per row */}
-									{products.map((product, index) => (
-										<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
-											<div onClick={() => handleProductClick(product._id)}>
+								{products.map((product, index) => (
+									<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
+										<div onClick={() => handleProductClick(product._id)}>
 
-												<ProductCard
-													name={user.name}
-													product={product}
-													addToCart={addToCart}
-													addToWishlist={addToWishlist}
-													addedToCart={isAlreadyAdded(product)}
-													isInWishlist={() => isAlreadyInWishlist(product)} // Pass this prop
-												/>
-											</div>
-										</Col>
-									))}
+											<ProductCard
+												name={user.name}
+												product={product}
+												addToCart={addToCart}
+												addToWishlist={addToWishlist}
+												addedToCart={isAlreadyAdded(product)}
+												isInWishlist={() => isAlreadyInWishlist(product)} // Pass this prop
+											/>
+										</div>
+									</Col>
+								))}
 
-								</Row>
-								{/* </div> */}
+							</Row>
+							{/* </div> */}
 
-								<Footer className={'d-flex justify-content-between align-items-center'}
-									text={`${products.length} products found`}
-									totalPages={totalPages}
-									currentPage={currentPage}
-									setCurrentPage={setCurrentPage}
+							<Footer className={'d-flex justify-content-between align-items-center'}
+								text={`${products.length} products found`}
+								totalPages={totalPages}
+								currentPage={currentPage}
+								setCurrentPage={setCurrentPage}
+							/>
+							{fetchProductError && (
+								<AlertComp
+									variant='danger'
+									text={errorText}
+									onClose={() => setFetchProductError(false)}
 								/>
-								{fetchProductError && (
-									<AlertComp
-										variant='danger'
-										text={errorText}
-										onClose={() => setFetchProductError(false)}
+							)}
+
+							<Offcanvas show={showFilters} onHide={handleToggleFilters} placement='end'>
+								<Offcanvas.Header closeButton>
+									<Offcanvas.Title>Filters</Offcanvas.Title>
+								</Offcanvas.Header>
+								<Offcanvas.Body>
+									{/* Dynamically generate filter options */}
+									{filters.map((filter, index) => (
+										<div key={index}>
+											<Form.Check
+												type='checkbox'
+												label={filter} // Directly use filter as the label since it's a string
+												id={`filter-${index}`} // Generate a unique ID for each checkbox
+												checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
+												onChange={() => handleFilterChange(filter)}
+											/>
+										</div>
+									))}
+									<br />
+									<br />
+									<Form.Check
+										type='switch'
+										id='saleSwitch'
+										label='Products on Sale'
+										checked={showSaleProducts}
+										onChange={() => setShowSaleProducts(!showSaleProducts)}
 									/>
-								)}
 
-								<Offcanvas show={showFilters} onHide={handleToggleFilters} placement='end'>
-									<Offcanvas.Header closeButton>
-										<Offcanvas.Title>Filters</Offcanvas.Title>
-									</Offcanvas.Header>
-									<Offcanvas.Body>
-										{/* Dynamically generate filter options */}
-										{filters.map((filter, index) => (
-											<div key={index}>
-												<Form.Check
-													type='checkbox'
-													label={filter} // Directly use filter as the label since it's a string
-													id={`filter-${index}`} // Generate a unique ID for each checkbox
-													checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
-													onChange={() => handleFilterChange(filter)}
-												/>
-											</div>
-										))}
-										<br />
-										<br />
-										<Form.Check
-											type='switch'
-											id='saleSwitch'
-											label='Products on Sale'
-											checked={showSaleProducts}
-											onChange={() => setShowSaleProducts(!showSaleProducts)}
-										/>
+								</Offcanvas.Body>
+							</Offcanvas>
 
-									</Offcanvas.Body>
-								</Offcanvas>
+						</Container>
+					</>
+				)
+			}
 
-							</Container>
-						</>
-					)
-				}
-
-			</NavbarSider>
+			{/* </NavbarSider> */}
 		</>
 	)
 }

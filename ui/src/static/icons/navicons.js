@@ -6,6 +6,7 @@ import UserIcon from "./user"
 import ShoppingCartIcon from "./cart"
 import BoxIcon from "./box"
 import HeartIcon from "./heart"
+import ShoppingBagIcon from "./ShoppingBagIcon";
 
 export{
     HomeIcon,
@@ -15,5 +16,6 @@ export{
     UserIcon,
     ShoppingCartIcon,
     BoxIcon,
-    HeartIcon
+    HeartIcon,
+    ShoppingBagIcon
 }

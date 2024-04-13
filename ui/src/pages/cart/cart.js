@@ -205,7 +205,7 @@ const ShoppingCart = ({ user }) => {
 							variant="primary"
 							onClick={handleContinueToCheckout}
 						>
-							Continue to Checkout
+							Continue
 						</CustomButton>
 					</div>
 

@@ -112,7 +112,7 @@ import 'dotenv/config.js'
 // getting environment variable
 const {Flask_URL}= process.env
 
-const getProducts = async ({ query }) => {
+const getProducts = async ({ query, catagory, isSaleOnly }) => {
   try {
     const sortOrder = query.sort;
     if (sortOrder && sortOrder !== 'asc' && sortOrder !== 'desc') {
