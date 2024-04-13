@@ -64,18 +64,18 @@ const Wishlist = ({ user }) => {
 				<h2 className="mb-4">Your Wishlist</h2>
 				{wishlistItems.length > 0 ? (
 					wishlistItems.map((item, index) => (
-						<Card className="wishlist-item ps-4" key={index}>
+						<Card className="wishlist-item px-4 py-2" key={index}>
 							<Row className="align-items-center">
-								<Col md={2}>
+								<Col md={4}>
 									<Image src={item.image} alt={item.name} fluid className="wishlist-item-img" />
 								</Col>
-								<Col md={7}>
+								<Col md={6}>
 									<Card.Body>
 										<Card.Title>{item.name}</Card.Title>
 										<Card.Text>{`Color: ${item.color}, Size: ${item.size}`}</Card.Text>
 									</Card.Body>
 								</Col>
-								<Col md={2} className="d-flex justify-content-between align-items-center">
+								<Col md={2} className="d-flex justify-content-end ">
 									<Button variant="link" onClick={() => handleRemove(item._id)}>
 										<Trash />
 									</Button>

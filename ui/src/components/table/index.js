@@ -10,7 +10,7 @@ const DetailsTable = ({
 
 	return (
 		
-		<Table borderless responsive >
+		<Table borderless responsive striped hover>
 			<thead>
 				<tr>
 					{columns.map((column, index) => (
@@ -23,7 +23,7 @@ const DetailsTable = ({
 			<tbody>
 				{data.length > 0 &&
 						data.map((item, index) => (
-							<tr key={index} style={{border: 'none', height: '100px'}}>
+							<tr style={{ height: '60px' }} key={index}>
 								{columns.map((column, index) => (
 									<td key={index} style={{ width: column.width }}>
 										{column.render(item)}
