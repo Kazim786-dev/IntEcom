@@ -39,7 +39,7 @@ function TotalOrders({ user }) {
 		try {
 			setLoading(true)
 			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/user-orders?page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/user-orders?page=${currentPage}&pageSize=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -50,6 +50,8 @@ function TotalOrders({ user }) {
 				const { totalPages, data } = response.data
 				setOrderItems(data)
 				setTotalPages(totalPages)
+				console.log(response.data)
+
 				setTimeout(() => {
 					setLoading(false)
 				}, 1000)

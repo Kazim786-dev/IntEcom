@@ -15,7 +15,8 @@ const getAllUserOrders = async ({role, user, page, pageSize}) => {
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 
-    const totalCount = orders.length;
+    // Count total number of orders for the user
+    const totalCount = await Order.countDocuments({ user: user._id });
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return {
@@ -27,7 +28,7 @@ const getAllUserOrders = async ({role, user, page, pageSize}) => {
     };
 
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     throw new Error('An error occurred while fetching orders.');
   }
 };

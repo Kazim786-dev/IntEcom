@@ -29,7 +29,7 @@ import PaymentForm from '../checkout/paymentForm' // Adjust the path as needed
 const stripePromise = loadStripe('pk_test_51OHrp2GPQMuSMoo9D37NyaFjrEBynzU7R9G97MOQyg07osataoLH51UKHgp4zovjokjt4gsHUb93TMXry9TrfwVl00qd0jwf9c')
 
 const ShoppingCart = ({ user }) => {
-	const taxRate = 0.1 // Assuming tax rate of 10%
+	const taxRate = 0.05 // Assuming tax rate of 10%
 
 	// states
 	const [deleteItemId, setDeleteItemId] = useState(null)
@@ -195,7 +195,7 @@ const ShoppingCart = ({ user }) => {
 
 					<div className="total-container">
 						<div ><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div>
-						<div ><p>Tax:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div>
+						<div ><p>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div>
 						<div ><p>Total:</p><b>${total.toFixed(2)}</b></div>
 					</div>
 					<div className="d-flex justify-content-end">
