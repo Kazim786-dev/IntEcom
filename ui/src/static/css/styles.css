@@ -127,12 +127,13 @@
 /* product card */
 
 .product-card:hover {
-  transform: translateY(-5px); /* Move the card up on hover */
+  transform: translateY(-7px); /* Move the card up on hover */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
 }
 
 .product-card:hover .product-card-body {
-  background-color: #e4f6fa; /* Change background color of card body on hover */
+  /* background-color: #e4f6fa; */
+  background-color: #cdf2fa; /* Change background color of card body on hover */
 }
 
 .product-card {

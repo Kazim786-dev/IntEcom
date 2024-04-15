@@ -13,8 +13,8 @@ const App = () => {
 
 	const user = useSelector((state)=> state.user)
 
-	return (
-		<div className='App'>
+	return (//bg-slate-50
+		<div className='App '>
 			<RouterLinks user={user} ></RouterLinks>
 		</div>
 	)

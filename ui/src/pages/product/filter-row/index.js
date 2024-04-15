@@ -26,11 +26,11 @@ const FiltersRow = ({searchTerm, handleSearchChange, searchInputRef, handleAudio
 												<SpeakSearch handleAudioSearch={handleAudioSearch} />}
 										</Form.Group>
 									</Col> */}
-            <Col className='d-flex justify-content-start ps-0'>
+            <Col className='d-flex justify-content-start ps-0 py-2'>
                 <SearchBar value={searchTerm} onChange={handleSearchChange} ref={searchInputRef} />
 
             </Col>
-            <Col md={'auto'} className='d-flex align-items-start ms-0 me-3 ps-0'>
+            <Col md={'auto'} className='d-flex align-items-start ms-0 me-3 py-2 ps-0'>
                 <div className="d-flex align-items-center">
                     <span className="me-2 font-semibold">Try Urdu Audio</span>
                     <div className='ms-2'>
@@ -41,7 +41,7 @@ const FiltersRow = ({searchTerm, handleSearchChange, searchInputRef, handleAudio
                     </div>
                 </div>
             </Col>
-            <Col md={'auto'} className='d-flex align-items-center pe-0 gap-2'>
+            <Col md={'auto'} className='d-flex align-items-center px-0 gap-2'>
 
                 <>
                     <Form.Label className='me-2 font-semibold'>Sort:</Form.Label>

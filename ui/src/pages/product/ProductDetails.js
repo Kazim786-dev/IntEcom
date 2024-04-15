@@ -14,7 +14,7 @@ import { add as addToCartAction, increase as increaseInCart } from '../../redux/
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 const ProductDetailPage = ({ user }) => {
-	
+
 	const location = useLocation()
 	const navigate = useNavigate()
 
@@ -133,15 +133,6 @@ const ProductDetailPage = ({ user }) => {
 	}
 	const cartLength = cartProducts.length;
 
-	const navlinks = [
-		// { text: 'Home', link:'/', icon: <HomeIcon className="h-4 w-4" />, badge: '12' },
-		{ text: 'Products', link: '/products', icon: <PackageIcon className="h-4 w-4" /> },
-
-		{ text: 'Cart', link: '/cart', icon: <ShoppingCartIcon className="h-4 w-4" />, badge: cartLength > 0 ? cartLength : null },
-		{ text: 'Wishlist', link: '/wishlist', icon: <HeartIcon className="h-4 w-4" /> },
-		{ text: 'Account', dropdownItems: ['Logout'], to: '/login', icon: <UserIcon className="h-4 w-4" /> },
-	]
-
 
 	function HeartIcon(props) {
 		return (
@@ -162,152 +153,143 @@ const ProductDetailPage = ({ user }) => {
 		)
 	}
 
-	
+
 	return (
 		<>
-		<NavbarSider navLinks={navlinks} showSearch={false}  >
 
-		<Container className="mt-5">
+			<Container className="mt-5">
 
-			{product && (
-				
-<div className='container my-4'>
-  <Row className="align-items-center">
-    {/* Image Container */}
-    <Col md={5} className='text-center'>
-      <Image className='img-fluid rounded mb-3' src={product.image} alt={product.name} style={{ maxHeight: '100%' }} />
-		<br/><br/><br/>
-      <div className='thumbnail'>
-        <Image
-          src={product.image}
-          alt={product.name + " thumbnail"}
-          className='img-thumbnail cursor-pointer'
-          onClick={() => {/* function to handle image click */}}
-          style={{ maxWidth: '80px' }}
-        />
-      </div>
-    </Col>
+				{product && (
 
-    {/* Details Container */}
-    <Col md={7} className="py-4 position-relative">
-      {product.isOnSale && (
-        <div style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          backgroundColor: 'green',
-          color: 'white',
-          transform: 'rotate(-25deg)',
-          transformOrigin: 'left bottom',
-          fontSize: '14px',
-          padding: '5px 10px',
-          borderTopRightRadius: '10px',
-          borderBottomRightRadius: '10px',
-        }}>
-          {product.offPercent}% OFF
-        </div>
-      )}
-      <div className="text-left">
-        <h3 className="fw-bold">{product.name}</h3>
-		<hr/><br/>
-        <p><strong>Description:</strong></p>
-        <p>{product.description}</p>
-		<p>
-			<strong>Price:</strong>
-			{product.isOnSale ? (
-				<>
-				<span style={{ color: 'red', textDecoration: 'line-through' }}>
-					${product.originalPrice.toFixed(2)}
-				</span>
-				{' '}
-				<span style={{ color: 'green' }}>
-					${(
-					product.originalPrice - 
-					(product.originalPrice * (product.offPercent / 100))
-					).toFixed(2)}
-				</span>
-				</>
-			) : (
-				<span style={{ color: 'green' }}>
-				${product.originalPrice.toFixed(2)}
-				</span>
-			)}
-			</p>        <p><strong>Category:</strong> {product.category}</p>
-        <p style={{display:'flex', flexDirection:'row'}}><strong style={{marginRight:'5px' }}>Colour:</strong> {product.color}
-			
-					<ColorIcon width="28" height="28" fill={product.color} />
-				
-		</p>
-        <p><strong>Size:</strong> {product.size}</p>
-      </div>
-      <Form>
-		<div>
-        <p className="text-danger fw-bold">Quantity Available: <span className="text-danger">{product.quantity}</span></p>
-      </div>
-        <div className="d-grid gap-2">
-          <Button variant="" size="lg" className="bg-black text-light mb-2" onClick={handleAddToCart} disabled={isProductInCart || product.quantity == 0}>
-			{isProductInCart ? 'In Cart' : product.quantity == 0 ? 'Out of Stock' : 'Add to Cart'}
-			</Button>
-          <Button variant="outline-primary" size="lg" className="mb-2" onClick={handleAddToWishlist} disabled={isProductInWishlist} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-				<HeartIcon className="w-4 h-4" /> {/* Heart icon */}
-				<span className="p-1">
-					{isProductInWishlist ? 'Added' : 'Wishlist'}
-				</span>
-		</Button>
-          <Button variant="outline-danger" size="lg" className="mb-2" onClick={handleReportProduct} disabled={reporting || hasUserReported}>
-			{hasUserReported ? 'Reported' : 'Report Product'}
-			</Button>
-        </div>
-      </Form>
-    </Col>
-  </Row>
+					<div className='container my-4'>
+						<Row className="align-items-center">
+							{/* Image Container */}
+							<Col md={5} className='text-center'>
+								<Image className='img-fluid rounded mb-3' src={product.image} alt={product.name} style={{ maxHeight: '100%' }} />
+								<br /><br /><br />
+								<div className='thumbnail'>
+									<Image
+										src={product.image}
+										alt={product.name + " thumbnail"}
+										className='img-thumbnail cursor-pointer'
+										onClick={() => {/* function to handle image click */ }}
+										style={{ maxWidth: '80px' }}
+									/>
+								</div>
+							</Col>
 
+							{/* Details Container */}
+							<Col md={7} className="py-4 position-relative">
+								{product.isOnSale && (
+									<div style={{
+										position: 'absolute',
+										top: '0',
+										left: '0',
+										backgroundColor: 'green',
+										color: 'white',
+										transform: 'rotate(-25deg)',
+										transformOrigin: 'left bottom',
+										fontSize: '14px',
+										padding: '5px 10px',
+										borderTopRightRadius: '10px',
+										borderBottomRightRadius: '10px',
+									}}>
+										{product.offPercent}% OFF
+									</div>
+								)}
+								<div className="text-left">
+									<h3 className="fw-bold">{product.name}</h3>
+									<hr /><br />
+									<p><strong>Description:</strong></p>
+									<p>{product.description}</p>
+									<p>
+										<strong>Price:</strong>
+										{product.isOnSale ? (
+											<>
+												<span style={{ color: 'red', textDecoration: 'line-through' }}>
+													${product.originalPrice.toFixed(2)}
+												</span>
+												{' '}
+												<span style={{ color: 'green' }}>
+													${(
+														product.originalPrice -
+														(product.originalPrice * (product.offPercent / 100))
+													).toFixed(2)}
+												</span>
+											</>
+										) : (
+											<span style={{ color: 'green' }}>
+												${product.originalPrice.toFixed(2)}
+											</span>
+										)}
+									</p>        <p><strong>Category:</strong> {product.category}</p>
+									<p style={{ display: 'flex', flexDirection: 'row' }}><strong style={{ marginRight: '5px' }}>Colour:</strong> {product.color}
 
-<hr/>
-<br/>
-<br/><br/>
-<Tabs
-      defaultActiveKey="Payments Policy"
-      className="mb-3 bg-light"
-    >
-      <Tab eventKey="Payments Policy" title="Payments Policy" className=' p3'>
-		<br/>
-        <h5>
-			Payments
-		</h5>
-		<p className='text-justify'>
-			At IntEcom, we value your security and convenience. Our secure payment system is powered by Stripe, one of the most trusted online payment solutions on the web. Stripe is certified to PCI Service Provider Level 1, the most stringent level of certification available in the payments industry. This means that when you shop with us, you can rest assured that your payment information is safe and protected.
+										<ColorIcon width="28" height="28" fill={product.color} />
 
-			We accept a variety of payment methods including major credit cards and digital wallets, ensuring that you can shop with ease. Once your order is confirmed, Stripe securely processes your payment, and you will receive an order confirmation via email.
-		</p>
-      </Tab>
-      <Tab eventKey="Shipping Policy" title="Shipping Policy">
-		<br/>
-		<h5>
-			Shipping
-		</h5>
-		<p className='text-justify'>
-			Upon successful payment, your order information is immediately sent to the respective seller responsible for fulfillment. Our trusted network of sellers is committed to providing you with timely and efficient service. Each seller directly manages the shipping process for their products, which allows them to provide you with accurate updates.
-
-			The seller will handle the packaging and dispatch of your purchase. You can expect to receive shipping and delivery updates as the seller updates the status in our database during the key stages of fulfillment: Shipped when the item leaves their facility and Delivered once it arrives at your doorstep.
-
-			We aim to create a seamless shopping experience, from the moment you place your order to the moment its delivered to your location.
-
-			For any queries or assistance with your order, our customer support team is always on standby to help ensure that your shopping experience is as smooth as possible.
-		</p>
-      </Tab>
-    </Tabs>
+									</p>
+									<p><strong>Size:</strong> {product.size}</p>
+								</div>
+								<Form>
+									<div>
+										<p className="text-danger fw-bold">Quantity Available: <span className="text-danger">{product.quantity}</span></p>
+									</div>
+									<div className="d-grid gap-2">
+										<Button variant="" size="lg" className="bg-black text-light mb-2" onClick={handleAddToCart} disabled={isProductInCart || product.quantity == 0}>
+											{isProductInCart ? 'In Cart' : product.quantity == 0 ? 'Out of Stock' : 'Add to Cart'}
+										</Button>
+										<Button variant="outline-primary" size="lg" className="mb-2" onClick={handleAddToWishlist} disabled={isProductInWishlist} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+											<HeartIcon className="w-4 h-4" /> {/* Heart icon */}
+											<span className="p-1">
+												{isProductInWishlist ? 'Added' : 'Wishlist'}
+											</span>
+										</Button>
+										<Button variant="outline-danger" size="lg" className="mb-2" onClick={handleReportProduct} disabled={reporting || hasUserReported}>
+											{hasUserReported ? 'Reported' : 'Report Product'}
+										</Button>
+									</div>
+								</Form>
+							</Col>
+						</Row>
 
 
+						<hr />
+						<br />
+						<br /><br />
+						<Tabs
+							defaultActiveKey="Payments Policy"
+							className="mb-3 bg-light"
+						>
+							<Tab eventKey="Payments Policy" title="Payments Policy" className=' p3'>
+								<br />
+								<h5>
+									Payments
+								</h5>
+								<p className='text-justify'>
+									At IntEcom, we value your security and convenience. Our secure payment system is powered by Stripe, one of the most trusted online payment solutions on the web. Stripe is certified to PCI Service Provider Level 1, the most stringent level of certification available in the payments industry. This means that when you shop with us, you can rest assured that your payment information is safe and protected.
+
+									We accept a variety of payment methods including major credit cards and digital wallets, ensuring that you can shop with ease. Once your order is confirmed, Stripe securely processes your payment, and you will receive an order confirmation via email.
+								</p>
+							</Tab>
+							<Tab eventKey="Shipping Policy" title="Shipping Policy">
+								<br />
+								<h5>
+									Shipping
+								</h5>
+								<p className='text-justify'>
+									Upon successful payment, your order information is immediately sent to the respective seller responsible for fulfillment. Our trusted network of sellers is committed to providing you with timely and efficient service. Each seller directly manages the shipping process for their products, which allows them to provide you with accurate updates.
+
+									The seller will handle the packaging and dispatch of your purchase. You can expect to receive shipping and delivery updates as the seller updates the status in our database during the key stages of fulfillment: Shipped when the item leaves their facility and Delivered once it arrives at your doorstep.
+
+									We aim to create a seamless shopping experience, from the moment you place your order to the moment its delivered to your location.
+
+									For any queries or assistance with your order, our customer support team is always on standby to help ensure that your shopping experience is as smooth as possible.
+								</p>
+							</Tab>
+						</Tabs>
 
 
-
-
-
-
-
-
-{/* 
+						{/* 
 					<Card className="product-detail-card col-md-6 d-flex justify-content-center align-items-center">
 						<Card.Body>
 							<div className='text-primary text-center my-4'>
@@ -367,57 +349,39 @@ const ProductDetailPage = ({ user }) => {
 					</Card> */}
 
 
+					</div>
 
+				)}
 
-
-
-
-
-				</div>
-				
-			)}
-
-
-
-
-
-
-
-
-
-
-
-
-			{/* Modal for reporting the product */}
-			<Modal show={showModal} onHide={() => setShowModal(false)} centered>
-				<Modal.Header closeButton>
-					<Modal.Title>Report Product</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group className="mb-3">
-							<Form.Label>Reason for Reporting</Form.Label>
-							<Form.Control
-								as="textarea"
-								rows={3}
-								value={reportText}
-								onChange={(e) => setReportText(e.target.value)}
-								placeholder="Enter your reason here..."
-							/>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={() => setShowModal(false)}>
-						Close
-					</Button>
-					<Button variant="danger" onClick={handleConfirmReport}>
-						Confirm Report
-					</Button>
-				</Modal.Footer>
-			</Modal>
-		</Container>
-		</NavbarSider>
+				{/* Modal for reporting the product */}
+				<Modal show={showModal} onHide={() => setShowModal(false)} centered>
+					<Modal.Header closeButton>
+						<Modal.Title>Report Product</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<Form>
+							<Form.Group className="mb-3">
+								<Form.Label>Reason for Reporting</Form.Label>
+								<Form.Control
+									as="textarea"
+									rows={3}
+									value={reportText}
+									onChange={(e) => setReportText(e.target.value)}
+									placeholder="Enter your reason here..."
+								/>
+							</Form.Group>
+						</Form>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="secondary" onClick={() => setShowModal(false)}>
+							Close
+						</Button>
+						<Button variant="danger" onClick={handleConfirmReport}>
+							Confirm Report
+						</Button>
+					</Modal.Footer>
+				</Modal>
+			</Container>
 
 		</>
 	)

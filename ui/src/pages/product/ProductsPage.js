@@ -15,6 +15,7 @@ import Footer from '../../components/footer'
 import ProductCard from '../../components/product/ProductCard'
 import SpinnerComp from '../../components/spinner'
 import SpeakSearch from '../../components/speak-search'
+import ProductLoadPlaceHolder from '../../components/product-load-card/index.js'
 
 //redux
 import { useSelector, useDispatch } from 'react-redux'
@@ -78,37 +79,20 @@ const AllProductsPage = ({ user }) => {
 		}
 	}
 
-
 	useEffect(() => {
 		fetchWishlist()
-		if (selectedFilters.length == 0) {
+		// if (selectedFilters.length == 0) {
 			debouncedFetchData()
 			fetchFilters()
 			// Cleanup the debounced function when the component is unmounted
 			return () => {
 				debouncedFetchData.cancel()
 			}
-		} else {
-			handleFilterChange()
-		}
+		// } else {
+		// 	handleFilterChange()
+		// }
 
-	}, [currentPage, priceFilter, searchTerm])
-
-
-	// Check if selectedFilters array is empty and call fetchAllProducts
-	useEffect(() => {
-		if (selectedFilters.length === 0) {
-			fetchProducts()
-		}
-	}, [selectedFilters]) //selectedFilters
-
-	// Check if selectedFilters array is empty and call fetchAllProducts
-
-	// useEffect(() => {
-	// 	if (searchInputRef.current) {
-	// 		searchInputRef.current.focus()
-	// 	}
-	// })
+	}, [currentPage, priceFilter, searchTerm, showSaleProducts, selectedFilters])
 
 	const fetchFilters = async () => {
 		try {
@@ -125,8 +109,6 @@ const AllProductsPage = ({ user }) => {
 
 	const handleFilterChange = async (selectedFilter) => {
 
-		console.log(selectedFilter)
-
 		setSelectedFilters((prevFilters) => {
 			// Ensure prevFilters is always treated as an array
 			const currentFilters = Array.isArray(prevFilters) ? prevFilters : []
@@ -142,90 +124,110 @@ const AllProductsPage = ({ user }) => {
 			}
 
 			// Now, send updatedFilters to the backend
-			sendFiltersToBackend(updatedFilters)
+			// sendFiltersToBackend(updatedFilters)
 
 			// Return updatedFilters to update the state
 			return updatedFilters
 		})
 	}
 
-	const sendFiltersToBackend = async (filters) => {
-		try {
-			const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
-				filters: filters,
-				isSaleOnly: showSaleProducts
-			})
-			if (response.status && response.status === 200) {
-				const { totalPages, data } = response.data
-				setProducts(data)
-				setTotalPages(totalPages)
-				setTimeout(() => {
-					setLoading(false)
-				}, 1000)
-			}
-			else {
-				setFetchProductError(true)
-				setErrorText('Error in fetching products')
-				setTimeout(() => {
-					setLoading(false)
-				}, 1000)
-			}
-			// Handle response data or perform actions based on the response
-		} catch (error) {
-			setTimeout(() => {
-				setLoading(false)
-			}, 1000)
-
-			if (error.response?.status && error.response.status === 404) {
-				setErrorText('No product with this name')
-			}
-			else {
-				setErrorText('Error in fetching products')
-			}
-			setFetchProductError(true)
-			// console.error('Error fetching data:', error)
-		}
+	const handleSalesFilter = ()=> {
+		setShowSaleProducts((prev)=>!prev) //toggle the state
+		// fectOnSaleOnly()
 	}
 
-	useEffect(() => {
-		const fectOnSaleOnly = async () => {
-			try {
-				setLoading(true)
-				setFetchProductError(false)
-				const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
-					filters: selectedFilters,
-					isSaleOnly: showSaleProducts
-				})
-				if (response.status && response.status === 200) {
-					const { totalPages, data } = response.data
-					setProducts(data)
-					setTotalPages(totalPages)
-					setTimeout(() => {
-						setLoading(false)
-					}, 1000)
-				} else {
-					setFetchProductError(true)
-					setErrorText('Error in fetching products')
-					setTimeout(() => {
-						setLoading(false)
-					}, 1000)
-				}
-			} catch (error) {
-				setTimeout(() => {
-					setLoading(false)
-				}, 1000)
 
-				if (error.response?.status && error.response.status === 404) {
-					setErrorText('No product with this name')
-				} else {
-					setErrorText('Error in fetching products')
-				}
-				setFetchProductError(true)
-			}
-		}
+	// Check if selectedFilters array is empty and call fetchAllProducts
+	// useEffect(() => {
+	// 	if (selectedFilters.length === 0) {
+	// 		fetchProducts()
+	// 	}
+	// }, [selectedFilters])
 
-		fectOnSaleOnly()
-	}, [showSaleProducts]) //showSaleProducts
+	// Check if selectedFilters array is empty and call fetchAllProducts
+	// useEffect(() => {
+	// 	if (searchInputRef.current) {
+	// 		searchInputRef.current.focus()
+	// 	}
+	// })
+
+	// useEffect(() => {
+	// 	fectOnSaleOnly()
+	// }, [showSaleProducts])
+	
+	// const fectOnSaleOnly = async () => {
+	// 	try {
+	// 		setLoading(true)
+	// 		setFetchProductError(false)
+	// 		const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
+	// 			filters: selectedFilters,
+	// 			isSaleOnly: showSaleProducts
+	// 		})
+	// 		if (response.status && response.status === 200) {
+	// 			const { totalPages, data } = response.data
+	// 			setProducts(data)
+	// 			setTotalPages(totalPages)
+	// 			setTimeout(() => {
+	// 				setLoading(false)
+	// 			}, 1000)
+	// 		} else {
+	// 			setFetchProductError(true)
+	// 			setErrorText('Error in fetching products')
+	// 			setTimeout(() => {
+	// 				setLoading(false)
+	// 			}, 1000)
+	// 		}
+	// 	} catch (error) {
+	// 		setTimeout(() => {
+	// 			setLoading(false)
+	// 		}, 1000)
+
+	// 		if (error.response?.status && error.response.status === 404) {
+	// 			setErrorText('No product with this name')
+	// 		} else {
+	// 			setErrorText('Error in fetching products')
+	// 		}
+	// 		setFetchProductError(true)
+	// 	}
+	// }
+
+	// const sendFiltersToBackend = async (filters) => {
+	// 	try {
+	// 		const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
+	// 			filters: filters,
+	// 			isSaleOnly: showSaleProducts
+	// 		})
+	// 		if (response.status && response.status === 200) {
+	// 			const { totalPages, data } = response.data
+	// 			setProducts(data)
+	// 			setTotalPages(totalPages)
+	// 			setTimeout(() => {
+	// 				setLoading(false)
+	// 			}, 1000)
+	// 		}
+	// 		else {
+	// 			setFetchProductError(true)
+	// 			setErrorText('Error in fetching products')
+	// 			setTimeout(() => {
+	// 				setLoading(false)
+	// 			}, 1000)
+	// 		}
+	// 		// Handle response data or perform actions based on the response
+	// 	} catch (error) {
+	// 		setTimeout(() => {
+	// 			setLoading(false)
+	// 		}, 1000)
+
+	// 		if (error.response?.status && error.response.status === 404) {
+	// 			setErrorText('No product with this name')
+	// 		}
+	// 		else {
+	// 			setErrorText('Error in fetching products')
+	// 		}
+	// 		setFetchProductError(true)
+	// 		// console.error('Error fetching data:', error)
+	// 	}
+	// }
 
 	const fetchProducts = async () => {
 		let response = ''
@@ -368,12 +370,28 @@ const AllProductsPage = ({ user }) => {
 		selectedFilters.includes(item)
 	}
 
+	const placeholderCount = 8;
+	const placeholders = Array.from({ length: placeholderCount }, (_, index) => index);
+
+
 	return (
 		<>
 			{/* <NavbarSider navLinks={navlinks} showSearch={true} onChange={handleSearchChange} value={searchTerm} ref={searchInputRef} > */}
 
 			{loading ? (
-				<SpinnerComp />
+				// <SpinnerComp/>
+				<Container fluid className='pt-5 min-vh-100 mb-5'>
+					<Row style={{ minHeight: '60vh' }} className='justify-content-center'>
+						{/* Desktop: Display 4 products per row 
+										Tablet: 2 Products per row
+										Mobile: 1 product per row */}
+						{placeholders.map((index) => (
+							<Col key={index} xl={3} lg={6} md={6} sm={12} className='d-flex justify-content-center ps-0 pe-0 mb-5'>
+								<ProductLoadPlaceHolder />
+							</Col>
+						))}
+					</Row>
+				</Container>
 			) :
 				(
 					<>
@@ -478,7 +496,7 @@ const AllProductsPage = ({ user }) => {
 										id='saleSwitch'
 										label='Products on Sale'
 										checked={showSaleProducts}
-										onChange={() => setShowSaleProducts(!showSaleProducts)}
+										onChange={() => handleSalesFilter()}
 									/>
 
 								</Offcanvas.Body>

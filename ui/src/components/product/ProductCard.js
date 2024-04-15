@@ -58,24 +58,24 @@ const ProductCard = ({
 
 
 	return (
-		<Card className="product-card bg-light pb-0" 
-		style={{ cursor: 'pointer', border: 'none', boxShadow: '0px 1px 1px rgba(0,0,0,0.15)', padding: '10px', position: 'relative' }}
-		onClick={navigateToProductDetail} >
+		<Card className="product-card bg-light pb-0"
+			style={{ cursor: 'pointer', border: 'none', boxShadow: '0px 1px 1px rgba(0,0,0,0.15)', padding: '3px', position: 'relative' }}
+			onClick={navigateToProductDetail} >
 			{product.isOnSale && (
 				<div className="sale-badge">
 					{product.offPercent}% OFF
 				</div>
 			)}
 			<Card.Img variant="top" src={product.image} className="product-card-img" />
-			<hr/>
-			<Card.Body className="product-card-body py-3 px-3 d-flex flex-column justify-content-between">
+			<hr className='mb-1 mt-3'/>
+			<Card.Body className="product-card-body pt-0 pb-3 px-2 d-flex flex-column justify-content-between">
 				<Card.Text className='font-semibold pr-1 m-0' style={{ height: '27px', overflow: 'hidden' }}>
 					{product.description}
 				</Card.Text>
 				<Card.Title className='mb-4 text-2xl font-semibold'>
 					${product.price.toFixed(2)}
 				</Card.Title>
-				<div className="d-flex justify-content-start mt-2 gap-2">
+				<div className="d-flex justify-content-start mt-0 gap-2">
 					{product.quantity < 1 ? (
 						<Button size='sm' variant='info' disabled>
 							Out of Stock
