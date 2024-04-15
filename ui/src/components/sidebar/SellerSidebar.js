@@ -10,7 +10,7 @@ import { Card } from 'react-bootstrap'
 
 const Sidebar = ({ selectedItem, handleItemClick }) => {
 	return (
-		<Card className='h-100 p-4 border-0'>
+		<Card className='h-100 ps-2 border-0' style={{ overflow: 'auto' }}>
 			<SidebarItem
 				icon={<ArrowRight />}
 				text="Products"
