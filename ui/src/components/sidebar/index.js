@@ -6,11 +6,12 @@ import SidebarItem from './sidebar-item'
 //svg
 import { ReactComponent as ArrowRight } from '../../static/images/svg/Arrow right short.svg'
 
+import "./Sidebar.css"
 import { Card } from 'react-bootstrap'
 
 const Sidebar = ({ selectedItem, handleItemClick }) => {
 	return (
-		<Card className='h-100 p-4 border-0'>
+		<Card className='h-100 p-4 border-0 min-h-screen sidebar'>
 			<SidebarItem
 				icon={<ArrowRight />}
 				text="Products"
