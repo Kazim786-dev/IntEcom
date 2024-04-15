@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Form, Button, Container, Row, Col, InputGroup, CloseButton } from 'react-bootstrap';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'; // Import CountryDropdown and RegionDropdown
-import PhoneInput from 'react-phone-number-input'; // Import PhoneInput
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';// Import PhoneInput
 import 'react-phone-number-input/style.css'; // Import CSS for PhoneInput
 import './PaymentForm.css';
 import { useNavigate } from 'react-router-dom';
@@ -230,7 +230,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                                 </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
-                        <Form.Group as={Row} className="mb-3" controlId="validationCustom07">
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom07">
                             <Form.Label column sm={2}>Phone Number</Form.Label>
                             <Col sm={10}>
                                 <PhoneInput
@@ -239,6 +239,9 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                                     value={shippingInfo.phoneNumber}
                                     onChange={handlePhoneChange}
                                 />
+                                {!isValidPhoneNumber(shippingInfo.phoneNumber) && (
+                                    <Form.Text className="text-danger">Invalid phone number</Form.Text>
+                                )}
                             </Col>
                         </Form.Group>
 						<Form.Group as={Row} className="mb-3"controlId="validationCustom02">
@@ -329,11 +332,16 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 								</Form.Group>
 
 					</fieldset>
-                    <Button type="submit" style={styles.confirmButton} disabled={!stripe}>
-                        Confirm Payment
-                    </Button>
-                </Form>
-                {/* Alerts */}
+					<Button type="submit" style={styles.confirmButton} disabled={!stripe}>
+			Confirm Payment
+	    	</Button>
+		    </Form>
+			{orderPlaced && (
+						<AlertComp variant="success" text="Awesome, Your order has been placed successfully." onClose={() => setOrderPlaced(false)} />
+					)}
+					{orderError && (
+						<AlertComp variant="danger" text={errorText} onClose={() => setOrderError(false)} />
+					)}
             </Container>
         </div>
     );
