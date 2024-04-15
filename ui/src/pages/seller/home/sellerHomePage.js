@@ -15,7 +15,6 @@ import ProductCanvas from '../../../components/product-canvas'
 import SpinnerComp from '../../../components/spinner'
 
 import Sidebar from '../../../components/sidebar/SellerSidebar'
-const MemoizedSideBar = React.memo(Sidebar)
 
 //svg
 import { ReactComponent as Trash } from '../../../static/images/svg/Trash.svg'
@@ -61,16 +60,16 @@ const AllProducts = ({ user }) => {
 	const [isAllEnd, setisAllEnd] = useState(false)
 	const [isAllStart, setisAllStart] = useState(false)
 
-	// useEffect(() => {
-	// 	if (selectedItem === 'Products') {
-	// 		debouncedFetchData()
-	// 		// Cleanup the debounced function when the component is unmounted
-	// 		return () => {
-	// 			debouncedFetchData.cancel()
-	// 		}
-	// 	}
+	useEffect(() => {
+		if (selectedItem === 'Products') {
+			debouncedFetchData()
+			// Cleanup the debounced function when the component is unmounted
+			return () => {
+				debouncedFetchData.cancel()
+			}
+		}
 
-	// }, [selectedItem, searchTerm]) //currentPage, selectedItem, searchTerm
+	}, [currentPage, selectedItem, searchTerm])
 
 	useEffect(() => {
 		setLoading(true)
@@ -80,57 +79,10 @@ const AllProducts = ({ user }) => {
 	}, [])
 
 	useEffect(() => {
-		if(selectedItem!='Products')
-		if (chartRef.current && salesAnalytics) {
-			const ctx = chartRef.current.getContext('2d')
-
-			const data = {
-				labels: salesAnalytics.map(item => item._id),
-				datasets: [
-					{
-						label: 'Total Quantity Sold',
-						data: salesAnalytics.map(item => item.totalQuantitySold),
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgba(75, 192, 192, 1)',
-						borderWidth: 1,
-					},
-					{
-						label: 'Total Price Earned',
-						data: salesAnalytics.map(item => item.totalCost),
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgba(255, 99, 132, 1)',
-						borderWidth: 1,
-					},
-				],
-			}
-
-			const options = {
-				indexAxis: 'y', // Use 'y' for horizontal bar chart
-				scales: {
-					x: {
-						beginAtZero: true,
-					},
-				},
-			}
-
-			let myChart = new Chart(ctx, {
-				type: 'bar',
-				data,
-				options,
-			})
-
-			// Ensure that the previous Chart instance is destroyed
-			return () => {
-				myChart.destroy()
-			}
-		}
-	}, [salesAnalytics])
-
-	const debouncedApiCalls = debounce((selectedItem) => {
-		console.log(selectedItem)
-		if (selectedItem === 'Products'){
+		if (selectedItem == 'Orders' || selectedItem === 'Products') {
 			fetchData()
-		} else if (selectedItem === 'Process') {
+		}
+		if (selectedItem === 'Process') {
 			fetchProcessedOrders()
 		} else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics()
@@ -138,15 +90,10 @@ const AllProducts = ({ user }) => {
 			loadNotOnDiscount()
 		} else if (selectedItem === 'End Sale') {
 			loadOnDiscount()
+		} else {
+			debouncedFetchData()
 		}
-	}, 1000);
 
-	useEffect(() => {
-		debouncedApiCalls(selectedItem)
-
-		return () => {
-			debouncedApiCalls.cancel()
-		}
 	}, [currentPage, selectedItem, searchTerm])
 
 	const fetchSalesAnalytics = async () => {
@@ -154,10 +101,10 @@ const AllProducts = ({ user }) => {
 			setTableLoading(true)
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/detailsAnalytics?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-				},
-			}
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			).then((response) => {
 
 				if (response.status && response.status === 200) {
@@ -242,58 +189,8 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
-	const loadNotOnDiscount = async () => {
-		try {
-			setTableLoading(true)
-			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-			)
-			if (response.status === 200) {
-				setNotOnSale(response.data.data)
-				setFetchDataError(false)
-				setTotalPages(response.data.totalPages)
-				setTableLoading(false)
-			}
-		} catch (error) {
-			console.error('Error fetching products not on discount:', error)
-			setFetchDataError(true)
-		} finally {
-			setTableLoading(false)
-		}
-	}
-
-	//end sale
-	const loadOnDiscount = async () => {
-		try {
-
-			setTableLoading(true)
-
-			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-			)
-			if (response.status === 200) {
-				setOnSale(response.data.data)
-				setFetchDataError(false)
-				setTotalPages(response.data.totalPages)
-			}
-			setTableLoading(false)
-		} catch (error) {
-			console.error('Error fetching products not on discount:', error)
-			setFetchDataError(true)
-		} finally {
-			setTableLoading(false)
-		}
-	}
+	// Debounced version of fetchData
+	const debouncedFetchData = debounce(fetchData, 1000)
 
 	const handleTrashClick = (itemId) => {
 		setproduct(itemId)
@@ -386,6 +283,52 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
+	useEffect(() => {
+		if (chartRef.current && salesAnalytics) {
+			const ctx = chartRef.current.getContext('2d')
+
+			const data = {
+				labels: salesAnalytics.map(item => item._id),
+				datasets: [
+					{
+						label: 'Total Quantity Sold',
+						data: salesAnalytics.map(item => item.totalQuantitySold),
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1,
+					},
+					{
+						label: 'Total Price Earned',
+						data: salesAnalytics.map(item => item.totalCost),
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgba(255, 99, 132, 1)',
+						borderWidth: 1,
+					},
+				],
+			}
+
+			const options = {
+				indexAxis: 'y', // Use 'y' for horizontal bar chart
+				scales: {
+					x: {
+						beginAtZero: true,
+					},
+				},
+			}
+
+			let myChart = new Chart(ctx, {
+				type: 'bar',
+				data,
+				options,
+			})
+
+			// Ensure that the previous Chart instance is destroyed
+			return () => {
+				myChart.destroy()
+			}
+		}
+	}, [salesAnalytics])
+	
 	const handleItemClick = (item) => {
 		setCurrentPage(1)
 		setTableLoading(true)
@@ -417,6 +360,108 @@ const AllProducts = ({ user }) => {
 		setSearchTerm(value)
 		// setCurrentPage(1)
 	}
+
+	const OrdersTablecolumns = []
+
+	// Product table column styling
+	const ProductsTablecolumns = [
+		{
+			header: 'Title',
+			width: '32rem',
+			render: (item) => (
+				<div className='row align-items-center pe-5'>
+					<div className='col-auto pe-0' >
+						<Image src={item.image} alt='Product' className='table-product-img' />
+					</div>
+					<div className='col'>
+						<span>{item.description}</span>
+					</div>
+				</div>
+			),
+		},
+		{
+			header: 'Price',
+			width: '17rem',
+			render: (product) => (
+				product.price.toFixed(2)
+			),
+		},
+		{
+			header: 'Stock',
+			width: '15rem',
+			render: (product) => product.quantity
+		},
+		{
+			header: 'Actions',
+			render: (item) => (
+				<>
+					<button
+						style={{ backgroundColor: 'inherit', border: 'none', paddingLeft: '0px' }}>
+						<>
+							<Trash onClick={() => handleTrashClick(item)} className='me-2' />
+							<Edit onClick={() => handleEditClick(item)} />
+						</>
+					</button>
+				</>
+			),
+		},
+	]
+
+	const ProcessedOrdersTableColumns = [
+		{
+			header: 'Date',
+			width: '17rem',
+			render: (item) => {
+				const date = new Date(item.date)
+				const localDate = date.toLocaleString(undefined, { timeZoneName: 'short' })
+				return localDate
+			}
+		},
+		{
+			header: 'Order#',
+			width: '10rem',
+			render: (item) => item.orderNumber
+		},
+		{
+			header: 'User Address',
+			width: '22rem',
+			render: (item) => {
+				const { shippingDetails } = item
+				return `${shippingDetails.name}, ${shippingDetails.address}, ${shippingDetails.city}, ${shippingDetails.state}, ${shippingDetails.zip}, ${shippingDetails.country}`
+			}
+		},
+		{
+			header: 'Product(s) Description',
+			width: '28rem',
+			render: (item) => {
+				return item.products.map(p => `${p.product.description} (Qty: ${p.quantity})`).join(', ')
+			}
+		},
+		{
+			header: 'Action',
+			render: (item) => (
+				<>
+					<div className='d-flex'>
+						<Button
+							onClick={() => handleShip(item._id)}
+							variant="info"
+							disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
+						>
+							Ship
+						</Button>
+						<Button
+							onClick={() => handleDeliver(item._id)}
+							variant="success"
+							className="ms-2"
+							disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
+						>
+							Deliver
+						</Button>
+					</div>
+				</>
+			),
+		},
+	]
 
 	const handleCheckboxChange = (productId) => {
 		const updatedSelectedProducts = [...selectedProducts]
@@ -478,49 +523,7 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
-	// Product table column styling
-	const ProductsTablecolumns = [
-		{
-			header: 'Title',
-			width: '32rem',
-			render: (item) => (
-				<div className='row align-items-center pe-5'>
-					<div className='col-auto pe-0' >
-						<Image src={item.image} alt='Product' className='table-product-img' />
-					</div>
-					<div className='col'>
-						<span>{item.description}</span>
-					</div>
-				</div>
-			),
-		},
-		{
-			header: 'Price',
-			width: '17rem',
-			render: (product) => (
-				product.price.toFixed(2)
-			),
-		},
-		{
-			header: 'Stock',
-			width: '15rem',
-			render: (product) => product.quantity
-		},
-		{
-			header: 'Actions',
-			render: (item) => (
-				<>
-					<button className='d-flex'
-						style={{ border: 'none', paddingLeft: '0px' }}>
-						<Trash onClick={() => handleTrashClick(item)} className='me-2' />
-						<Edit onClick={() => handleEditClick(item)} />
-					</button>
-				</>
-			),
-		},
-	]
-
-	// for sale management table
+	///////for on sale management table
 	const productsColumns = [
 		{
 			header: 'Product',
@@ -539,7 +542,7 @@ const AllProducts = ({ user }) => {
 
 		},
 		{
-			header: 'Select',
+			header: 'Put on Sale',
 			render: (item) => (
 				<Form.Check
 					type="checkbox"
@@ -550,63 +553,58 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
-	const OrdersTablecolumns = []
+	const loadNotOnDiscount = async () => {
+		try {
+			setTableLoading(true)
+			const response = await axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			)
+			if (response.status === 200) {
+				setNotOnSale(response.data.data)
+				setFetchDataError(false)
+				setTotalPages(response.data.totalPages)
+				setTableLoading(false)
+			}
+		} catch (error) {
+			console.error('Error fetching products not on discount:', error)
+			setFetchDataError(true)
+		} finally {
+			setTableLoading(false)
+		}
+	}
 
-	const ProcessedOrdersTableColumns = [
-		{
-			header: 'Date',
-			width: '17rem',
-			render: (item) => {
-				const date = new Date(item.date)
-				const localDate = date.toLocaleString(undefined, { timeZoneName: 'short' })
-				return localDate
+	/////end sale
+	const loadOnDiscount = async () => {
+		try {
+
+			setTableLoading(true)
+
+			const response = await axios.get(
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			)
+			if (response.status === 200) {
+				setOnSale(response.data.data)
+				setFetchDataError(false)
+				setTotalPages(response.data.totalPages)
 			}
-		},
-		{
-			header: 'Order#',
-			width: '10rem',
-			render: (item) => item.orderNumber
-		},
-		{
-			header: 'User Address',
-			width: '22rem',
-			render: (item) => {
-				const { shippingDetails } = item
-				return `${shippingDetails.name}, ${shippingDetails.address}, ${shippingDetails.city}, ${shippingDetails.state}, ${shippingDetails.zip}, ${shippingDetails.country}`
-			}
-		},
-		{
-			header: 'Product(s) Description',
-			width: '28rem',
-			render: (item) => {
-				return item.products.map(p => `${p.product.description} (Qty: ${p.quantity})`).join(', ')
-			}
-		},
-		{
-			header: 'Action',
-			render: (item) => (
-				<>
-					<div className='d-flex'>
-						<Button
-							onClick={() => handleShip(item._id)}
-							variant="info"
-							disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
-						>
-							Ship
-						</Button>
-						<Button
-							onClick={() => handleDeliver(item._id)}
-							variant="success"
-							className="ms-2"
-							disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
-						>
-							Deliver
-						</Button>
-					</div>
-				</>
-			),
-		},
-	]
+			setTableLoading(false)
+		} catch (error) {
+			console.error('Error fetching products not on discount:', error)
+			setFetchDataError(true)
+		} finally {
+			setTableLoading(false)
+		}
+	}
 
 	const EndSaleProductsColumns = [
 		{
@@ -703,32 +701,25 @@ const AllProducts = ({ user }) => {
 		setselectedProductsNotOnSale(updatedSelectedProducts)
 	}
 
-	// Debounced version of api calls
-	const debouncedFetchData = debounce(fetchData, 300)
-	// const debouncedFetchProcessedOrders = debounce(fetchProcessedOrders, 300)
-	// const debouncedFetchSalesAnalytics = debounce(fetchSalesAnalytics, 300)
-	// const debouncedLoadNotOnDiscount = debounce(loadNotOnDiscount, 300)
-	// const debouncedLoadOnDiscount = debounce(loadOnDiscount, 300)
-
 	return (
 		<>
 			{loading ? (
 				<SpinnerComp />
 			) : (
-				<Container fluid className='pt-0 pb-5 pe-3 ps-0'>
+				<Container fluid className='pt-0 p-5 ps-0'>
 					<Row>
-						<Col xs={4} md={4} lg={3} className='mt-2'>
-							<MemoizedSideBar selectedItem={selectedItem} handleItemClick={handleItemClick} />
+						<Col xs={3}>
+							<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
-						<Col xs={8} md={8} lg={9} className=" px-3">
-							{selectedItem === 'Analytics' &&
+						<Col className="mt-4 px-3">
+							{selectedItem === 'Analytics' && 
 								<OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />
 							}
 							<Row className='mb-4 m-0'>
-								<Col xs={'auto'} lg={5} className='d-flex justify-content-start ps-0 align-items-center'>
+								<Col className='d-flex justify-content-start ps-0 align-items-center'>
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
-								<Col xs={'auto'} lg={7} className='d-flex justify-content-end pe-0 align-items-center'>
+								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<>
 											<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
@@ -742,19 +733,19 @@ const AllProducts = ({ user }) => {
 													ref={searchInputRef}
 												/>
 											</Form.Group>
-											<Button onClick={handleAddClick} className='px-3 ms-2'>Add Product</Button>
+											<Button onClick={handleAddClick} className='px-3 ms-2'>Add New</Button>
 
 										</>
 									) : selectedItem === 'Discount Management' ? (
 										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button className='me-2'
-												onClick={() => {
-													setShowSaleConfirmationModal(true)
-													setisAllStart(true)
-												}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Apply on All</Button>
+											<Button className='me-2' 
+											onClick={() => {
+												setShowSaleConfirmationModal(true)
+												setisAllStart(true)
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Sale on All</Button>
 											{/* <div style={{ marginRight: '10px' }}></div> */}
 											<Button onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>
-												Apply on Selected
+												Sale on Selected
 											</Button>
 											<Form.Group className="ms-2 p-0">
 												<Form.Control
@@ -777,7 +768,7 @@ const AllProducts = ({ user }) => {
 												}} disabled={OnSale.length == 0}>End Sale for all</Button>
 											</Col>
 										</>
-									) : <></>}
+									): <></>}
 								</Col>
 							</Row>
 							<Row>
@@ -806,7 +797,7 @@ const AllProducts = ({ user }) => {
 								</Modal.Footer>
 							</Modal>
 
-
+							
 							{/* end Sale confirmation modal */}
 							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
 								<Modal.Header closeButton>
@@ -824,9 +815,9 @@ const AllProducts = ({ user }) => {
 									</Button>
 								</Modal.Footer>
 							</Modal>
-{/* className='border shadow-sm rounded' */}
-							<div className='border shadow-md rounded' style={{ height: '24.4rem', overflowY: 'auto' }} >
-								{tableLoading ? (
+
+							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
+								{ tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'Discount Management' && notOnSale ? (
 									<DetailsTable
@@ -886,6 +877,8 @@ const AllProducts = ({ user }) => {
 							handleDeleteConfirmation={handleDeleteConfirmation}
 						/>
 					)}
+
+
 
 					{showProductCanvas && (
 						<ProductCanvas

@@ -47,13 +47,13 @@ const Sidebar = ({ selectedItem, handleItemClick }) => {
 				onItemClick={() => handleItemClick('End Sale')}
 			/>
 			<hr />
-			<SidebarItem
+			{/* <SidebarItem
 				icon={<ArrowRight />}
 				text="Return Applications"
 				isSelected={selectedItem === 'Return Applications'}
 				onItemClick={() => handleItemClick('Return Applications')}
 			/>
-			<hr />
+			<hr /> */}
 		</Card>
 	)
 }
