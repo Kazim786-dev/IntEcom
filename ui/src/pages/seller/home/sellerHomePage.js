@@ -715,20 +715,20 @@ const AllProducts = ({ user }) => {
 			{loading ? (
 				<SpinnerComp />
 			) : (
-				<Container fluid className='pt-0 p-5 ps-0'>
+				<Container fluid className='pt-0 pb-5 pe-3 ps-0'>
 					<Row>
-						<Col xs={3}>
+						<Col xs={4} md={4} lg={3} className='mt-2'>
 							<MemoizedSideBar selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
-						<Col xs={9} className="mt-4 px-3">
+						<Col xs={8} md={8} lg={9} className=" px-3">
 							{selectedItem === 'Analytics' &&
 								<OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />
 							}
 							<Row className='mb-4 m-0'>
-								<Col className='d-flex justify-content-start ps-0 align-items-center'>
+								<Col xs={'auto'} lg={5} className='d-flex justify-content-start ps-0 align-items-center'>
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
-								<Col className='d-flex justify-content-end pe-0 align-items-center'>
+								<Col xs={'auto'} lg={7} className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<>
 											<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
