@@ -79,7 +79,7 @@ const OffCanvasComp = ({
 			header: 'Price',
 			width: '17rem',
 			render: (product) => (
-				product.price
+				product.price.toFixed(2)
 			),
 		},
 		{

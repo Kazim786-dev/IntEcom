@@ -198,7 +198,7 @@ const ShoppingCart = ({ user }) => {
 			header: '',
 			render: (item) => (
 				// <Trash onClick={() => handleDelete(item._id)} style={{ cursor: "pointer", textAlign: "center", marginRight:"1rem" }}/>
-				<button onClick={() => handleDelete(item._id)} style={{ backgroundColor: 'inherit', border: 'none', marginRight: '1rem' }}><Trash /></button>
+				<button onClick={() => handleDelete(item._id)} style={{ border: 'none', marginRight: '1rem' }}><Trash /></button>
 			),
 			width: '12px',
 			//   style: { textAlign: "center", cursor: "pointer" },

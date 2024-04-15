@@ -5,12 +5,15 @@ import { Table } from 'react-bootstrap'
 const DetailsTable = ({
 	data,
 	columns,
+	striped = true,
+	borderless = true
 }) => {
 
+	const tableClassName = `rounded custom-table ${striped ? 'table-striped' : ''} ${borderless ? 'table-borderless' : ''}`;
 
 	return (
-		
-		<Table borderless responsive striped hover>
+		//borderless striped 
+		<Table striped borderless responsive hover>
 			<thead>
 				<tr>
 					{columns.map((column, index) => (

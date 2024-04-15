@@ -96,7 +96,7 @@ function TotalOrders({ user }) {
 			header: 'Action',
 			render: (item) => (
 				<>
-					<button className="bg-white border-0" onClick={() => handleButtonClick(item)}><ArrowUpRight /></button>
+					<button className="border-0" onClick={() => handleButtonClick(item)}><ArrowUpRight /></button>
 				</>
 			),
 		},
