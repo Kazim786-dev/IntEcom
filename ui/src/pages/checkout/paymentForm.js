@@ -7,6 +7,7 @@ import PhoneInput from 'react-phone-number-input'; // Import PhoneInput
 import 'react-phone-number-input/style.css'; // Import CSS for PhoneInput
 import './PaymentForm.css';
 import { useNavigate } from 'react-router-dom';
+import countryCodeLookup from 'country-code-lookup'; // Import the country-code-lookup library
 import AlertComp from '../../components/alert';
 
 //redux
@@ -56,7 +57,11 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
     };
 
     const handleCountryChange = (val) => {
-        setShippingInfo({ ...shippingInfo, country: val });
+        // Map the full country name to its two-letter country code
+        const code = countryCodeLookup.byCountry(val);
+        if (code) {
+            setShippingInfo({ ...shippingInfo, country: code.iso2 });
+        }
     };
 
     const handlePhoneChange = (value) => {
