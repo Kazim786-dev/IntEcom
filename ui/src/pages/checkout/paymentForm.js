@@ -57,13 +57,10 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
     };
 
     const handleCountryChange = (val) => {
-        // Map the full country name to its two-letter country code
-        const code = countryCodeLookup.byCountry(val);
-        if (code) {
-            setShippingInfo({ ...shippingInfo, country: code.iso2 });
-        }
+        console.log("Selected Country Code:", val);
+        setShippingInfo({ ...shippingInfo, country: val });
     };
-
+        
     const handlePhoneChange = (value) => {
         setShippingInfo({ ...shippingInfo, phoneNumber: value });
     };
@@ -281,6 +278,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                             <Form.Label column sm={2}>State</Form.Label>
                             <Col sm={10}>
                                 <RegionDropdown
+                                  countryValueType="short" 
                                     country={shippingInfo.country}
                                     value={shippingInfo.state}
                                     onChange={(val) => setShippingInfo({ ...shippingInfo, state: val })}
@@ -311,7 +309,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                                     value={shippingInfo.country}
                                     onChange={handleCountryChange}
                                     classes="form-control"
-                                    valueType="full"
+                                    valueType="short"
                                 />
                             </Col>
                         </Form.Group>
