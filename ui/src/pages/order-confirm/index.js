@@ -119,8 +119,7 @@ import { format } from 'date-fns'; // Import the format function from date-fns
 const OrderConfirm = () => {
 
     const location = useLocation();
-    console.log(location)
-    const { shippingInfo, total, products } = location.state
+    const { shippingInfo, total, products, phone } = location.state
     const currentDate = new Date();
     // Format the current date and time into the desired format
     const formattedDateTime = format(currentDate, "MMMM d, yyyy, h:mm a");
@@ -172,7 +171,7 @@ const OrderConfirm = () => {
                         <h2 className="font-semibold text-lg text-primary">Shipping address</h2>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                             <div className="font-medium">{shippingInfo.name}</div>
-                            <div className="text-right">+92 123 456 7890</div>
+                            <div className="text-right">{phone}</div>
                             <div className="col-span-2"> {shippingInfo.address}, {shippingInfo.city}, {shippingInfo.country}</div>
                         </div>
                     </div>

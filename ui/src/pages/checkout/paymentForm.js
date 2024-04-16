@@ -139,7 +139,8 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                             state: {
                                 shippingInfo,
                                 products: ProductsforReceipt,
-                                total
+                                total,
+                                phone: shippingInfo.phoneNumber,
                             }
                         });
                         setTimeout(() => {
