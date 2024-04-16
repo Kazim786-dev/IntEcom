@@ -3,7 +3,7 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import NavbarSider from '../../components/navbar-sider/navbarSider'
 
-import { Container, Form, Image } from 'react-bootstrap'
+import { Col, Container, Form, Image, Row } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import './style.css'
 //svg
@@ -206,34 +206,25 @@ const ShoppingCart = ({ user }) => {
 	]
 	const cartLength = cartItems.length;
 
-	const navlinks = [
-		// { text: 'Home', link:'/', icon: <HomeIcon className="h-4 w-4" />, badge: '12' },
-		{ text: 'Products', link: '/products', icon: <PackageIcon className="h-4 w-4" /> },
-
-		{ text: 'Cart', link: '/cart', icon: <ShoppingCartIcon className="h-4 w-4" />, badge: cartLength > 0 ? cartLength : null },
-		{ text: 'Wishlist', link: '/wishlist', icon: <HeartIcon className="h-4 w-4" /> },
-		{ text: 'Account', dropdownItems: ['Logout'], to: '/login', icon: <UserIcon className="h-4 w-4" /> },
-	]
 	return (
 		<>
 			{loading ? (
 				<SpinnerComp />
 			) : (
 
-				<Container fluid className="pt-0 p-5 mt-5">
+				<Container fluid className="pt-0 px-4 pb-5 mt-5" >
 
 
-					<div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
-						<div style={{ overflowY: 'auto', flex: 3 }}>
-							<div className="d-flex align-items-center heading-container">
-								<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-								<h1 className="cart-heading ">Your Shopping Bag</h1>
-							</div>
+					<div className="d-flex align-items-center heading-container">
+						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
+						<h1 className="cart-heading ">Your Shopping Bag</h1>
+					</div>
+					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
+						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '40rem', overflowY: 'auto', flex: 1 }}>
 							<DetailsTable data={cartItems} columns={columns} />
-						</div>
-
-						<div style={{
-							flex: 1,
+						</Col>
+						<Col lg={3} style={{
+							// flex: 1,
 							backgroundColor: '#f8f9fa', // bg-light equivalent
 							boxShadow: '0 2px 4px rgba(0,0,0,.2)',
 							padding: '1rem',
@@ -259,10 +250,8 @@ const ShoppingCart = ({ user }) => {
 									<span className={'font-bold'}>Continue</span>
 								</CustomButton>
 							</div>
-						</div>
-					</div>
-
-
+						</Col>
+					</Row>
 
 					{showPaymentForm && (
 						<Elements stripe={stripePromise}>
