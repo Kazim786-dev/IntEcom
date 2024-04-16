@@ -111,9 +111,17 @@ const AllProducts = ({ user }) => {
 
 	const fetchData = () => {
 		setFetchDataError(false)
-		if (selectedItem == 'Products') {
+		if (selectedItem == 'Products' || selectedItem == "Orders Summary") {
+			var query
+			if (selectedItem == 'Products') {
+				query= `${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`
+			}else{
+				const tempp= 'Orders'
+				query = `${process.env.REACT_APP_DEV_BACKEND_URL}/${tempp.toLowerCase()}/`
+			}
+
 			axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
+				query,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -122,6 +130,7 @@ const AllProducts = ({ user }) => {
 			).then((response) => {
 				if (response.status && response.status === 200) {
 					const { totalPages, data } = response.data
+					console.log(response);
 					setData(data)
 					setFetchDataError(false)
 					setTotalPages(totalPages)
@@ -332,7 +341,7 @@ const AllProducts = ({ user }) => {
 				debouncedFetchData.cancel()
 			}
 		} else if(selectedItem == 'Orders Summary'){
-			console.log("fetch data for table in order summary")
+			debouncedFetchData()
 		} else if (selectedItem === 'Seller Requests') {
 			fetchSellers()
 		} else if (selectedItem === 'Process Orders') {
@@ -930,7 +939,7 @@ const AllProducts = ({ user }) => {
 							<MemoizedSideBar sidebarItems={sidebarItems} selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
 						<Col className="mt-4 px-3">
-							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
+							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={'Orders'} />}
 							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 
 							<Row className='mb-3 m-0'>
@@ -939,21 +948,22 @@ const AllProducts = ({ user }) => {
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
-										<Button size='sm' onClick={handleAddClick} className='px-3'>Add Product</Button>
-									) : selectedItem === 'Orders Summary' ? (
 										<>
-											<Form.Label className="me-2"><b>Search:</b></Form.Label>
-											<Form.Group className="mb-1">
-												<Form.Control
-													className='pe-5'
-													type="text"
-													value={searchTerm}
-													placeholder={`Search Order`}
-													onChange={handleSearchChange}
-													ref={searchInputRef}
-												/>
-											</Form.Group>
-										</>
+										<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
+										<Form.Group className="mb-1 mt-1">
+											<Form.Control
+												size='sm'
+												className='pe-5'
+												type="text"
+												value={searchTerm}
+												placeholder={`Search`}
+												onChange={handleSearchChange}
+												ref={searchInputRef}
+											/>
+										</Form.Group>
+										<Button size='sm' onClick={handleAddClick} className='px-3  ms-2'>Add Product</Button>
+
+									</>
 									) : selectedItem === 'Discount Management' ? (
 										<>
 											<Button size='sm' onClick={() => {
