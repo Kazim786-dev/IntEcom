@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Form, Button, Container, Row, Col, InputGroup, CloseButton } from 'react-bootstrap';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'; // Import CountryDropdown and RegionDropdown
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';// Import PhoneInput
+import PhoneInput from 'react-phone-number-input'; // Import PhoneInput
 import 'react-phone-number-input/style.css'; // Import CSS for PhoneInput
 import './PaymentForm.css';
 import { useNavigate } from 'react-router-dom';
@@ -134,13 +134,12 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         setOrderPlaced(true);
                         setOrderError(false);
                         setErrorText('');
-
+                        
                         navigate('/order-confirm', {
-                            state: {
+                            state:{
                                 shippingInfo,
-                                products: ProductsforReceipt,
-                                total,
-                                phone: shippingInfo.phoneNumber,
+                                products:ProductsforReceipt,
+                                total
                             }
                         });
                         setTimeout(() => {
@@ -165,7 +164,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
         }
     };
 
-    const styles = {
+	const styles = {
         paymentFormSlide: {
             padding: '2rem',
             backgroundColor: '#f7f7f7',
@@ -202,9 +201,8 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
         },
         confirmButton: {
             width: '100%',
-            padding: '0.34rem',
-            // fontSize: '1.2rem',
-            fontWeight:'semibold',
+            padding: '0.75rem',
+            fontSize: '1.2rem',
             backgroundColor: '#007bff',
             color: 'white',
             border: 'none',
@@ -226,7 +224,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         <Form.Group as={Row} className="mb-3" controlId="validationCustom01">
                             <Form.Label column sm={2}>Name</Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="text" name="name" onChange={handleInputChange} required />
+                                <Form.Control type="text" name="name" onChange={handleInputChange} required/>
                                 <Form.Control.Feedback type="invalid">
                                     Please enter your name.
                                 </Form.Control.Feedback>
@@ -241,38 +239,35 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                                     value={shippingInfo.phoneNumber}
                                     onChange={handlePhoneChange}
                                 />
-                                {!isValidPhoneNumber(shippingInfo.phoneNumber) && (
-                                    <Form.Text className="text-danger">Invalid phone number</Form.Text>
-                                )}
                             </Col>
                         </Form.Group>
-                        <Form.Group as={Row} className="mb-3" controlId="validationCustom02">
-                            <Form.Label column sm={2}>Address</Form.Label>
-                            <Col sm={10}>
-                                <Form.Control
-                                    as="textarea"
-                                    name="address"
-                                    onChange={handleInputChange}
-                                    rows={3}  // You can adjust the number of rows depending on your needs
-                                    required
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter your address.
-                                </Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+						<Form.Group as={Row} className="mb-3"controlId="validationCustom02">
+						<Form.Label column sm={2}>Address</Form.Label>
+						<Col sm={10}>
+							<Form.Control 
+							as="textarea" 
+							name="address" 
+							onChange={handleInputChange}
+							rows={3}  // You can adjust the number of rows depending on your needs
+							required
+							/>
+							<Form.Control.Feedback type="invalid">
+								Please enter your address.
+								</Form.Control.Feedback>
+						</Col>
+						</Form.Group>
 
-                        <Form.Group as={Row} className="mb-3" controlId="validationCustom03">
-                            <Form.Label column sm={2}>City</Form.Label>
-                            <Col sm={10}>
-                                <Form.Control type="text" name="city" onChange={handleInputChange} required />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter your city.
-                                </Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom03">
+							<Form.Label column sm={2}>City</Form.Label>
+							<Col sm={10}>
+								<Form.Control type="text" name="city" onChange={handleInputChange}required />
+								<Form.Control.Feedback type="invalid">
+								Please enter your city.
+								</Form.Control.Feedback>
+							</Col>
+						</Form.Group>
 
-                        <Form.Group as={Row} className="mb-3" controlId="validationCustom04">
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom04">
                             <Form.Label column sm={2}>State</Form.Label>
                             <Col sm={10}>
                                 <RegionDropdown
@@ -290,15 +285,15 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} className="mb-3" controlId="validationCustom05">
-                            <Form.Label column sm={2}>Postal Code</Form.Label>
-                            <Col sm={10}>
-                                <Form.Control type="text" name="zip" onChange={handleInputChange} required />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter your postal code.
-                                </Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+						<Form.Group as={Row} className="mb-3" controlId="validationCustom05">
+							<Form.Label column sm={2}>Postal Code</Form.Label>
+							<Col sm={10}>
+								<Form.Control type="text" name="zip" onChange={handleInputChange}required />
+								<Form.Control.Feedback type="invalid">
+								Please enter your postal code.
+								</Form.Control.Feedback>
+							</Col>
+						</Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="validationCustom06">
                             <Form.Label column sm={2}>Country</Form.Label>
                             <Col sm={10}>
@@ -313,37 +308,32 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         {/* Other form fields */}
                     </fieldset>
                     {/* Payment Details */}
-                    <fieldset style={styles.fieldset}>
-                        <legend style={styles.legend}>Payment Details</legend>
-                        <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm={2}>Card Information</Form.Label>
-                            <Col sm={10}>
-                                <InputGroup>
-                                    <CardElement className="form-control" />
-                                </InputGroup>
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm={2}>Name on Card</Form.Label>
-                            <Col sm={10}>
-                                <Form.Control type="text" name="Name on Card" onChange={handleInputChange} required />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter the name on card.
-                                </Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+					<fieldset style={styles.fieldset}>
+						<legend style={styles.legend}>Payment Details</legend>
+						<Form.Group as={Row} className="mb-3">
+									<Form.Label column sm={2}>Card Information</Form.Label>
+									<Col sm={10}>
+										<InputGroup>
+											<CardElement className="form-control" />
+										</InputGroup>
+									</Col>
+								</Form.Group>
+								<Form.Group as={Row} className="mb-3">
+									<Form.Label column sm={2}>Name on Card</Form.Label>
+									<Col sm={10}>
+										<Form.Control type="text" name="Name on Card" onChange={handleInputChange} required />
+										<Form.Control.Feedback type="invalid">
+											Please enter the name on card.
+											</Form.Control.Feedback>
+									</Col>
+								</Form.Group>
 
-                    </fieldset>
+					</fieldset>
                     <Button type="submit" style={styles.confirmButton} disabled={!stripe}>
                         Confirm Payment
                     </Button>
                 </Form>
-                {orderPlaced && (
-                    <AlertComp variant="success" text="Awesome, Your order has been placed successfully." onClose={() => setOrderPlaced(false)} />
-                )}
-                {orderError && (
-                    <AlertComp variant="danger" text={errorText} onClose={() => setOrderError(false)} />
-                )}
+                {/* Alerts */}
             </Container>
         </div>
     );
