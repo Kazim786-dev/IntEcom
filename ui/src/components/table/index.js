@@ -27,9 +27,9 @@ const DetailsTable = ({
 				{data.length > 0 &&
 						data.map((item, index) => (
 							<tr style={{ height: '60px' }} key={index}>
-								{columns.map((column, index) => (
-									<td key={index} style={{ width: column.width }}>
-										{column.render(item)}
+								{columns.map((column, idx) => (
+									<td key={idx} style={{ width: column.width }}>
+										{column.render(item,index)}
 									</td>
 								))}
 							</tr>

@@ -33,7 +33,7 @@ const Footer = () => {
 						<h5>Contact Us</h5>
 						<ul className="list-unstyled">
 							<li>Phone: +123 456 7890</li>
-							<li>Email: i202310@nu.edu.pk</li>
+							<li>Email: i210167@nu.edu.pk</li>
 							<li>Address: 123 Street, Islamabad, Pakistan</li>
 						</ul>
 					</div>

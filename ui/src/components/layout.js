@@ -3,6 +3,7 @@ import React from 'react'
 import NavbarComp from '../components/navbar'
 import Footer from './endFooter/endFooter'
 import NavBarSiderCard from './navbar-sider-card'
+const MemoizedNavBarSiderCard = React.memo(NavBarSiderCard)
 import NavTag from './nav-tagline'
 const MemoizedNavTag = React.memo(NavTag); // MemoizedNavTag: Memoize NavTag to prevent unnecessary re-renders
 
@@ -21,7 +22,7 @@ const Layout = ({ showNavbar, children, user, footer }) => {
 			
 			<div style={{ display: 'flex', minHeight: '100vh' }}>
 				{/* Sidebar */}
-                {user && user.role === 'customer' && <NavBarSiderCard user={user} />}
+                {user && user.role === 'customer' && <MemoizedNavBarSiderCard user={user} />}
 				{/* Main Content Area */}
 				<div style={{ flex: 1 }}>
 					<MemoizedNavTag/>

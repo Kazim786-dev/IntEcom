@@ -4,7 +4,7 @@ import './SidebarItem.css'; // Importing custom CSS
 const SidebarItem = ({ icon, text, isSelected, onItemClick }) => {
     return (
         <div
-            className={`sidebar-item ${isSelected ? 'active' : ''}`}
+            className={`sidebar-item font-semibold p-2 ${isSelected ? 'active' : ''}`}
             onClick={onItemClick}
         >
             {icon}

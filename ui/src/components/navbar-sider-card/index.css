@@ -1,0 +1,23 @@
+.navbar-link {
+    display: flex;
+    align-items: center;
+    height: 2rem; /* Set your desired height */
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .cust-nav-active-link {
+    background-color: #007bff; /* Active link background color */
+    border-radius: 0.25rem;
+    color: white;
+    background-color: rgb(164, 164, 164);
+  }
+  
+  .navbar-link:hover {
+    color: black;
+    background-color: #e2e2e2; /* Hover background color for non-active links */
+  }
+  
+  .cust-nav-active-link:hover {
+    background-color: rgb(51, 127, 209); /*Hover background color for active links */
+  }
+  

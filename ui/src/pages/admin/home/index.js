@@ -15,12 +15,24 @@ import OrderSummary from '../../../components/order-summary'
 import ProductCanvas from '../../../components/product-canvas'
 import SpinnerComp from '../../../components/spinner'
 
-import Sidebar from '../../../components/sidebar'
+import Sidebar from '../../../components/sidebar/'
+const MemoizedSideBar = React.memo(Sidebar)
 
 //svg
 import { ReactComponent as Trash } from '../../../static/images/svg/Trash.svg'
 import { ReactComponent as Edit } from '../../../static/images/svg/Pencil square.svg'
 import { ReactComponent as ArrowUpRight } from '../../../static/images/svg/Arrow up right.svg'
+
+import {
+	PackageIcon,
+    ShoppingCartIcon,
+    AnalyticsIcon,
+    DiscountIcon,
+    EndSaleIcon,
+    FileWarningIcon,
+    FolderIcon,
+	UserIcon
+} from '../../../static/icons/admin-nav-icons'
 
 
 const AllProducts = ({ user }) => {
@@ -55,12 +67,9 @@ const AllProducts = ({ user }) => {
 	const [salesAnalytics, setSalesAnalytics] = useState(null)
 	const chartRef = useRef(null)
 
-
-
-
 	const [selectedProducts, setSelectedProducts] = useState([])
 	const [showSaleConfirmationModal, setShowSaleConfirmationModal] = useState(false)
-	const [salePercentage, setSalePercentage] = useState(0)
+	const [salePercentage, setSalePercentage] = useState()
 	const [notOnSale, setNotOnSale] = useState([])
 
 
@@ -70,38 +79,16 @@ const AllProducts = ({ user }) => {
 	const [isAllEnd, setisAllEnd] = useState(false)
 	const [isAllStart, setisAllStart] = useState(false)
 
-
-
-	useEffect(() => {
-		debouncedFetchData()
-		// Cleanup the debounced function when the component is unmounted
-		return () => {
-			//return
-			debouncedFetchData.cancel()
-		}
-	}, [currentPage, selectedItem, searchTerm])
-
-	useEffect(() => {
-		setLoading(true)
-		if (searchInputRef.current) {
-			searchInputRef.current.focus()
-		}
-	}, [])
-
-
-
 	const fetchSalesAnalytics = async () => {
 		try {
 			setTableLoading(true)
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/detailsAnalytics?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`, {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
 			).then((response) => {
-				console.log(response)
-
 				if (response.status && response.status === 200) {
 					console.log(response)
 					const totalPages = response.totalPages
@@ -118,15 +105,13 @@ const AllProducts = ({ user }) => {
 		} catch (error) {
 			console.error('Error fetching sales analytics:', error)
 			setFetchDataError(true)
-		} finally {
 			setTableLoading(false)
 		}
 	}
 
 	const fetchData = () => {
-
 		setFetchDataError(false)
-		if (selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && selectedItem !== 'Discount Management' && selectedItem !== 'End Sale') {
+		if (selectedItem == 'Products') {
 			axios.get(
 				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
@@ -180,15 +165,15 @@ const AllProducts = ({ user }) => {
 			const { totalPages, data } = response.data
 			setProcessedOrders(data)
 			setTotalPages(totalPages)
+			setTableLoading(false) // Stop table loading
 		} catch (error) {
 			console.error('Error fetching processed orders:', error)
 			setErrorText('Error fetching processed orders')
 			setFetchDataError(true)
-		} finally {
-			setLoading(false) // Stop loading
 			setTableLoading(false) // Stop table loading
 		}
 	}
+
 	const handleDeleteConfirmation = () => {
 		if (product) {
 
@@ -264,24 +249,6 @@ const AllProducts = ({ user }) => {
 		setShowProductCanvas(true)
 	}
 
-	const handleItemClick = (item) => {
-		setCurrentPage(1)
-		setTableLoading(true)
-		setSelectedItem(item)
-		if (item === 'reported') {
-			fetchReportedProducts()
-		} else if (item === 'Process') {
-			fetchProcessedOrders()
-		} else if (selectedItem == 'Orders' || selectedItem === 'Products') {
-			fetchData()
-		} else if (selectedItem == 'Analytics') {
-			fetchSalesAnalytics()
-		}
-		else {
-			debouncedFetchData()
-		}
-	}
-
 	const handleShouldFetchAgain = () => {
 		fetchData()
 	}
@@ -303,14 +270,74 @@ const AllProducts = ({ user }) => {
 		setCurrentPage(page)
 	}
 
-
+	useEffect(() => {
+		setLoading(true)
+		if (searchInputRef.current) {
+			searchInputRef.current.focus()
+		}
+	}, [])
 
 	useEffect(() => {
-		if (selectedItem === 'Sellers') {
+		if (chartRef.current && salesAnalytics) {
+			const ctx = chartRef.current.getContext('2d')
+
+			const data = {
+				labels: salesAnalytics.map(item => item._id),
+				datasets: [
+					{
+						label: 'Total Quantity Sold',
+						data: salesAnalytics.map(item => item.totalQuantitySold),
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1,
+					},
+					{
+						label: 'Total Price Earned',
+						data: salesAnalytics.map(item => item.totalCost),
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgba(255, 99, 132, 1)',
+						borderWidth: 1,
+					},
+				],
+			}
+
+			const options = {
+				indexAxis: 'y', // Use 'y' for horizontal bar chart
+				scales: {
+					x: {
+						beginAtZero: true,
+					},
+				},
+			}
+
+			let myChart = new Chart(ctx, {
+				type: 'bar',
+				data,
+				options,
+			})
+
+			// Ensure that the previous Chart instance is destroyed
+			return () => {
+				myChart.destroy()
+			}
+		}
+	}, [salesAnalytics])
+
+	useEffect(() => {
+		if(selectedItem == 'Products'){
+			debouncedFetchData()
+			// Cleanup the debounced function when the component is unmounted
+			return () => {
+				//return
+				debouncedFetchData.cancel()
+			}
+		} else if(selectedItem == 'Orders Summary'){
+			console.log("fetch data for table in order summary")
+		} else if (selectedItem === 'Seller Requests') {
 			fetchSellers()
-		} else if (selectedItem === 'Process') {
+		} else if (selectedItem === 'Process Orders') {
 			fetchProcessedOrders()
-		} else if (selectedItem === 'reported') {
+		} else if (selectedItem === 'Reported Products') {
 			fetchReportedProducts()
 		} else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics()
@@ -318,10 +345,16 @@ const AllProducts = ({ user }) => {
 			loadNotOnDiscount()
 		} else if (selectedItem === 'End Sale') {
 			loadOnDiscount()
-		} else {
-			debouncedFetchData()
 		}
+
 	}, [currentPage, selectedItem, searchTerm])
+
+	const handleItemClick = (item) => {
+		setCurrentPage(1)
+		setTableLoading(true)
+		setSelectedItem(item)
+		setSearchTerm()
+	}
 
 	const fetchReportedProducts = async () => {
 		setReportLoading(true) // Start loading for reported products
@@ -332,13 +365,14 @@ const AllProducts = ({ user }) => {
 			})
 
 			setReportedProducts(response.data)
+			setTableLoading(false)       // Stop main loading
 		} catch (error) {
 			// console.error('Error fetching reported products:', error)
 			setErrorText('Error fetching reported products')
 			setFetchDataError(true)
+			setTableLoading(false)       // Stop main loading
 		} finally {
 			setReportLoading(false) // Stop loading for reported products
-			setTableLoading(false)       // Stop main loading
 		}
 	}
 
@@ -409,13 +443,11 @@ const AllProducts = ({ user }) => {
 		},
 	]
 
-
 	//seller analytics information
-
 	const SellersTablecolumns = [
 		{
 			header: 'Name',
-			render: (seller) => seller._id,
+			render: (seller) => seller.name,
 		},
 		{
 			header: 'Total Quantity Sold',
@@ -426,56 +458,6 @@ const AllProducts = ({ user }) => {
 			render: (seller) => seller.totalCost.toFixed(2),
 		},
 	]
-
-
-
-	useEffect(() => {
-		if (chartRef.current && salesAnalytics) {
-			const ctx = chartRef.current.getContext('2d')
-
-			const data = {
-				labels: salesAnalytics.map(item => item._id),
-				datasets: [
-					{
-						label: 'Total Quantity Sold',
-						data: salesAnalytics.map(item => item.totalQuantitySold),
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgba(75, 192, 192, 1)',
-						borderWidth: 1,
-					},
-					{
-						label: 'Total Price Earned',
-						data: salesAnalytics.map(item => item.totalCost),
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgba(255, 99, 132, 1)',
-						borderWidth: 1,
-					},
-				],
-			}
-
-			const options = {
-				indexAxis: 'y', // Use 'y' for horizontal bar chart
-				scales: {
-					x: {
-						beginAtZero: true,
-					},
-				},
-			}
-
-			let myChart = new Chart(ctx, {
-				type: 'bar',
-				data,
-				options,
-			})
-
-			// Ensure that the previous Chart instance is destroyed
-			return () => {
-				myChart.destroy()
-			}
-		}
-	}, [salesAnalytics])
-
-
 
 	// Product table column styling
 	const ProductsTablecolumns = [
@@ -509,12 +491,10 @@ const AllProducts = ({ user }) => {
 			header: 'Actions',
 			render: (item) => (
 				<>
-					<button
-						style={{ backgroundColor: 'inherit', border: 'none', paddingLeft: '0px' }}>
-						<>
-							<Trash onClick={() => handleTrashClick(item)} className='me-3' />
-							<Edit onClick={() => handleEditClick(item)} />
-						</>
+					<button className='d-flex gap-2'
+						style={{ border: 'none', paddingLeft: '0px' }}>
+						<Trash onClick={() => handleTrashClick(item)} />
+						<Edit onClick={() => handleEditClick(item)} />
 					</button>
 				</>
 			),
@@ -538,7 +518,6 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
-
 	const handleCancelReport = async (reportId) => {
 		try {
 			const response = await axios.delete(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/cancel-report/${reportId}`, {
@@ -555,7 +534,6 @@ const AllProducts = ({ user }) => {
 			// Handle error here, such as updating state or showing an error message
 		}
 	}
-
 
 	const ReportedProductsTableColumns = [
 		// Define columns for reported products table
@@ -635,7 +613,7 @@ const AllProducts = ({ user }) => {
 			header: 'Action',
 			render: (item) => (
 				<>
-					<button className="bg-white border-0" onClick={() => handleOrderDetailButtonClick(item)}><ArrowUpRight /></button>
+					<button className=" border-0" onClick={() => handleOrderDetailButtonClick(item)}><ArrowUpRight /></button>
 				</>
 			),
 		},
@@ -694,18 +672,6 @@ const AllProducts = ({ user }) => {
 			),
 		},
 	]
-
-
-
-
-
-
-
-
-
-
-
-
 
 	const handleCheckboxChange = (productId) => {
 		const updatedSelectedProducts = [...selectedProducts]
@@ -786,7 +752,7 @@ const AllProducts = ({ user }) => {
 
 		},
 		{
-			header: 'Put on Sale',
+			header: 'Select',
 			render: (item) => (
 				<Form.Check
 					type="checkbox"
@@ -821,8 +787,6 @@ const AllProducts = ({ user }) => {
 			setTableLoading(false)
 		}
 	}
-
-
 
 	/////end sale
 	const loadOnDiscount = async () => {
@@ -944,38 +908,39 @@ const AllProducts = ({ user }) => {
 		setselectedProductsNotOnSale(updatedSelectedProducts)
 	}
 
-
-
-
-
-
-
-
-
-
+	const sidebarItems = [
+		{ id: 1, icon: <PackageIcon className="h-5 w-5" />, text: 'Products' },
+		{ id: 2, icon: <ShoppingCartIcon className="h-5 w-5" />, text: 'Process Orders' },
+		{ id: 3, icon: <DiscountIcon className="h-5 w-5" />, text: 'Discount Management' },
+		{ id: 4, icon: <EndSaleIcon className="h-5 w-5" />, text: 'End Sale' },
+		{ id: 5, icon: <AnalyticsIcon className="h-5 w-5" />, text: 'Analytics' },
+		{ id: 6, icon: <UserIcon className="h-5 w-5" />, text: 'Orders Summary' },
+		{ id: 7, icon: <FolderIcon className="h-5 w-5" />, text: 'Seller Requests' },
+		{ id: 8, icon: <FileWarningIcon className="h-5 w-5" />, text: 'Reported Products' },
+	];
 
 	return (
 		<>
-			{loading || reportLoading ? (
+			{loading ? (
 				<SpinnerComp />
 			) : (
-				<Container fluid className='pt-0 p-5 ps-0'>
+				<Container fluid className='pt-0 pb-5 pe-3 ps-0'>
 					<Row>
 						<Col xs={3}>
-							<Sidebar selectedItem={selectedItem} handleItemClick={handleItemClick} />
+							<MemoizedSideBar sidebarItems={sidebarItems} selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
 						<Col className="mt-4 px-3">
-							{selectedItem === 'Orders' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
+							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 
-							<Row className='mb-4 m-0'>
+							<Row className='mb-3 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
 									<h2 className='text-primary'>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
-										<Button onClick={handleAddClick} className='px-3'>Add New</Button>
-									) : selectedItem !== 'Sellers' && selectedItem !== 'Process' && selectedItem !== 'Discount Management' && selectedItem !== 'End Sale' && selectedItem !== 'reported' && selectedItem !== 'Analytics' && (
+										<Button size='sm' onClick={handleAddClick} className='px-3'>Add Product</Button>
+									) : selectedItem === 'Orders Summary' ? (
 										<>
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
@@ -983,204 +948,194 @@ const AllProducts = ({ user }) => {
 													className='pe-5'
 													type="text"
 													value={searchTerm}
-													placeholder={`Search by ${selectedItem}`}
+													placeholder={`Search Order`}
 													onChange={handleSearchChange}
 													ref={searchInputRef}
 												/>
 											</Form.Group>
 										</>
-									)}
-								</Col>
-							</Row>
-							<Row>
-								{selectedItem === 'Analytics' && salesAnalytics && (
-									<div className="my-4">
-										<canvas ref={chartRef} id="salesChart" width="400" height="200"></canvas>
-									</div>
-								)}
-							</Row>
-
-
-
-
-
-
-
-							{/* Sale confirmation modal */}
-							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
-								<Modal.Header closeButton>
-									<Modal.Title>Confirm Sale</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									Are you sure you want to put the products on sale with a {salePercentage}% discount?
-								</Modal.Body>
-								<Modal.Footer>
-									<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
-										Cancel
-									</Button>
-									<Button variant="primary" onClick={handleConfirmSale}>
-										Confirm
-									</Button>
-								</Modal.Footer>
-							</Modal>
-
-
-
-							<Row>
-								{selectedItem === 'Discount Management' && (
-									<>
-										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button onClick={() => {
+									) : selectedItem === 'Discount Management' ? (
+										<>
+											<Button size='sm' onClick={() => {
 												setShowSaleConfirmationModal(true)
 												setisAllStart(true)
-											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Put All Products on Sale</Button>
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Apply on All</Button>
 											<div style={{ marginRight: '10px' }}></div>
-											<Button onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>Put Selected Products on Sale</Button>
-											<Form.Group className="mb-1 ms-2">
+											<Button size='sm' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>
+												Apply on Selected
+											</Button>
+											<Form.Group className="ms-2">
 												<Form.Control
+													size='sm'
 													type="number"
 													value={salePercentage}
-													placeholder="Discount Percentage"
+													placeholder="Discount %"
 													onChange={(e) => setSalePercentage(e.target.value)}
 													min="0"
 												/>
 											</Form.Group>
-										</Col>
-									</>
-								)}
-							</Row>
-							<br />
-
-							{/* end Sale confirmation modal */}
-							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
-								<Modal.Header closeButton>
-									<Modal.Title>Confirm End Sale</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									Are you sure you want to put products on back on origional price?
-								</Modal.Body>
-								<Modal.Footer>
-									<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
-										Cancel
-									</Button>
-									<Button variant="primary" onClick={handleConfirmEndSale}>
-										Confirm
-									</Button>
-								</Modal.Footer>
-							</Modal>
-
-							<Row>
-								{selectedItem === 'End Sale' && (
-									<>
+										</>
+									) : selectedItem == 'End Sale' && (
 										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
+											<Button size='sm' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
 											<div style={{ marginRight: '10px' }}></div>
-											<Button onClick={() => {
+											<Button size='sm' onClick={() => {
 												setShowEndSaleConfirmationModal(true)
 												setisAllEnd(true)
 											}} disabled={OnSale.length == 0}>End Sale for all</Button>
 										</Col>
-									</>
-								)}
-							</Row>
-							<br />
+									)
+									}
 
-
-
-
-							<div style={{ height: '24.4rem', overflowY: 'auto' }}>
-								{tableLoading ? (
-									<SpinnerComp />
-								) : selectedItem === 'reported' ? (
-									<DetailsTable
-										data={reportedProducts}
-										columns={ReportedProductsTableColumns}
-									/>
-								) : selectedItem === 'Process' ? (
-									<DetailsTable
-										data={processedOrders}
-										columns={ProcessedOrdersTableColumns}
-									/>
-								) : selectedItem === 'Sellers' ? (
-									<DetailsTable
-										data={sellers}
-										columns={SellerTablecolumns}
-									/>
-								) : selectedItem === 'Analytics' && salesAnalytics ? (
-									<DetailsTable
-										data={salesAnalytics}
-										columns={SellersTablecolumns}
-									/>
-								) : selectedItem === 'Discount Management' ? (
-									<DetailsTable
-										data={notOnSale}
-										columns={productsColumns}
-									/>
-								) : selectedItem === 'End Sale' ? (
-									<DetailsTable
-										data={OnSale}
-										columns={EndSaleProductsColumns}
-									/>
-								) : selectedItem === 'Products' ? (
-									<DetailsTable
-										data={data}
-										columns={ProductsTablecolumns}
-									/>
-								) : (
-									<DetailsTable
-										data={data}
-										columns={OrdersTablecolumns}
-									/>
-								)}
+						
+								</Col>
+					</Row>
+					<Row>
+						{selectedItem === 'Analytics' && salesAnalytics && (
+							<div className="my-4">
+								<canvas ref={chartRef} id="salesChart" width="400" height="200"></canvas>
 							</div>
-							<Footer
-								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
-								text={''}
-								totalPages={totalPages}
-								currentPage={currentPage}
-								setCurrentPage={handlePageChange}
-							/>
-						</Col>
+						)}
 					</Row>
 
-					{fetchDataError && (
-						<AlertComp
-							variant='danger'
-							text={Errortext}
-							onClose={() => setFetchDataError(false)}
-						/>
-					)}
+					{/* Sale confirmation modal */}
+					<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
+						<Modal.Header closeButton>
+							<Modal.Title>Confirm Sale</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							Are you sure you want to put the products on sale with a {salePercentage}% discount?
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
+								Cancel
+							</Button>
+							<Button variant="primary" onClick={handleConfirmSale}>
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
 
-					{showDeleteModal && (
-						<DeleteConfirmationModal
-							showDeleteModal={showDeleteModal}
-							setShowDeleteModal={setShowDeleteModal}
-							handleDeleteConfirmation={handleDeleteConfirmation}
-						/>
-					)}
 
-					{showOrderCanvas && (
-						<OffCanvasComp
-							placement={'end'}
-							show={showOrderCanvas}
-							setShow={setShowOrderCanvas}
-							orderItem={orderItem}
-							name={orderItem.user.name}
-							token={user.token}
-						/>
-					)}
+					{/* end Sale confirmation modal */}
+					<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
+						<Modal.Header closeButton>
+							<Modal.Title>Confirm End Sale</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							Are you sure you want to put products on back on origional price?
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
+								Cancel
+							</Button>
+							<Button variant="primary" onClick={handleConfirmEndSale}>
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
 
-					{showProductCanvas && (
-						<ProductCanvas
-							placement={'end'}
-							show={showProductCanvas}
-							setShow={setShowProductCanvas}
-							product={product}
-							handleShouldFetchAgain={handleShouldFetchAgain}
-							token={user.token}
-						/>
-					)}
-				</Container>
+					<div className='border shadow-sm rounded' style={{ height: '31rem', overflowY: 'auto' }}>
+						{tableLoading ? (
+							<SpinnerComp />
+						) : selectedItem === 'Reported Products' ? (
+							<DetailsTable
+								data={reportedProducts}
+								columns={ReportedProductsTableColumns}
+							/>
+						) : selectedItem === 'Process Orders' ? (
+							<DetailsTable
+								data={processedOrders}
+								columns={ProcessedOrdersTableColumns}
+							/>
+						) : selectedItem === 'Seller Requests' ? (
+							<DetailsTable
+								data={sellers}
+								columns={SellerTablecolumns}
+							/>
+						) : selectedItem === 'Analytics' && salesAnalytics ? (
+							<DetailsTable
+								data={salesAnalytics}
+								columns={SellersTablecolumns}
+							/>
+						) : selectedItem === 'Discount Management' ? (
+							<DetailsTable
+								data={notOnSale}
+								columns={productsColumns}
+							/>
+						) : selectedItem === 'End Sale' ? (
+							<DetailsTable
+								data={OnSale}
+								columns={EndSaleProductsColumns}
+							/>
+						) : selectedItem === 'Products' ? (
+							<DetailsTable
+								data={data}
+								columns={ProductsTablecolumns}
+							/>
+						) : (
+							<DetailsTable
+								data={data}
+								columns={OrdersTablecolumns}
+							/>
+						)}
+					</div>
+
+					<Footer
+						className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
+						text={''}
+						totalPages={totalPages}
+						currentPage={currentPage}
+						setCurrentPage={handlePageChange}
+					/>
+				</Col>
+					</Row >
+
+		{ fetchDataError && (
+			<AlertComp
+				variant='danger'
+				text={Errortext}
+				onClose={() => setFetchDataError(false)}
+			/>
+		)
+}
+
+{
+	showDeleteModal && (
+		<DeleteConfirmationModal
+			showDeleteModal={showDeleteModal}
+			setShowDeleteModal={setShowDeleteModal}
+			handleDeleteConfirmation={handleDeleteConfirmation}
+		/>
+	)
+}
+
+{
+	showOrderCanvas && (
+		<OffCanvasComp
+			placement={'end'}
+			show={showOrderCanvas}
+			setShow={setShowOrderCanvas}
+			orderItem={orderItem}
+			name={orderItem.user.name}
+			token={user.token}
+		/>
+	)
+}
+
+{
+	showProductCanvas && (
+		<ProductCanvas
+			placement={'end'}
+			show={showProductCanvas}
+			setShow={setShowProductCanvas}
+			product={product}
+			handleShouldFetchAgain={handleShouldFetchAgain}
+			token={user.token}
+		/>
+	)
+}
+				</Container >
 			)}
 		</>
 	)
