@@ -287,7 +287,8 @@ const ProductDetailPage = ({ user }) => {
 								</p>
 							</Tab>
 						</Tabs>
-
+						<br/>
+						<br/>
 
 						{/* 
 					<Card className="product-detail-card col-md-6 d-flex justify-content-center align-items-center">

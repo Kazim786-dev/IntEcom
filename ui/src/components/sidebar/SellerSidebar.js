@@ -1,16 +1,17 @@
-import React from 'react'
+import React from 'react';
 
 //comp
-import SidebarItem from './sidebar-item'
+import SidebarItem from './sidebar-item';
 
 //svg
-import { ReactComponent as ArrowRight } from '../../static/images/svg/Arrow right short.svg'
+import { ReactComponent as ArrowRight } from '../../static/images/svg/Arrow right short.svg';
 
-import { Card } from 'react-bootstrap'
+import { Card } from 'react-bootstrap';
+import './Sidebar.css'; // Importing custom CSS
 
 const Sidebar = ({ selectedItem, handleItemClick }) => {
 	return (
-		<Card className='h-100 ps-2 pt-3 border-0' style={{ overflow: 'auto' }}>
+		<Card className=' h-100 p-4 border-0 min-h-screen sidebar' style={{ overflow: 'auto' }}>
 			<SidebarItem
 				icon={<ArrowRight />}
 				text="Products"
@@ -46,15 +47,15 @@ const Sidebar = ({ selectedItem, handleItemClick }) => {
 				onItemClick={() => handleItemClick('End Sale')}
 			/>
 			<hr />
-			<SidebarItem
+			{/* <SidebarItem
 				icon={<ArrowRight />}
 				text="Return Applications"
 				isSelected={selectedItem === 'Return Applications'}
 				onItemClick={() => handleItemClick('Return Applications')}
 			/>
-			<hr />
+			<hr /> */}
 		</Card>
 	)
 }
 
-export default Sidebar
+export default Sidebar;
