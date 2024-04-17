@@ -318,7 +318,7 @@ const AllProducts = ({ user }) => {
 			// width: '10%' // Width of the row index column (adjust as needed)
 		},
 		{
-			header: 'Product Name',
+			header: 'Product',
 			render: (detail) => detail.name,
 		},
 		{

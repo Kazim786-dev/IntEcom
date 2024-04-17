@@ -282,7 +282,7 @@ const AllProducts = ({ user }) => {
 			const ctx = chartRef.current.getContext('2d')
 
 			const data = {
-				labels: salesAnalytics.map(item => item._id),
+				labels: salesAnalytics.map((item, index) => index + 1),
 				datasets: [
 					{
 						label: 'Total Quantity Sold',
@@ -446,7 +446,14 @@ const AllProducts = ({ user }) => {
 	//seller analytics information
 	const SellersTablecolumns = [
 		{
-			header: 'Name',
+			header: '#', // Row index header
+			render: (detail, index) => index + 1, // Row index render function
+			className: 'bg-light',
+			backgroundColor: ''
+			// width: '10%' // Width of the row index column (adjust as needed)
+		},
+		{
+			header: 'Product',
 			render: (seller) => seller.name,
 		},
 		{
