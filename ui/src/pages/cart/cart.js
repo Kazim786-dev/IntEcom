@@ -217,7 +217,7 @@ const ShoppingCart = ({ user }) => {
 
 					<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-						<h1 className="cart-heading ">Your Shopping Bag</h1>
+						<h1 className="cart-heading" style={{ fontFamily: 'Arial, sans-serif' }}>Your Shopping Bag</h1>
 					</div>
 					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
 						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '40rem', overflowY: 'auto', flex: 1 }}>
@@ -232,12 +232,12 @@ const ShoppingCart = ({ user }) => {
 							height: '40rem',
 							alignContent: 'center'
 						}}>
-							<h1 className="cart-heading " >Order Summary</h1>
+							<h1 className="cart-heading " style={{ fontFamily: 'Arial, sans-serif' }}>Order Summary</h1>
 							<br /><br />
-							<div><p>Total Items:</p><b>{cartLength}</b></div><hr />
-							<div><p>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr />
-							<div><p>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
-							<div><p>Total:</p><b>${total.toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total Items:</p><b>{cartLength}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total:</p><b>${total.toFixed(2)}</b></div><hr />
 							<br />
 							<br />
 

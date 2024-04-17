@@ -12,7 +12,7 @@ const CustomButton = ({
 }) => {
     
 	return (
-		<Button variant={variant} type={type} className={className} disabled={isDisabled} onClick={onClick}>
+		<Button variant={variant} type={type} className={className} disabled={isDisabled} onClick={onClick} style={{ fontFamily: 'Arial, sans-serif' }}>
 			{children}
 		</Button>
 	)

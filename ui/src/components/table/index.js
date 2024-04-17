@@ -17,7 +17,7 @@ const DetailsTable = ({
 			<thead>
 				<tr>
 					{columns.map((column, index) => (
-						<th key={index} className="header-cell text-primary">
+						<th key={index} className="header-cell text-primary" style={{ fontFamily: 'Arial, sans-serif' }}>
 							{column.header}
 						</th>
 					))}

@@ -728,7 +728,7 @@ const AllProducts = ({ user }) => {
 							}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-primary'>{selectedItem}</h2>
+									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
