@@ -2,13 +2,13 @@ import React from 'react';
 import { Card, Nav, Form, Button, Badge, Dropdown } from 'react-bootstrap';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
-import { UserIcon } from '../../static/icons/navicons.js';
+import { Package2Icon,UserIcon } from '../../static/icons/navicons.js';
 
 import { useDispatch } from 'react-redux'
 import { logout } from '../../redux/slice/auth/user-slice'
 import { empty } from '../../redux/slice/cart/cart-slice'
 
-const NavTag = () => {
+const NavTag = ({user}) => {
 
     //redux state
     const dispatch = useDispatch()
@@ -23,9 +23,25 @@ const NavTag = () => {
             <header className="flex items-center justify-between gap-4 border-b bg-gray-100/50 p-2 px-3">
                 <div className="">
                 {/* text-2xl sm:text-3xl md:text-4xl */}
-                    <h4 className="m-0 font-semibold tracking-tighter text-secondary">Fashion for Every Season <span className='blockquote-footer tracking-tighter animate-pulse text-primary'>where shopping meets technology</span>
-                    </h4>
                     
+                {/* <h4 className="m-0 font-semibold tracking-tighter text-secondary">Fashion for Every Season <span className='blockquote-footer tracking-tighter animate-pulse text-primary'>where shopping meets technology</span>
+                    </h4> */}
+                    
+                    <h4 className="m-0 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
+                        {user && user.role !== 'customer' && (
+                            <span className='d-flex align-items-center gap-2 font-semibold '>
+                                <Package2Icon className='h-6 w-6' style={{color:'#005A9C'}}/>
+                                <span style={{color:'#005A9C'}}>IntEcom</span>
+                            </span>
+                        )}
+                        Fashion for Every Season 
+                        <span className=' blockquote-footer tracking-tighter animate-pulse text-primary ' style={{marginBottom:'-16px'}}>where shopping meets technology</span>
+                    </h4>
+
+
+
+
+
                 </div>
                 <div>
                     {/* Dropdown Menu */}

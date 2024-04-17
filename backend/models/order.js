@@ -55,6 +55,7 @@ const orderSchema = new Schema({
     state: String,
     zip: String,
     country: String,
+    phoneNumber: String,
   }
   // You can add more fields like shipping address, payment details, etc. as per your requirements
 },{

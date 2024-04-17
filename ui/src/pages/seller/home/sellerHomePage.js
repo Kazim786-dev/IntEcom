@@ -171,8 +171,9 @@ const AllProducts = ({ user }) => {
 		setFetchDataError(false)
 		setTableLoading(true)
 		if (selectedItem == 'Products') {
+			console.log("here in products");
 			axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -211,7 +212,7 @@ const AllProducts = ({ user }) => {
 	const fetchProcessedOrders = async () => {
 		try {
 			setTableLoading(true) // Start loading
-			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders?orderNumber=${searchTerm}`, {
+			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/orders/seller-orders`, {
 				headers: { Authorization: `Bearer ${user.token}` }
 			})
 			const { totalPages, data } = response.data
@@ -727,7 +728,7 @@ const AllProducts = ({ user }) => {
 							}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-primary'>{selectedItem}</h2>
+									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
