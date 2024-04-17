@@ -395,7 +395,7 @@ const AllProductsPage = ({ user }) => {
 			) :
 				(
 					<>
-						<Container fluid className='pt-0 min-vh-100 mb-5'>
+						<Container fluid className='pt-0 min-vh-100 mt-4 mb-5'>
 
 							{/* <Row className='mb-4 m-0' >
 								<Col className='d-flex justify-content-start ps-0'>

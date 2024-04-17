@@ -58,7 +58,7 @@ const ProductCard = ({
 
 
 	return (
-		<Card className="product-card bg-light pb-0"
+		<Card className="product-card bg-light border pb-0"
 			style={{ cursor: 'pointer', border: 'none', boxShadow: '0px 1px 1px rgba(0,0,0,0.15)', padding: '3px', position: 'relative' }}
 			onClick={navigateToProductDetail} >
 			{product.isOnSale && (
@@ -68,7 +68,7 @@ const ProductCard = ({
 			)}
 			<Card.Img variant="top" src={product.image} className="product-card-img" />
 			<hr className='mb-1 mt-3'/>
-			<Card.Body className="product-card-body pt-0 pb-3 px-2 d-flex flex-column justify-content-between">
+			<Card.Body className="product-card-body rounded pt-0 pb-3 px-2 d-flex flex-column justify-content-between">
 				<Card.Text className='font-semibold pr-1 m-0' style={{ height: '27px', overflow: 'hidden' }}>
 					{product.description}
 				</Card.Text>

@@ -212,7 +212,7 @@ const ShoppingCart = ({ user }) => {
 				<SpinnerComp />
 			) : (
 
-				<Container fluid className="pt-0 px-4 pb-5 mt-5" >
+				<Container fluid className="pt-0 px-4 pb-5 mt-4" >
 
 
 					<div className="d-flex align-items-center heading-container">

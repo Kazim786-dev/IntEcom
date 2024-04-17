@@ -19,7 +19,7 @@ const NavTag = ({user}) => {
     }
 
     return (
-        <div className="w-full flex-1 mb-2">
+        <div className="w-full flex-1">
             <header className="flex items-center justify-between gap-4 border-b bg-gray-100/50 p-2 px-3">
                 <div className="">
                 {/* text-2xl sm:text-3xl md:text-4xl */}

@@ -133,6 +133,7 @@
 .product-card:hover .product-card-body {
   /* background-color: #e4f6fa; */
   background-color: #cdf2fa; /* Change background color of card body on hover */
+  
 }
 
 .product-card {

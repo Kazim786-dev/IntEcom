@@ -114,7 +114,7 @@ function TotalOrders({ user }) {
 			) :
 				(
 					<>
-						<Container fluid className="pb-5 px-4 mt-5">
+						<Container fluid className="pb-5 px-4 mt-4">
 							<div className="d-flex align-items-center heading-container">
 								<Link to='/products'><ArrowLeft /></Link>
 								<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif' }} >Orders</h1>
