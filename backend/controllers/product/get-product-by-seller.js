@@ -9,7 +9,10 @@ const getProductsBySeller = async ({query, userId}) => {
 
     const page = parseInt(query.page) || 1;
     const pageSize = parseInt(query.size) || 8;
-    const productToSearch = query.prod;
+    var productToSearch = query.searchQuery;
+    if (productToSearch == 'undefined') {
+      productToSearch=''
+    }
     const sortField = 'price';
     const sortOptions = { [sortField]: sortOrder === 'desc' ? -1 : 1 };
 

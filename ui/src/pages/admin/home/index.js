@@ -975,21 +975,21 @@ const AllProducts = ({ user }) => {
 
 									</>
 									) 
-									// : selectedItem === 'Orders Summary' ? (
-									// 	<>
-									// 		<Form.Label className="me-2"><b>Search:</b></Form.Label>
-									// 		<Form.Group className="mb-1">
-									// 			<Form.Control
-									// 				className='pe-5'
-									// 				type="text"
-									// 				value={searchTerm}
-									// 				placeholder={`Search Order`}
-									// 				onChange={handleSearchChange}
-									// 				ref={searchInputRef}
-									// 			/>
-									// 		</Form.Group>
-									// 	</>
-									// )
+									: selectedItem === 'Orders Summary' ? (
+										<>
+											<Form.Label className="me-2"><b>Search:</b></Form.Label>
+											<Form.Group className="mb-1">
+												<Form.Control
+													className='pe-5'
+													type="text"
+													value={searchTerm}
+													placeholder={`Search Order`}
+													onChange={handleSearchChange}
+													ref={searchInputRef}
+												/>
+											</Form.Group>
+										</>
+									)
 									: selectedItem === 'Discount Management' ? (
 										<>
 											<Button size='sm' onClick={() => {

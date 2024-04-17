@@ -4,7 +4,13 @@ import User from '../../models/user.js'
 const getAllOrders = async ({role, searchQuery, page=1, size=10}) => {
   
   try {
+    if (searchQuery !== 'undefined') {
+      
+      const foundOrders = await searchOrders(searchQuery, page, size);
+      return { status: 200, data: foundOrders };
 
+    } else {
+      searchQuery = ''
       const totalCount = await Order.countDocuments();
       const totalPages = Math.ceil(totalCount / size);
 
@@ -14,7 +20,7 @@ const getAllOrders = async ({role, searchQuery, page=1, size=10}) => {
         .populate("user", "-password");
 
       return { status: 200, data: { totalPages: totalPages, data: orders } };
-    
+    }
   } catch (error) {
     throw new Error(error.message);
   }
