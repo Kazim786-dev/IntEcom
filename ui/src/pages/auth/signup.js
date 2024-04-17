@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import imga from '../../static/images/ecom1.png'
 
 // react-bootstrap
 import { Form, Row, Col } from 'react-bootstrap'
@@ -118,16 +119,23 @@ function SignUpPage() {
 	}
 
 	return (
-		<div className="w-full overflow-hidden px-6">
+		<div className="w-full overflow-hidden">
 			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
-				<div className="hidden ps-5 lg:flex items-center justify-center">
+				<div className="hidden ps-5 lg:flex flex-col  min-h-screen items-center justify-center" style={{backgroundColor:"#005A9C"}} >
 					<img
 						alt="Product"
-						className="aspect-[600/374] object-cover bg-gray-100"
+						className=" object-cover"
 						// height="374"
-						src="/ecom.png"
-					// width="600"
+						src={imga}
+						// width="600"
 					/>
+					<br/>
+					<h2 className="m-0 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
+                            <span className='d-flex align-items-center gap-2 font-semibold '>
+                                <span style={{color:'white', fontFamily:'Lucida Handwriting'}}>IntEcom</span>
+                            </span>
+                        <span className=' blockquote-footer tracking-tighter animate-pulse ' style={{marginBottom:'-16px', color:'#6f90af'}}>where shopping meets technology</span>
+                    </h2>
 				</div>
 				<div className="flex items-center justify-center p-6 lg:p-10">
 					<div className="mx-auto w-full max-w-md px-4 space-y-8">

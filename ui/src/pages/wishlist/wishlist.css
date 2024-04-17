@@ -2,16 +2,46 @@
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   color: #333;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 8px;  /* width of the vertical scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* color of the track */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888; /* color of the scrollbar itself */
+    border-radius: 10px; /* roundness of the scrollbar */
+    border: 2px solid #f1f1f1; /* creates padding around the scroll */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* color of scrollbar when hovered */
+  }
 }
+
 
 .wishlist-item {
   margin-bottom: 15px;
-}
+  transition: transform 0.3s ease;  /* Smooth transform on hover */
 
+}
+.wishlist-item:hover {
+  transform: scale(1.02);  /* Slight scale to lift card on hover */
+}
 .wishlist-item-img {
-  width: 80%; /* Ensure the width is consistent */
+  max-width: 100%; /* Ensures image is responsive */
   height: 130px; /* Set a fixed height */
+  border-radius: 8px;  /* Rounded corners for the image */
+
 }
 
 /* Adjust the height and alignment of the row */
@@ -23,4 +53,8 @@
 /* Ensure the content within the card body fits the new row height */
 .wishlist-item .card-body {
   padding: 5px 0px; /* Adjust padding for a tighter fit */
+}
+/* Buttons styling for better visual appeal */
+button {
+  border-radius: 8px; /* Rounded buttons */
 }

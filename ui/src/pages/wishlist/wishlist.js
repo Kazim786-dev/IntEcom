@@ -60,14 +60,14 @@ const Wishlist = ({ user }) => {
 	return (
 		<div>
 			<br />
-			<Container className="wishlist-container">
+			<Container className="wishlist-container min-h-screen mb-5">
 				<h2 className="mb-4">Your Wishlist</h2>
 				{wishlistItems.length > 0 ? (
 					wishlistItems.map((item, index) => (
 						<Card className="wishlist-item px-4 py-2" key={index}>
-							<Row className="align-items-center">
-								<Col md={4}>
-									<Image src={item.image} alt={item.name} fluid className="wishlist-item-img" />
+							<Row className="align-items-center justify-content-center">
+								<Col md={2} style={{display:"flex", alignItems:'center', justifyContent:'center'}}>
+									<Image src={item.image} alt={'image not found'} fluid className="wishlist-item-img" />
 								</Col>
 								<Col md={6}>
 									<Card.Body>
