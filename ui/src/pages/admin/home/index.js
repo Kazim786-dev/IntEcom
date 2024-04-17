@@ -386,20 +386,24 @@ const AllProducts = ({ user }) => {
 
 	const fetchSellers = async () => {
 		try {
-			const response = await axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
+			setTableLoading(true)
+			axios.get(`${process.env.REACT_APP_DEV_BACKEND_URL}/users/sellers?/page=${currentPage}&size=${pageSize}`, {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
-			})
-			if (response.status === 200) {
-
+			}).then( (response)=>{
+				console.log(response)
 				setSellers(response.data.sellers)
 				setTotalPages(response.data.totalPages)
-			}
+				setTableLoading(false)
+			}).catch((error)=>{
+				console.error('Error fetching sellers:', error)
+				setTableLoading(false)
+			})
+			
 		} catch (error) {
 			console.error('Error fetching sellers:', error)
-		} finally {
-			setLoading(false)
+			setTableLoading(false)
 		}
 	}
 
