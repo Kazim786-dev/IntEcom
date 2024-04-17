@@ -112,16 +112,15 @@ const AllProducts = ({ user }) => {
 	const fetchData = () => {
 		setFetchDataError(false)
 		if (selectedItem == 'Products' || selectedItem == "Orders Summary") {
-			var query
+			var temp
 			if (selectedItem == 'Products') {
-				query= `${process.env.REACT_APP_DEV_BACKEND_URL}/${selectedItem.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`
+				temp= selectedItem
 			}else{
-				const tempp= 'Orders'
-				query = `${process.env.REACT_APP_DEV_BACKEND_URL}/${tempp.toLowerCase()}/`
+				temp = 'Orders'
 			}
 
 			axios.get(
-				query,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/${temp.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -964,7 +963,23 @@ const AllProducts = ({ user }) => {
 										<Button size='sm' onClick={handleAddClick} className='px-3  ms-2'>Add Product</Button>
 
 									</>
-									) : selectedItem === 'Discount Management' ? (
+									) 
+									// : selectedItem === 'Orders Summary' ? (
+									// 	<>
+									// 		<Form.Label className="me-2"><b>Search:</b></Form.Label>
+									// 		<Form.Group className="mb-1">
+									// 			<Form.Control
+									// 				className='pe-5'
+									// 				type="text"
+									// 				value={searchTerm}
+									// 				placeholder={`Search Order`}
+									// 				onChange={handleSearchChange}
+									// 				ref={searchInputRef}
+									// 			/>
+									// 		</Form.Group>
+									// 	</>
+									// )
+									: selectedItem === 'Discount Management' ? (
 										<>
 											<Button size='sm' onClick={() => {
 												setShowSaleConfirmationModal(true)

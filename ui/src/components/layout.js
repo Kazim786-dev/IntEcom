@@ -25,7 +25,7 @@ const Layout = ({ showNavbar, children, user, footer }) => {
                 {user && user.role === 'customer' && <MemoizedNavBarSiderCard user={user} />}
 				{/* Main Content Area */}
 				<div style={{ flex: 1 }}>
-					<MemoizedNavTag/>
+					<MemoizedNavTag user={user} />
 					{children}
 				</div>
 			</div>
