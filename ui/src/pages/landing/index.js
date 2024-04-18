@@ -2,19 +2,31 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import { Form, Link } from "react-router-dom";
 
+import logo from '../../static/images/logo/logo.png'
+
 import Footer from "../../components/endFooter/endFooter";
 
 const LandingPage = () => {
     return (
         <>
-            <section className="w-full pt-5 md:pt-16 lg:pt-24 border-t">
-                <div className="container space-y-4 px-4 text-center md:px-6">
+            <section className="w-full flex pt-5 md:pt-16 lg:pt-24 border-t">
+                {/* Left column with the image */}
+                <div className="w-1/2 pr-8">
+                    <img
+                        className="w-full h-auto object-cover"
+                        src={logo}
+                        alt="IntEcom Logo"
+                    />
+                </div>
+                {/* Right column with text content */}
+                {/* <div className="container space-y-4 px-4 text-center md:px-6"> */}
+                <div className="w-1/2 space-y-4 text-center">
                     <div className="mb-3">
                         <h1
                             className="mb-5 text-3xl text-primary font-bold tracking-tighter sm:text-4xl md:text-5xl/none lg:text-6xl">
                             Welcome to IntEcom
                             <p
-                                className="mx-auto tracking-normal text-dark" style={{fontSize: '1.6rem'}}>
+                                className="mx-auto tracking-normal text-dark" style={{ fontSize: '1.6rem' }}>
                                 where fashion meets technology
                             </p>
                         </h1>
@@ -39,7 +51,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            <section className="w-full py-8 md:py-16 lg:py-24">
+            <section className="w-full py-12 ">
                 <div
                     className="container grid items-center gap-4 px-4 text-center md:px-6 lg:gap-10">
                     <div className="space-y-3">
@@ -81,7 +93,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            <section className="w-full py-12 md:py-24 lg:py-32 border-t">
+            <section className="w-full py-16 border-t">
                 <div className="container space-y-4 px-4 text-center md:px-6">
                     <div className="space-y-2">
                         <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
@@ -114,7 +126,7 @@ const LandingPage = () => {
                     </Link>
                 </nav>
             </footer> */}
-            <Footer/>
+            <Footer />
 
         </>
     )
