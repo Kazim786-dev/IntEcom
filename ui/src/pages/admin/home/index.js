@@ -557,19 +557,23 @@ const AllProducts = ({ user }) => {
 		// Define columns for reported products table
 		{
 			header: 'Reported Product',
+			width: '22rem',
 			render: (report) => report.product.description,
 		},
 		{
-			header: 'Report by',
+			header: 'Reported By',
+			width: '15rem',
 			render: (report) => report.user.name,
 		},
 		{
 			header: 'Reason',
+			width: '20rem',
 			render: (report) => report.text,
 		},
 		// ... other columns for product details
 		{
 			header: 'Actions',
+			width: '17rem',
 			render: (report) => (
 				<>
 					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
@@ -712,6 +716,7 @@ const AllProducts = ({ user }) => {
 				offPercent: salePercentage,
 				flag: false
 			}
+			console.log(saleData);
 			if (isAllStart) {
 				saleData.flag = true
 			}
