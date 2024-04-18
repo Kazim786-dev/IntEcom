@@ -10,7 +10,7 @@ import Footer from "../../components/endFooter/endFooter";
 const LandingPage = () => {
     return (
         <>
-            <Carousel style={{ maxWidth: '100%', margin: '0 auto' }}>
+            <Carousel interval={2200} style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <Carousel.Item>
                     {/* <ExampleCarouselImage text="First slide" /> */}
                     <img
