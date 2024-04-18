@@ -1,6 +1,7 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import { Form, Link } from "react-router-dom";
+import Carousel from 'react-bootstrap/Carousel';
 
 import logo from '../../static/images/logo/logo.png'
 
@@ -9,9 +10,48 @@ import Footer from "../../components/endFooter/endFooter";
 const LandingPage = () => {
     return (
         <>
-            <section className="w-full flex pt-5 md:pt-16 lg:pt-24 border-t">
+            <Carousel style={{ maxWidth: '100%', margin: '0 auto' }}>
+                <Carousel.Item>
+                    {/* <ExampleCarouselImage text="First slide" /> */}
+                    <img
+                        className="d-block w-full object-fit"
+                        src='https://www.persado.com/wp-content/uploads/2023/07/generative-ai-in-e-commerce.jpg'
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>The best Ecommerce Platform</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-full object-fit"
+                        src='https://cdn.shopify.com/s/files/1/0070/7032/files/ecommerce_20platforms.png?v=1701447416'
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    {/* <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>Get Amazing discounts on your favorite products</p>
+                    </Carousel.Caption> */}
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-full object-fit"
+                        src="https://www.pickfu.com/blog/wp-content/uploads/2019/09/e-commerce-product-images.jpg"
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>Get Amazing discounts on your favorite products</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+            <section className="w-full flex flex-col justify-center items-center gap-5 pt-5 md:pt-16 lg:pt-24 border-t">
                 {/* Left column with the image */}
-                <div className="w-1/2 pr-8">
+                <div className="w-1/4 pr-8">
                     <img
                         className="w-full h-auto object-cover"
                         src={logo}
