@@ -81,7 +81,7 @@ const Wishlist = ({ user }) => {
 									<Button variant="link" onClick={() => handleRemove(item._id)}>
 										<Trash />
 									</Button>
-									<CustomButton variant="" onClick={() => handleShopNow(item._id)}>
+									<CustomButton variant="primary" onClick={() => handleShopNow(item._id)}>
 										Shop Now
 									</CustomButton>
 								</Col>
