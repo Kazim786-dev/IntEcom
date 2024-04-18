@@ -28,7 +28,8 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 				value={formData.price}
 				onChange={handleChange}
 				name='price'
-				placeholder={'PKR 00.00'}
+				placeholder={'PKR 100.00'}
+				min={'0'}
 			/>
 			<FormField
 				required
@@ -40,6 +41,7 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 				onChange={handleChange}
 				name='quantity'
 				placeholder={'100'}
+				min='1'
 			/>
 			<FormField
 				required

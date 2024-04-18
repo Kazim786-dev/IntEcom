@@ -14,8 +14,9 @@ const FormField = ({
 	type,
 	as,
 	onBlur, 
-	placeholder, 
-	onChange, 
+	placeholder,
+	min,
+	onChange,
 	children }) => {
     
 	return (
@@ -25,6 +26,7 @@ const FormField = ({
 				type={type}
 				as={as}
 				placeholder={placeholder}
+				min={min !== undefined ? min : null}
 				name={name}
 				value={value}
 				onChange={onChange}

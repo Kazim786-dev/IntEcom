@@ -80,17 +80,12 @@ const AllProductsPage = ({ user }) => {
 	}
 
 	useEffect(() => {
-		fetchWishlist()
-		// if (selectedFilters.length == 0) {
-			debouncedFetchData()
-			fetchFilters()
-			// Cleanup the debounced function when the component is unmounted
-			return () => {
-				debouncedFetchData.cancel()
-			}
-		// } else {
-		// 	handleFilterChange()
-		// }
+		debouncedFetchData()
+		fetchFilters()
+		// Cleanup the debounced function when the component is unmounted
+		return () => {
+			debouncedFetchData.cancel()
+		}
 
 	}, [currentPage, priceFilter, searchTerm, showSaleProducts, selectedFilters])
 
@@ -131,103 +126,10 @@ const AllProductsPage = ({ user }) => {
 		})
 	}
 
-	const handleSalesFilter = ()=> {
-		setShowSaleProducts((prev)=>!prev) //toggle the state
-		// fectOnSaleOnly()
+	const handleSalesFilter = () => {
+		setShowSaleProducts((prev) => !prev) //toggle the state
 	}
 
-
-	// Check if selectedFilters array is empty and call fetchAllProducts
-	// useEffect(() => {
-	// 	if (selectedFilters.length === 0) {
-	// 		fetchProducts()
-	// 	}
-	// }, [selectedFilters])
-
-	// Check if selectedFilters array is empty and call fetchAllProducts
-	// useEffect(() => {
-	// 	if (searchInputRef.current) {
-	// 		searchInputRef.current.focus()
-	// 	}
-	// })
-
-	// useEffect(() => {
-	// 	fectOnSaleOnly()
-	// }, [showSaleProducts])
-	
-	// const fectOnSaleOnly = async () => {
-	// 	try {
-	// 		setLoading(true)
-	// 		setFetchProductError(false)
-	// 		const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
-	// 			filters: selectedFilters,
-	// 			isSaleOnly: showSaleProducts
-	// 		})
-	// 		if (response.status && response.status === 200) {
-	// 			const { totalPages, data } = response.data
-	// 			setProducts(data)
-	// 			setTotalPages(totalPages)
-	// 			setTimeout(() => {
-	// 				setLoading(false)
-	// 			}, 1000)
-	// 		} else {
-	// 			setFetchProductError(true)
-	// 			setErrorText('Error in fetching products')
-	// 			setTimeout(() => {
-	// 				setLoading(false)
-	// 			}, 1000)
-	// 		}
-	// 	} catch (error) {
-	// 		setTimeout(() => {
-	// 			setLoading(false)
-	// 		}, 1000)
-
-	// 		if (error.response?.status && error.response.status === 404) {
-	// 			setErrorText('No product with this name')
-	// 		} else {
-	// 			setErrorText('Error in fetching products')
-	// 		}
-	// 		setFetchProductError(true)
-	// 	}
-	// }
-
-	// const sendFiltersToBackend = async (filters) => {
-	// 	try {
-	// 		const response = await axios.post(`${process.env.REACT_APP_DEV_BACKEND_URL}/products/allproducts?page=${currentPage}&size=${pageSize}&sort=${priceFilter}&name=${searchTerm}`, {
-	// 			filters: filters,
-	// 			isSaleOnly: showSaleProducts
-	// 		})
-	// 		if (response.status && response.status === 200) {
-	// 			const { totalPages, data } = response.data
-	// 			setProducts(data)
-	// 			setTotalPages(totalPages)
-	// 			setTimeout(() => {
-	// 				setLoading(false)
-	// 			}, 1000)
-	// 		}
-	// 		else {
-	// 			setFetchProductError(true)
-	// 			setErrorText('Error in fetching products')
-	// 			setTimeout(() => {
-	// 				setLoading(false)
-	// 			}, 1000)
-	// 		}
-	// 		// Handle response data or perform actions based on the response
-	// 	} catch (error) {
-	// 		setTimeout(() => {
-	// 			setLoading(false)
-	// 		}, 1000)
-
-	// 		if (error.response?.status && error.response.status === 404) {
-	// 			setErrorText('No product with this name')
-	// 		}
-	// 		else {
-	// 			setErrorText('Error in fetching products')
-	// 		}
-	// 		setFetchProductError(true)
-	// 		// console.error('Error fetching data:', error)
-	// 	}
-	// }
 
 	const fetchProducts = async () => {
 		let response = ''
@@ -287,7 +189,6 @@ const AllProductsPage = ({ user }) => {
 		setPriceFilter(event.target.value)
 	}
 	const handleSortChange = (sortValue) => {
-		// Implement your sorting logic here based on the selected sort value
 		setPriceFilter(sortValue)
 	};
 
@@ -472,13 +373,13 @@ const AllProductsPage = ({ user }) => {
 								/>
 							)}
 
-							<Offcanvas show={showFilters} onHide={handleToggleFilters} placement='end'>
+							<Offcanvas show={showFilters} onHide={handleToggleFilters} placement='end' scroll={true}>
 								<Offcanvas.Header closeButton>
-									<Offcanvas.Title>Filters</Offcanvas.Title>
+									<Offcanvas.Title><h5 className='text-3xl font-semibold mt-2 text-primary'>Filters</h5></Offcanvas.Title>
 								</Offcanvas.Header>
 								<Offcanvas.Body>
 									{/* Dynamically generate filter options */}
-									{filters.map((filter, index) => (
+									{/* {filters.map((filter, index) => (
 										<div key={index}>
 											<Form.Check
 												type='checkbox'
@@ -488,16 +389,62 @@ const AllProductsPage = ({ user }) => {
 												onChange={() => handleFilterChange(filter)}
 											/>
 										</div>
-									))}
-									<br />
-									<br />
-									<Form.Check
+									))} */}
+									{/* <Form.Check
 										type='switch'
 										id='saleSwitch'
-										label='Products on Sale'
+										label='Discounted Products'
 										checked={showSaleProducts}
 										onChange={() => handleSalesFilter()}
-									/>
+									/> */}
+
+									{/* Filter options */}
+
+									<div className="mb-8">
+										<Form.Label className='me-2 font-semibold'><h5>Sort by Price:</h5></Form.Label>
+										{/* <h5 className="text-lg font-semibold mb-3">Sort by Price</h5> */}
+										<Form.Group className=''>
+											<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
+												<option value='asc'>Low to High</option>
+												<option value='desc'>High to Low</option>
+											</Form.Select>
+										</Form.Group>
+									</div>
+
+									<div className="mb-8">
+										<h5 className="text-lg font-semibold mb-2">Categories</h5>
+										{filters.map((filter, index) => (
+											<div key={index} className="flex items-center mb-2">
+												<input
+													type="checkbox"
+													id={`filter-${index}`}
+													checked={selectedFilters.includes(filter)}
+													onChange={() => handleFilterChange(filter)}
+													className="form-checkbox h-4 w-4 text-primary mr-2"
+												/>
+												<label htmlFor={`filter-${index}`} className="text-sm font-semibold text-gray-600">
+													{filter}
+												</label>
+											</div>
+										))}
+									</div>
+
+									{/* Sale products switch */}
+									<div className="mb-8">
+										<h5 className="text-lg font-semibold mb-2">Discount</h5>
+										<div className="flex items-center">
+											<input
+												type="checkbox"
+												id="saleSwitch"
+												checked={showSaleProducts}
+												onChange={handleSalesFilter}
+												className="form-checkbox h-5 w-5 text-primary mr-3"
+											/>
+											<label htmlFor="saleSwitch" className="text-sm font-semibold text-gray-600">
+												Show Discounted Products
+											</label>
+										</div>
+									</div>
 
 								</Offcanvas.Body>
 							</Offcanvas>

@@ -762,7 +762,7 @@ const AllProducts = ({ user }) => {
 		}, {
 			header: 'Price',
 			width: '15rem',
-			render: (item) => item.price,
+			render: (item) => item.price
 
 		}, {
 			header: 'Stock',
@@ -795,6 +795,7 @@ const AllProducts = ({ user }) => {
 				}
 			)
 			if (response.status === 200) {
+				console.log(response.data)
 				setNotOnSale(response.data.data)
 				setFetchDataError(false)
 				setTotalPages(response.data.totalPages)
@@ -839,12 +840,20 @@ const AllProducts = ({ user }) => {
 			width: '32rem',
 			render: (item) => item.description,
 
-		}, {
-			header: 'Price',
+		}, 
+		{
+			header: 'Current Price',
 			width: '15rem',
-			render: (item) => (item.offPercent / 100) * item.price,
+			render: (item) => item.price,
 
-		}, {
+		}, 
+		{
+			header: 'Original Price',
+			width: '15rem',
+			render: (item) => item.originalPrice,
+
+		}, 
+		{
 			header: 'Stock',
 			width: '15rem',
 			render: (item) => item.quantity,
@@ -1014,7 +1023,7 @@ const AllProducts = ({ user }) => {
 										</>
 									) : selectedItem == 'End Sale' && (
 										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{}}>End Sale</Button>
+											<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{}}>End Sale for selected</Button>
 											<div style={{ marginRight: '10px' }}></div>
 											<Button size='sm' variant='primary' onClick={() => {
 												setShowEndSaleConfirmationModal(true)

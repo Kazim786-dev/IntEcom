@@ -618,7 +618,7 @@ const AllProducts = ({ user }) => {
 		}, {
 			header: 'Price',
 			width: '15rem',
-			render: (item) => (item.offPercent / 100) * item.price,
+			render: (item) => (item.originalPrice) - item.price,
 
 		}, {
 			header: 'Stock',
@@ -633,7 +633,7 @@ const AllProducts = ({ user }) => {
 
 		},
 		{
-			header: 'End Sale',
+			header: 'Select',
 			render: (item) => (
 				<Form.Check
 					type="checkbox"
@@ -912,6 +912,7 @@ const AllProducts = ({ user }) => {
 					{showProductCanvas && (
 						<ProductCanvas
 							placement={'end'}
+							scolll={true}
 							show={showProductCanvas}
 							setShow={setShowProductCanvas}
 							product={product}

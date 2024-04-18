@@ -77,13 +77,13 @@ const Wishlist = ({ user }) => {
 										<Card.Text>{`Color: ${item.color}, Size: ${item.size}`}</Card.Text>
 									</Card.Body>
 								</Col>
-								<Col md={2} className="d-flex justify-content-end ">
+								<Col md={2} className="d-flex gap-3 justify-content-end ">
 									<Button variant="link" onClick={() => handleRemove(item._id)}>
-										<Trash />
+										<Trash/>
 									</Button>
-									<CustomButton variant="" onClick={() => handleShopNow(item._id)}>
+									<Button variant="outline-primary" size='sm' onClick={() => handleShopNow(item._id)}>
 										Shop Now
-									</CustomButton>
+									</Button>
 								</Col>
 							</Row>
 						</Card>
