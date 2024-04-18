@@ -2,32 +2,39 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import { Form, Link } from "react-router-dom";
 
+import Footer from "../../components/endFooter/endFooter";
+
 const LandingPage = () => {
     return (
         <>
-            <section className="w-full pt-8 md:pt-16 lg:pt-24 border-t">
+            <section className="w-full pt-5 md:pt-16 lg:pt-24 border-t">
                 <div className="container space-y-4 px-4 text-center md:px-6">
-                    <div className="space-y-2">
+                    <div className="mb-3">
                         <h1
-                            className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none lg:text-6xl">
+                            className="mb-5 text-3xl text-primary font-bold tracking-tighter sm:text-4xl md:text-5xl/none lg:text-6xl">
                             Welcome to IntEcom
+                            <p
+                                className="mx-auto tracking-normal text-dark" style={{fontSize: '1.6rem'}}>
+                                where fashion meets technology
+                            </p>
                         </h1>
                         <p
-                            className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                            The best place to find amazing deals on your favorite products.
+                            className="mx-auto max-w-[600px] text-gray-700 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                            The best place to find amazing match of products to your taste.
                         </p>
                     </div>
-                    <div className="space-y-4 mt-4">
+                    <div className="space-y-3">
                         <p className="max-w-[600px] mx-auto text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                             Lets get started. Sign in or create your account
                         </p>
                     </div>
                     <div className="grid max-w-sm gap-2 mx-auto">
                         <Link className="btn btn-primary" to={'/login'}>
-                        Sign in
+                            Sign in
                         </Link>
-                        <Link className="btn" to={'/signup'}>
-                        Create an account
+                        {/* className="btn" */}
+                        <Link to={'/signup'}>
+                            Create an account
                         </Link>
                     </div>
                 </div>
@@ -95,9 +102,9 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            <footer
+            {/* <footer
                 className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-                <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 Acme Inc. All rights reserved.</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 IntECom Inc. All rights reserved.</p>
                 <nav className="sm:ml-auto flex gap-4 sm:gap-6">
                     <Link className="text-xs hover:underline underline-offset-4" href="#">
                         Terms of Service
@@ -106,7 +113,9 @@ const LandingPage = () => {
                         Privacy
                     </Link>
                 </nav>
-            </footer>
+            </footer> */}
+            <Footer/>
+
         </>
     )
 }
