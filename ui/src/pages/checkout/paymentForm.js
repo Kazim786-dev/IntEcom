@@ -53,7 +53,20 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+
         setShippingInfo({ ...shippingInfo, [name]: value });
+        
+        // Regular expression to match alphabetic characters (uppercase and lowercase)
+        // const alphabeticRegex = /^[A-Za-z]+$/;
+
+        // // Check if the input value consists of alphabetic characters only
+        // if (value === '' || alphabeticRegex.test(value)) {
+        //     // Update the state with the new value if it's valid
+        //     setShippingInfo({ ...shippingInfo, [name]: value });
+        // } else {
+        //     // Optionally, display an error message or handle invalid input
+        //     console.log('Invalid input: Please enter alphabetic characters only.');
+        // }
     };
 
     const handleCountryChange = (val) => {
@@ -230,7 +243,17 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         <Form.Group as={Row} className="mb-3" controlId="validationCustom01">
                             <Form.Label column sm={2}>Name</Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="text" name="name" onChange={handleInputChange} required />
+                                <Form.Control type="text" name="name" onChange={handleInputChange} required 
+                                    onKeyPress={(e) => {
+                                        // Get the pressed key from the event
+                                        const charCode = e.which ? e.which : e.keyCode;
+                                    
+                                        // Check if the pressed key is a digit (0-9)
+                                        if (charCode >= 48 && charCode <= 57) {
+                                            e.preventDefault(); // Prevent input of digits
+                                        }
+                                    }}
+                                />
                                 <Form.Control.Feedback type="invalid">
                                     Please enter your name.
                                 </Form.Control.Feedback>
@@ -331,7 +354,17 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm={2}>Name on Card</Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="text" name="Name on Card" onChange={handleInputChange} required />
+                                <Form.Control type="text" name="Name on Card" onChange={handleInputChange} required 
+                                    onKeyPress={(e) => {
+                                        // Get the pressed key from the event
+                                        const charCode = e.which ? e.which : e.keyCode;
+                                    
+                                        // Check if the pressed key is a digit (0-9)
+                                        if (charCode >= 48 && charCode <= 57) {
+                                            e.preventDefault(); // Prevent input of digits
+                                        }
+                                    }}
+                                />
                                 <Form.Control.Feedback type="invalid">
                                     Please enter the name on card.
                                 </Form.Control.Feedback>
