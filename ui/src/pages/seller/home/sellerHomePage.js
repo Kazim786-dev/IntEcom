@@ -536,7 +536,7 @@ const AllProducts = ({ user }) => {
 		}, {
 			header: 'Price',
 			width: '15rem',
-			render: (item) => item.price,
+			render: (item) => item.price.toFixed(2),
 
 		}, {
 			header: 'Stock',
@@ -618,7 +618,7 @@ const AllProducts = ({ user }) => {
 		}, {
 			header: 'Price',
 			width: '15rem',
-			render: (item) => (item.offPercent / 100) * item.price,
+			render: (item) => item.price.toFixed(2),
 
 		}, {
 			header: 'Stock',
@@ -629,11 +629,11 @@ const AllProducts = ({ user }) => {
 		{
 			header: 'Sale Percentage',
 			width: '15rem',
-			render: (item) => item.offPercent,
+			render: (item) => item.offPercent + '%',
 
 		},
 		{
-			header: 'End Sale',
+			header: 'Select',
 			render: (item) => (
 				<Form.Check
 					type="checkbox"
@@ -912,6 +912,7 @@ const AllProducts = ({ user }) => {
 					{showProductCanvas && (
 						<ProductCanvas
 							placement={'end'}
+							scolll={true}
 							show={showProductCanvas}
 							setShow={setShowProductCanvas}
 							product={product}

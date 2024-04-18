@@ -43,15 +43,15 @@ const FiltersRow = ({searchTerm, handleSearchChange, searchInputRef, handleAudio
             </Col>
             <Col md={'auto'} className='d-flex align-items-center px-0 gap-2'>
 
-                <>
-                    <Form.Label className='me-2 font-semibold'>Sort:</Form.Label>
+                {/* <>
+                    <Form.Label className='me-2 font-semibold'>Sort by Price:</Form.Label>
                     <Form.Group className=''>
                         <Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
                             <option value='asc'>Low to High</option>
                             <option value='desc'>High to Low</option>
                         </Form.Select>
                     </Form.Group>
-                </>
+                </> */}
 
                 <Button onClick={handleToggleFilters} className="" variant="ghost">
                     <SlidersHorizontalIcon />

@@ -99,17 +99,6 @@ router.get('/reports/:productId', authMiddleware, async (req, res) => {
   }
 });
 
-
-// Get all Products
-router.get('/allproducts', async (req, res) => {
-  try {
-    const result = await getProducts({query: req.query});
-    return res.status(result.status).json(result.data);
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal server error.' });
-  }
-});
-
 // Get all Products
 router.post('/allproducts', async (req, res) => {
   try {
@@ -187,12 +176,6 @@ router.post('/end-sale', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
-
-
-
-
-
 
 
 // Get all Products not on sale
