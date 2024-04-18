@@ -236,7 +236,6 @@ const AllProducts = ({ user }) => {
 			console.error('Error shipping order:', error)
 		}
 	}
-
 	// Function to handle delivering an order
 	const handleDeliver = async (orderId) => {
 		try {

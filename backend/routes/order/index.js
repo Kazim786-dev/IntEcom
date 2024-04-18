@@ -57,15 +57,17 @@ router.get('/user-orders', async (req, res) => {
 // Route for fetching order summary (accessible only to admin)
 router.get('/summary', VerifyRole({ roleToCheck: 'admin' }), async (req, res) => {
     try {
-        // Calling the controller function to get order summary
-        const result = await getOrderSummary();
+        // Retrieve the duration from the query parameters with a default of '1y'
+        const duration = req.query.duration || '1y';
+
+        // Calling the controller function to get order summary based on duration
+        const result = await getOrderSummary(duration);
         res.status(result.status).json(result.data);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred while fetching the order summary.' });
     }
 });
-
 
 // Route for fetching order analytics (accessible only to seller)
 router.get('/analytics', authMiddleware, async (req, res) => {

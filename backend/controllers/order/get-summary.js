@@ -1,9 +1,29 @@
 import Order from '../../models/order.js';
 
-const getOrderSummary = async () => {
+const getOrderSummary = async (duration = '1y') => {
   try {
-    // Calculate total amount of all orders
+    let startDate;
+    const now = new Date();
+
+    switch (duration) {
+      case '24h':
+        startDate = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+        break;
+      case '7d':
+        startDate = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
+      case '30d':
+        startDate = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+        break;
+      case '1y':
+      default:
+        startDate = new Date(now.getTime() - (365 * 24 * 60 * 60 * 1000));
+        break;
+    }
+
+    // Calculate total amount of all orders since startDate
     const totalAmountResult = await Order.aggregate([
+      { $match: { createdAt: { $gte: startDate } } },
       {
         $group: {
           _id: null,
@@ -14,8 +34,9 @@ const getOrderSummary = async () => {
 
     const totalAmount = totalAmountResult[0]?.totalAmount || 0;
 
-    // Calculate total orders
+    // Calculate total number of orders since startDate
     const totalOrdersResult = await Order.aggregate([
+      { $match: { createdAt: { $gte: startDate } } },
       {
         $group: {
           _id: null,
@@ -26,11 +47,10 @@ const getOrderSummary = async () => {
 
     const totalOrders = totalOrdersResult[0]?.totalOrders || 0;
 
-    // Calculate total units in orders
+    // Calculate total units sold in orders since startDate
     const totalUnitsResult = await Order.aggregate([
-      {
-        $unwind: '$products',
-      },
+      { $match: { createdAt: { $gte: startDate } } },
+      { $unwind: '$products' },
       {
         $group: {
           _id: null,
@@ -50,8 +70,9 @@ const getOrderSummary = async () => {
       },
     };
   } catch (error) {
+    console.error("Error fetching order summary:", error);
     throw new Error('An error occurred while fetching the order summary.');
   }
 };
 
-  export default getOrderSummary
+export default getOrderSummary;
