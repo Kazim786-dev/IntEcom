@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import imga from '../../static/images/ecom1.png'
+import image from '../../static/images/ecom1.png'
+import logo from '../../static/images/logo/logo.png'
 
 // react-bootstrap
 import { Form, Row, Col } from 'react-bootstrap'
@@ -120,16 +121,15 @@ function SignUpPage() {
 
 	return (
 		<div className="w-full overflow-hidden">
-			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
-				<div className="hidden ps-5 lg:flex flex-col  min-h-screen items-center justify-center" style={{backgroundColor:"#005A9C"}} >
+			<div className="relative grid justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
+				<div className="ps-5 flex flex-col min-h-screen items-center justify-around" style={{backgroundColor:"#005A9C"}} >
 					<img
-						alt="Product"
+						alt="Logo"
 						className=" object-cover"
 						// height="374"
-						src={imga}
+						src={logo}
 						// width="600"
 					/>
-					<br/>
 					<h2 className="m-0 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
                             <span className='d-flex align-items-center gap-2 font-semibold '>
                                 <span style={{color:'white', fontFamily:'Lucida Handwriting'}}>IntEcom</span>
@@ -256,4 +256,4 @@ function SignUpPage() {
 				)
 }
 
-				export default SignUpPage
+export default SignUpPage

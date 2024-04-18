@@ -7,8 +7,9 @@ const FormContainer = ({
 	heading }) => {
 
 	return (
-		<Container className='auth-form-container'>
-			<h1 className="text-animation display-4">
+		// <Container className='auth-form-container'>
+		<Container className='py-3'>
+			{/* <h1 className="text-animation display-4">
 				<span className="text-primary"><b>I</b></span>
 				<span className="text-primary"><b>n</b></span>
 				<span className="text-primary"><b>t</b></span>
@@ -16,13 +17,13 @@ const FormContainer = ({
 				<span className="text-danger"><b>c</b></span>
 				<span className="text-danger"><b>o</b></span>
 				<span className="text-danger"><b>m</b></span>
-			</h1>
+			</h1> */}
 			<Row>
-				<Col xs={12} md={6} className="image-column">
+				{/* <Col xs={12} md={6} className="image-column">
 					<div className="background-image"></div>
-				</Col>
-				<Col xs={12} md={6}>
-					<div className='ms-5 ps-5'>
+				</Col> */}
+				<Col>
+					<div className='px-5'>
 						<div className="text-center text-primary">
 							<h2>{heading}</h2>
 						</div>

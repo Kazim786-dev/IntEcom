@@ -4,6 +4,13 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import { Package2Icon, ShoppingBagIcon, ShoppingCartIcon, HeartIcon, UserIcon, HomeIcon } from '../../static/icons/navicons.js';
 {/* <ShoppingBagIcon className='h-5 w-5' /> */ }
+
+import logo from '../../static/images/logo/logo.png'
+
+//logo svg
+// import { ReactComponent as NavLogo } from '../../static/images/logo/ColoredNavlogo.svg'
+// import { ReactComponent as NavLogo } from '../../static/images/logo/navlogo.svg'
+
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../redux/slice/auth/user-slice'
 import { empty } from '../../redux/slice/cart/cart-slice'
@@ -45,19 +52,20 @@ const NavBarSiderCard = ({ user }) => {
     const [activeLink, setActiveLink] = useState(null);
 
     return (
-        <div className=' flex min-h-screen bg-slate-100'>
-            <div className='rounded-0 p-4 border'>
+        <div className=' flex min-h-screen bg-slate-50'>
+            <div className='rounded-0 p-4 pe-2 pt-1 border'>
                 {/* Company Logo and Name */}
-                <div className='flex items-center gap-2 font-semibold mb-5'>
-                    <Package2Icon className='h-6 w-6' />
-                    <span>IntEcom</span>
-                </div>
+                <h5 className='flex items-center pt-2 gap-2 font-semibold mb-5'>
+                    <Package2Icon className='h-6 w-6 text-primary' />
+                    {/* <img src={logo} alt="Logo" className="h-12 w-auto"/> */}
+                    {/* <NavLogo className=" h-14 w-auto"/> */}
+                    <h4 className='m-0 text-primary'>IntEcom</h4>
+                </h5>
 
                 {/* Sidebar Navigation */}
                 <div className='flex flex-col p-0 gap-1 text-md font-medium pe-4'>
                     {navLinks.map((item, index) => (
                         <>
-
                             <Link
                                 key={index}
                                 to={item.link}
