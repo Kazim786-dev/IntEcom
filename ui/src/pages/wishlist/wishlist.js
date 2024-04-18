@@ -62,7 +62,7 @@ const Wishlist = ({ user }) => {
 		<div>
 			<br />
 			<Container className="wishlist-container min-h-screen mb-5">
-				<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif' , color:'#005A9C'}}>Your Wishlist</h1>
+				<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif'}}>Your Wishlist</h1>
 				<br/>
 				{wishlistItems.length > 0 ? (
 					wishlistItems.map((item, index) => (

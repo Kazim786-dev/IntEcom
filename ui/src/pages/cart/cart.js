@@ -217,7 +217,7 @@ const ShoppingCart = ({ user }) => {
 
 					<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-						<h1 className="cart-heading" style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C'}}>Your Shopping Bag</h1>
+						<h1 className="cart-heading" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
 					</div>
 					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
 						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '40rem', overflowY: 'auto', flex: 1 }}>
@@ -232,7 +232,7 @@ const ShoppingCart = ({ user }) => {
 							height: '40rem',
 							alignContent: 'center'
 						}}>
-							<h1 className="cart-heading " style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C' }}>Order Summary</h1>
+							<h1 className="cart-heading " style={{ fontFamily: 'Arial, sans-serif' }}>Order Summary</h1>
 							<br /><br />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total Items:</p><b>{cartLength}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>PKR {calculateSubTotal.toFixed(2)}</b></div><hr />
@@ -245,7 +245,7 @@ const ShoppingCart = ({ user }) => {
 								<CustomButton
 									isDisabled={cartItems.length <= 0}
 									variant=""
-									className="w-full"
+									className="w-full bg-primary"
 									onClick={handleContinueToCheckout}
 								>
 									<span className={'font-bold'}>Continue</span>

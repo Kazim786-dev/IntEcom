@@ -728,7 +728,7 @@ const AllProducts = ({ user }) => {
 							}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='' style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C'}}>{selectedItem}</h2>
+									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif'}}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
@@ -747,7 +747,7 @@ const AllProducts = ({ user }) => {
 											</Form.Group>
 											<Button
 												size='sm'
-												onClick={handleAddClick} className='px-3 ms-2' style={{backgroundColor:'#005A9C', border:'0px'}}>
+												onClick={handleAddClick} className='px-3 ms-2' style={{border:'0px'}}>
 												Add New
 											</Button>
 
@@ -755,18 +755,20 @@ const AllProducts = ({ user }) => {
 									) : selectedItem === 'Discount Management' ? (
 										<Col className='d-flex gap-2 justify-content-end pe-0 align-items-center'>
 											<Button
+												variant='primary'
 												size='sm'
 												onClick={() => {
 													setShowSaleConfirmationModal(true)
 													setisAllStart(true)
-												}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>
+												}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{ }}>
 												Apply on All
 											</Button>
 											{/* <div style={{ marginRight: '10px' }}></div> */}
 											<Button
+												variant='primary'
 												size='sm'
 												onClick={() => setShowSaleConfirmationModal(true)}
-												disabled={salePercentage <= 0 || selectedProducts.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>
+												disabled={salePercentage <= 0 || selectedProducts.length == 0} style={{}}>
 												Apply on Selected
 											</Button>
 											<Form.Group className="p-0">
@@ -784,15 +786,15 @@ const AllProducts = ({ user }) => {
 									) : selectedItem === 'End Sale' ? (
 										<>
 											<Col className='d-flex gap-2 justify-content-end pe-0 align-items-center'>
-												<Button size='sm' onClick={() => setShowEndSaleConfirmationModal(true)}
-													disabled={selectedProductsNotOnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>
+												<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)}
+													disabled={selectedProductsNotOnSale.length == 0} style={{}}>
 													End sale for selected products
 												</Button>
 												{/* <div style={{ marginRight: '10px' }}></div> */}
-												<Button size='sm' onClick={() => {
+												<Button size='sm' variant='primary' onClick={() => {
 													setShowEndSaleConfirmationModal(true)
 													setisAllEnd(true)
-												}} disabled={OnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>End sale for all products</Button>
+												}} disabled={OnSale.length == 0} style={{}}>End sale for all products</Button>
 											</Col>
 										</>
 									) : <></>}

@@ -662,7 +662,7 @@ const AllProducts = ({ user }) => {
 			}
 		},
 		{
-			header: 'Product(s) Description',
+			header: 'Product Description',
 			width: '28rem',
 			render: (item) => {
 				return item.products.map(p => `${p.product.description} (Qty: ${p.quantity})`).join(', ')
@@ -857,7 +857,7 @@ const AllProducts = ({ user }) => {
 
 		},
 		{
-			header: 'End Sale',
+			header: 'Select',
 			render: (item) => (
 				<Form.Check
 					type="checkbox"
@@ -954,7 +954,7 @@ const AllProducts = ({ user }) => {
 
 							<Row className='mb-3 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2  style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C'}}>{selectedItem}</h2>
+									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif'}}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
@@ -966,12 +966,12 @@ const AllProducts = ({ user }) => {
 												className='pe-5'
 												type="text"
 												value={searchTerm}
-												placeholder={`Search`}
+												placeholder={`Search Product`}
 												onChange={handleSearchChange}
 												ref={searchInputRef}
 											/>
 										</Form.Group>
-										<Button size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{backgroundColor:'#005A9C', border:'0px'}}>Add Product</Button>
+										<Button variant='primary' size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{}}>Add Product</Button>
 
 									</>
 									) 
@@ -980,10 +980,11 @@ const AllProducts = ({ user }) => {
 											<Form.Label className="me-2"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1">
 												<Form.Control
+												size='sm'
 													className='pe-5'
 													type="text"
 													value={searchTerm}
-													placeholder={`Search Order`}
+													placeholder={`Search by Order#`}
 													onChange={handleSearchChange}
 													ref={searchInputRef}
 												/>
@@ -992,12 +993,12 @@ const AllProducts = ({ user }) => {
 									)
 									: selectedItem === 'Discount Management' ? (
 										<>
-											<Button size='sm' onClick={() => {
+											<Button size='sm' variant='primary' onClick={() => {
 												setShowSaleConfirmationModal(true)
 												setisAllStart(true)
-											}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>Apply on All</Button>
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>Apply on All</Button>
 											<div style={{ marginRight: '10px' }}></div>
-											<Button size='sm' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}style={{backgroundColor:'#005A9C', border:'0px'}}>
+											<Button size='sm' variant='primary' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}style={{}}>
 												Apply on Selected
 											</Button>
 											<Form.Group className="ms-2">
@@ -1013,12 +1014,12 @@ const AllProducts = ({ user }) => {
 										</>
 									) : selectedItem == 'End Sale' && (
 										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button size='sm' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{backgroundColor:'#005A9C', border:'0px'}}>End Sale</Button>
+											<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{}}>End Sale</Button>
 											<div style={{ marginRight: '10px' }}></div>
-											<Button size='sm' onClick={() => {
+											<Button size='sm' variant='primary' onClick={() => {
 												setShowEndSaleConfirmationModal(true)
 												setisAllEnd(true)
-											}} disabled={OnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>End Sale for all</Button>
+											}} disabled={OnSale.length == 0} style={{}}>End Sale for all</Button>
 										</Col>
 									)
 									}

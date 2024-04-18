@@ -27,15 +27,15 @@ const NavTag = ({user}) => {
                 {/* <h4 className="m-0 font-semibold tracking-tighter text-secondary">Fashion for Every Season <span className='blockquote-footer tracking-tighter animate-pulse text-primary'>where shopping meets technology</span>
                     </h4> */}
                     
-                    <h4 className="m-0 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
+                    <h4 className="m-0 d-flex align-items-center gap-2 font-semibold tracking-tighter text-slate-500">
                         {user && user.role !== 'customer' && (
-                            <span className='d-flex align-items-center gap-2 font-semibold '>
-                                <Package2Icon className='h-6 w-6' style={{color:'#005A9C'}}/>
-                                <span style={{color:'#005A9C'}}>IntEcom</span>
+                            <span className='d-flex align-items-center gap-2 font-semibold text-primary'>
+                                <Package2Icon className='h-6 w-6'/>
+                                <span className='mr-3'>IntEcom</span>
                             </span>
                         )}
                         Fashion for Every Season 
-                        <span className=' blockquote-footer tracking-tighter animate-pulse text-primary ' style={{marginBottom:'-16px'}}>where shopping meets technology</span>
+                        <span className=' blockquote-footer tracking-tighter animate-pulse text-primary ' style={{marginBottom:'-16px'}}>where fashion meets technology</span>
                     </h4>
 
 

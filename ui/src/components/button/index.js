@@ -12,7 +12,7 @@ const CustomButton = ({
 }) => {
     
 	return (
-		<Button variant={variant} type={type} className={className} disabled={isDisabled} onClick={onClick} style={{ fontFamily: 'Arial, sans-serif' , backgroundColor:'#005A9C', color:"white", borderRadius:'0px', border:'0px'}}>
+		<Button variant={variant} type={type} className={className} disabled={isDisabled} onClick={onClick} style={{ fontFamily: 'Arial, sans-serif', color:"white", borderRadius:'0px', border:'0px'}}>
 			{children}
 		</Button>
 	)
