@@ -61,7 +61,7 @@ const Wishlist = ({ user }) => {
 	return (
 		<div>
 			<br />
-			<Container className="wishlist-container min-h-screen mb-5">
+			<Container className="wishlist-container  mb-5">
 				<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif'}}>Your Wishlist</h1>
 				<br/>
 				{wishlistItems.length > 0 ? (
