@@ -717,12 +717,12 @@ const AllProducts = ({ user }) => {
 			{loading ? (
 				<SpinnerComp />
 			) : (
-				<Container fluid className='pt-0 pb-5 pe-3 ps-0'>
+				<Container fluid className='pt-0 pe-3 ps-0'>
 					<Row>
 						<Col xs={3}>
 							<MemoizedSideBar sidebarItems={sidebarItems} selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
-						<Col className="mt-4 px-3">
+						<Col className="mt-4 px-3 pb-4">
 							{selectedItem === 'Analytics' &&
 								<OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />
 							}
@@ -845,7 +845,7 @@ const AllProducts = ({ user }) => {
 								</Modal.Footer>
 							</Modal>
 
-							<div className='border shadow-sm rounded' style={{ height: '24.4rem', overflowY: 'auto' }}>
+							<div className='border shadow-sm rounded' style={{ height: '33rem', overflowY: 'auto' }}>
 								{tableLoading ? (
 									<SpinnerComp />
 								) : selectedItem === 'Discount Management' && notOnSale ? (
