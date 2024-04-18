@@ -954,7 +954,7 @@ const AllProducts = ({ user }) => {
 
 							<Row className='mb-3 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
+									<h2  style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C'}}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
@@ -971,7 +971,7 @@ const AllProducts = ({ user }) => {
 												ref={searchInputRef}
 											/>
 										</Form.Group>
-										<Button size='sm' onClick={handleAddClick} className='px-3  ms-2'>Add Product</Button>
+										<Button size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{backgroundColor:'#005A9C', border:'0px'}}>Add Product</Button>
 
 									</>
 									) 
@@ -995,9 +995,9 @@ const AllProducts = ({ user }) => {
 											<Button size='sm' onClick={() => {
 												setShowSaleConfirmationModal(true)
 												setisAllStart(true)
-											}} disabled={salePercentage <= 0 || notOnSale.length == 0}>Apply on All</Button>
+											}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>Apply on All</Button>
 											<div style={{ marginRight: '10px' }}></div>
-											<Button size='sm' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}>
+											<Button size='sm' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}style={{backgroundColor:'#005A9C', border:'0px'}}>
 												Apply on Selected
 											</Button>
 											<Form.Group className="ms-2">
@@ -1013,12 +1013,12 @@ const AllProducts = ({ user }) => {
 										</>
 									) : selectedItem == 'End Sale' && (
 										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button size='sm' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}>End Sale</Button>
+											<Button size='sm' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{backgroundColor:'#005A9C', border:'0px'}}>End Sale</Button>
 											<div style={{ marginRight: '10px' }}></div>
 											<Button size='sm' onClick={() => {
 												setShowEndSaleConfirmationModal(true)
 												setisAllEnd(true)
-											}} disabled={OnSale.length == 0}>End Sale for all</Button>
+											}} disabled={OnSale.length == 0} style={{backgroundColor:'#005A9C', border:'0px'}}>End Sale for all</Button>
 										</Col>
 									)
 									}

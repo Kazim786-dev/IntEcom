@@ -8,6 +8,7 @@ import 'react-phone-number-input/style.css'; // Import CSS for PhoneInput
 import './PaymentForm.css';
 import { useNavigate } from 'react-router-dom';
 import AlertComp from '../../components/alert';
+import CustomButton from '../../components/button'
 
 //redux
 import { remove, increase, decrease, placeOrder } from '../../redux/slice/cart/cart-slice';
@@ -175,8 +176,9 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
             marginBottom: '1rem',
         },
         heading: {
-            color: '#0d6efd',
             marginBottom: '1rem',
+            color:'#005A9C'
+
         },
         closeButton: {
             padding: '0.5rem 1rem',
@@ -212,6 +214,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
             borderRadius: '0.3rem',
             boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
         },
+
     };
 
     return (
@@ -336,9 +339,9 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                         </Form.Group>
 
                     </fieldset>
-                    <Button type="submit" style={styles.confirmButton} disabled={!stripe}>
+                    <CustomButton type="submit" style={styles.confirmButton} disabled={!stripe} className="w-full">
                         Confirm Payment
-                    </Button>
+                    </CustomButton>
                 </Form>
                 {orderPlaced && (
                     <AlertComp variant="success" text="Awesome, Your order has been placed successfully." onClose={() => setOrderPlaced(false)} />

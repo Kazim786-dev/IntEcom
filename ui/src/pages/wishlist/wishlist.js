@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Card, Image } from 'react-bootstrap'
 import { ReactComponent as Trash } from '../../static/images/svg/Trash.svg'
 import { useNavigate } from 'react-router-dom'
 import SpinnerComp from '../../components/spinner'
+import CustomButton from '../../components/button'
 
 import './wishlist.css'
 
@@ -61,7 +62,8 @@ const Wishlist = ({ user }) => {
 		<div>
 			<br />
 			<Container className="wishlist-container min-h-screen mb-5">
-				<h2 className="mb-4">Your Wishlist</h2>
+				<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif' , color:'#005A9C'}}>Your Wishlist</h1>
+				<br/>
 				{wishlistItems.length > 0 ? (
 					wishlistItems.map((item, index) => (
 						<Card className="wishlist-item px-4 py-2" key={index}>
@@ -79,9 +81,9 @@ const Wishlist = ({ user }) => {
 									<Button variant="link" onClick={() => handleRemove(item._id)}>
 										<Trash />
 									</Button>
-									<Button variant="primary" onClick={() => handleShopNow(item._id)}>
+									<CustomButton variant="" onClick={() => handleShopNow(item._id)}>
 										Shop Now
-									</Button>
+									</CustomButton>
 								</Col>
 							</Row>
 						</Card>
