@@ -39,14 +39,14 @@
 }
 .wishlist-item-img {
   max-width: 100%; /* Ensures image is responsive */
-  height: 130px; /* Set a fixed height */
+  height: 130px !important; /* Set a fixed height */
   border-radius: 8px;  /* Rounded corners for the image */
 
 }
 
 /* Adjust the height and alignment of the row */
 .wishlist-item .row {
-  min-height: 120px; /* Decrease this value as needed */
+  min-height: 120px !important; /* Decrease this value as needed */
   align-items: center; /* Align items vertically */
 }
 

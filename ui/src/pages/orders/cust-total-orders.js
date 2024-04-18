@@ -120,7 +120,7 @@ function TotalOrders({ user }) {
 								<h1 className="cart-heading ms-1"style={{ fontFamily: 'Arial, sans-serif' }} >Orders</h1>
 							</div>
 
-							<div className='border shadow-sm rounded' style={{ height: '24rem', overflowY: 'auto' }}>
+							<div className='border shadow-sm rounded' style={{ height: '33rem', overflowY: 'auto' }}>
 								<DetailsTable data={orderItems} columns={columns} />
 							</div>
 

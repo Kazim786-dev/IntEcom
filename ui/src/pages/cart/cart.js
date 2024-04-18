@@ -220,7 +220,7 @@ const ShoppingCart = ({ user }) => {
 						<h1 className="cart-heading" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
 					</div>
 					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
-						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '40rem', overflowY: 'auto', flex: 1 }}>
+						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '33rem', overflowY: 'auto', flex: 1 }}>
 							<DetailsTable data={cartItems} columns={columns} />
 						</Col>
 						<Col lg={3} style={{
@@ -229,19 +229,17 @@ const ShoppingCart = ({ user }) => {
 							boxShadow: '0 2px 4px rgba(0,0,0,.2)',
 							padding: '1rem',
 							textAlign: 'left',
-							height: '40rem',
-							alignContent: 'center'
+							height: '33rem',
+							alignContent: 'center',
 						}}>
 							<h1 className="cart-heading " style={{ fontFamily: 'Arial, sans-serif' }}>Order Summary</h1>
-							<br /><br />
+							<br />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total Items:</p><b>{cartLength}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>PKR {calculateSubTotal.toFixed(2)}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Tax:</p><b>PKR {(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total:</p><b>PKR {total.toFixed(2)}</b></div><hr />
-							<br />
-							<br />
 
-							<div className="d-flex justify-content-center">
+							<div className="d-flex justify-content-center mt-4">
 								<CustomButton
 									isDisabled={cartItems.length <= 0}
 									variant=""
