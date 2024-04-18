@@ -98,8 +98,8 @@ const LoginPage = () => {
 	return (
 
 		<div className="w-full overflow-hidden">
-			<div className="relative grid items-center justify-center w-full min-h-screen gap-10 lg:grid-cols-2 xl:gap-0">
-				<div className="ps-5 flex flex-col  min-h-screen items-center justify-around" style={{backgroundColor:"#005A9C"}} >
+			<div className="relative grid items-center justify-center w-full min-h-screen gap-8 lg:grid-cols-2 xl:gap-0">
+				<div className="ps-0 flex flex-col  min-h-screen items-center justify-center" style={{backgroundColor:"#005A9C"}} >
 					<img
 						alt="Logo"
 						className=" object-cover"
@@ -107,7 +107,9 @@ const LoginPage = () => {
 						src={logo}
 						// width="600"
 					/>
-					<h2 className="m-0 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
+					<br/>
+					<br/>
+					<h2 className="m-0 mt-5 d-flex align-items-center gap-3 font-semibold tracking-tighter text-secondary">
                             <span className='d-flex align-items-center gap-2 font-semibold '>
                                 <span style={{color:'white', fontFamily:'Lucida Handwriting'}}>IntEcom</span>
                             </span>
