@@ -84,7 +84,7 @@ const OrderSummary = ({ user, setErrorText, selectedItem}) => {
 			/>
 			<SummaryElement 
 				title={'Total Amount:'} 
-				count={`$${orderSummary.totalAmount}`} 
+				count={`PKR ${orderSummary.totalAmount}`} 
 				className={'px-4 py-3 bg-gray-200 order-summary-element'}
 			/>
 		</div>

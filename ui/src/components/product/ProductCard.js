@@ -73,7 +73,7 @@ const ProductCard = ({
 					{product.description}
 				</Card.Text>
 				<Card.Title className='mb-4 text-2xl font-semibold'>
-					${product.price.toFixed(2)}
+					PKR {product.price.toFixed(2)}
 				</Card.Title>
 				<div className="d-flex justify-content-start mt-0 gap-2">
 					{product.quantity < 1 ? (

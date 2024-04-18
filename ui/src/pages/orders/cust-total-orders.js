@@ -90,7 +90,7 @@ function TotalOrders({ user }) {
 		{
 			header: 'Amount',
 			width: '17rem',
-			render: (item) => '$' + item.totalAmount.toFixed(2)
+			render: (item) => 'PKR ' + item.totalAmount.toFixed(2)
 		},
 		{
 			header: 'Action',

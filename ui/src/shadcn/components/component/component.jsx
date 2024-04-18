@@ -115,7 +115,7 @@ export function LandingPage() {
                   width="300" />
                 <div className="space-y-1">
                   <h3 className="font-bold">Product Title</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only $19.99!</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only PKR s19.99!</p>
                 </div>
               </div>
               <div className="flex flex-col items-start space-y-2">
@@ -127,7 +127,7 @@ export function LandingPage() {
                   width="300" />
                 <div className="space-y-1">
                   <h3 className="font-bold">Another Product</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only $24.99!</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only PKR 24.99!</p>
                 </div>
               </div>
               <div className="flex flex-col items-start space-y-2">
@@ -139,7 +139,7 @@ export function LandingPage() {
                   width="300" />
                 <div className="space-y-1">
                   <h3 className="font-bold">Best Product Ever</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only $29.99!</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only PKR 29.99!</p>
                 </div>
               </div>
               <div className="flex flex-col items-start space-y-2">
@@ -151,7 +151,7 @@ export function LandingPage() {
                   width="300" />
                 <div className="space-y-1">
                   <h3 className="font-bold">Amazing Product</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only $34.99!</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Description of the product. Only PKR 34.99!</p>
                 </div>
               </div>
             </div>

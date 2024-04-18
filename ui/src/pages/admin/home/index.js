@@ -624,8 +624,8 @@ const AllProducts = ({ user }) => {
 			width: '17rem',
 			render: (item) => {
 				if (item.totalAmount)
-					return '$' + item.totalAmount.toFixed(2)
-				return '$' + 0
+					return 'PKR ' + item.totalAmount.toFixed(2)
+				return 'PKR ' + 0
 			}
 		},
 		{

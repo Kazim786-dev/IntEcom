@@ -29,7 +29,7 @@ export default function Component() {
             a world of imagination, where the ordinary transforms into the extraordinary.
           </p>
         </div>
-        <div className="text-4xl font-bold">$99</div>
+        <div className="text-4xl font-bold">PKR 99</div>
         <div className="flex flex-col gap-2 min-[400px]:flex-row">
           <Button size="lg">Add to cart</Button>
           <Button size="lg" variant="outline">

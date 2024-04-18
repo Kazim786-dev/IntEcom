@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import NavbarSider from '../../components/navbar-sider/navbarSider'
 import { HomeIcon, PackageIcon, BoxIcon, ShoppingCartIcon, UserIcon, HeartIcon } from '../../static/icons/navicons.js';
 import { ReactComponent as ColorIcon } from '../../static/images/svg/Ellipse 1.svg'
-
+import CurrencyConverter from '../../components/Price/CurrencyConverter.js';
 import './ProductDetails.css'
 import { Container, Row, Col, Button, Card, Image, Badge, Modal, Form } from 'react-bootstrap'
 import SpinnerComp from '../../components/spinner'
@@ -207,11 +207,11 @@ const ProductDetailPage = ({ user }) => {
 										{product.isOnSale ? (
 											<>
 												<span style={{ color: 'red', textDecoration: 'line-through' }}>
-													${product.originalPrice.toFixed(2)}
+													PKR {product.originalPrice.toFixed(2)}
 												</span>
 												{' '}
 												<span style={{ color: 'green' }}>
-													${(
+													PKR {(
 														product.originalPrice -
 														(product.originalPrice * (product.offPercent / 100))
 													).toFixed(2)}
@@ -219,7 +219,7 @@ const ProductDetailPage = ({ user }) => {
 											</>
 										) : (
 											<span style={{ color: 'green' }}>
-												${product.originalPrice.toFixed(2)}
+												PKR {product.originalPrice.toFixed(2)}
 											</span>
 										)}
 									</p>        <p><strong>Category:</strong> {product.category}</p>

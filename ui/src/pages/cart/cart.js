@@ -192,7 +192,7 @@ const ShoppingCart = ({ user }) => {
 		},
 		{
 			header: 'Price',
-			render: (item) => `$${item.price.toFixed(2)}`,
+			render: (item) => `PKR ${item.price.toFixed(2)}`,
 		},
 		{
 			header: '',
@@ -235,9 +235,9 @@ const ShoppingCart = ({ user }) => {
 							<h1 className="cart-heading " style={{ fontFamily: 'Arial, sans-serif', color:'#005A9C' }}>Order Summary</h1>
 							<br /><br />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total Items:</p><b>{cartLength}</b></div><hr />
-							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>${calculateSubTotal.toFixed(2)}</b></div><hr />
-							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Service fee:</p><b>${(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
-							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total:</p><b>${total.toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>PKR {calculateSubTotal.toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Tax:</p><b>PKR {(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total:</p><b>PKR {total.toFixed(2)}</b></div><hr />
 							<br />
 							<br />
 

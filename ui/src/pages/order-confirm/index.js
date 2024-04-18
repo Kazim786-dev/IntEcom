@@ -137,7 +137,7 @@ const OrderConfirm = () => {
                         <div className="font-medium">Order number</div>
                         <div className="text-right">#TVwNGxXBg</div>
                         <div className="font-medium">Total</div>
-                        <div className="text-right">${total.toFixed(2)}</div>
+                        <div className="text-right">PKR {total.toFixed(2)}</div>
                         <div className="font-medium">Date</div>
                         {/* <div className="text-right">April 12, 2023, 10:30 AM</div> */}
                         <div className="text-right">{formattedDateTime}</div>
@@ -154,7 +154,7 @@ const OrderConfirm = () => {
                                             {product.quantity}x {product.name.substring(0, 20)}...
                                         </span>
                                     </Col>
-                                    <Col className="text-right">${(product.price * product.quantity).toFixed(2)}</Col>
+                                    <Col className="text-right">PKR {(product.price * product.quantity).toFixed(2)}</Col>
                                 </Row>
                                 <Row className="text-gray-500 dark:text-gray-400">
                                     <Col className="text-left">

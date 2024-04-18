@@ -123,7 +123,7 @@ const OffCanvasComp = ({
 										<p className='font-semibold text-primary'>Products:</p><span className='text-styles'> {orderItem.products.length}</span>
 									</Col>
 									<Col>
-										<p className='font-semibold text-primary'>Amount:</p><span className='text-styles'> {'$'+orderItem.totalAmount.toFixed(2)}</span>
+										<p className='font-semibold text-primary'>Amount:</p><span className='text-styles'> {'PKR '+orderItem.totalAmount.toFixed(2)}</span>
 									</Col>
 								</Row>
 								<hr />

@@ -28,7 +28,7 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 				value={formData.price}
 				onChange={handleChange}
 				name='price'
-				placeholder={'$00.00'}
+				placeholder={'PKR 00.00'}
 			/>
 			<FormField
 				required
