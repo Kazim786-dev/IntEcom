@@ -236,7 +236,7 @@ const ShoppingCart = ({ user }) => {
 							<br />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total Items:</p><b>{cartLength}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Sub Total:</p><b>PKR {calculateSubTotal.toFixed(2)}</b></div><hr />
-							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Tax:</p><b>PKR {(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
+							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Service Fee:</p><b>PKR {(calculateSubTotal * taxRate).toFixed(2)}</b></div><hr />
 							<div><p style={{ fontFamily: 'Arial, sans-serif' }}>Total:</p><b>PKR {total.toFixed(2)}</b></div><hr />
 
 							<div className="d-flex justify-content-center mt-4">
