@@ -1,20 +1,72 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import { Form, Link } from "react-router-dom";
+import Carousel from 'react-bootstrap/Carousel';
+
+import logo from '../../static/images/logo/logo.png'
 
 import Footer from "../../components/endFooter/endFooter";
 
 const LandingPage = () => {
     return (
         <>
-            <section className="w-full pt-5 md:pt-16 lg:pt-24 border-t">
-                <div className="container space-y-4 px-4 text-center md:px-6">
+            <Carousel interval={2200} style={{ maxWidth: '100%', margin: '0 auto' }}>
+                <Carousel.Item>
+                    {/* <ExampleCarouselImage text="First slide" /> */}
+                    <img
+                        className="d-block w-full object-fit"
+                        src='https://www.persado.com/wp-content/uploads/2023/07/generative-ai-in-e-commerce.jpg'
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>The best Ecommerce Platform</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-full object-fit"
+                        src='https://cdn.shopify.com/s/files/1/0070/7032/files/ecommerce_20platforms.png?v=1701447416'
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    {/* <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>Get Amazing discounts on your favorite products</p>
+                    </Carousel.Caption> */}
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-full object-fit"
+                        src="https://www.pickfu.com/blog/wp-content/uploads/2019/09/e-commerce-product-images.jpg"
+                        alt="First slide"
+                        style={{ maxHeight: '500px', minHeight: '200px' }}
+                    />
+                    <Carousel.Caption>
+                        <h3>Enjoy the amazing taste of some innovative technology with shopping</h3>
+                        <p>Get Amazing discounts on your favorite products</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+            <section className="w-full flex flex-col justify-center items-center gap-5 pt-5 md:pt-16 lg:pt-24 border-t">
+                {/* Left column with the image */}
+                <div className="w-1/4 pr-8">
+                    <img
+                        className="w-full h-auto object-cover"
+                        src={logo}
+                        alt="IntEcom Logo"
+                    />
+                </div>
+                {/* Right column with text content */}
+                {/* <div className="container space-y-4 px-4 text-center md:px-6"> */}
+                <div className="w-1/2 space-y-4 text-center">
                     <div className="mb-3">
                         <h1
                             className="mb-5 text-3xl text-primary font-bold tracking-tighter sm:text-4xl md:text-5xl/none lg:text-6xl">
                             Welcome to IntEcom
                             <p
-                                className="mx-auto tracking-normal text-dark" style={{fontSize: '1.6rem'}}>
+                                className="mx-auto tracking-normal text-dark" style={{ fontSize: '1.6rem' }}>
                                 where fashion meets technology
                             </p>
                         </h1>
@@ -39,7 +91,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            <section className="w-full py-8 md:py-16 lg:py-24">
+            <section className="w-full py-12 ">
                 <div
                     className="container grid items-center gap-4 px-4 text-center md:px-6 lg:gap-10">
                     <div className="space-y-3">
@@ -81,7 +133,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            <section className="w-full py-12 md:py-24 lg:py-32 border-t">
+            <section className="w-full py-16 border-t">
                 <div className="container space-y-4 px-4 text-center md:px-6">
                     <div className="space-y-2">
                         <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
@@ -114,7 +166,7 @@ const LandingPage = () => {
                     </Link>
                 </nav>
             </footer> */}
-            <Footer/>
+            <Footer />
 
         </>
     )

@@ -557,19 +557,23 @@ const AllProducts = ({ user }) => {
 		// Define columns for reported products table
 		{
 			header: 'Reported Product',
+			width: '22rem',
 			render: (report) => report.product.description,
 		},
 		{
-			header: 'Report by',
+			header: 'Reported By',
+			width: '15rem',
 			render: (report) => report.user.name,
 		},
 		{
 			header: 'Reason',
+			width: '20rem',
 			render: (report) => report.text,
 		},
 		// ... other columns for product details
 		{
 			header: 'Actions',
+			width: '17rem',
 			render: (report) => (
 				<>
 					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
@@ -712,6 +716,7 @@ const AllProducts = ({ user }) => {
 				offPercent: salePercentage,
 				flag: false
 			}
+			console.log(saleData);
 			if (isAllStart) {
 				saleData.flag = true
 			}
@@ -761,7 +766,7 @@ const AllProducts = ({ user }) => {
 		}, {
 			header: 'Price',
 			width: '15rem',
-			render: (item) => item.price
+			render: (item) => item.price.toFixed(2)
 
 		}, {
 			header: 'Stock',
@@ -843,13 +848,13 @@ const AllProducts = ({ user }) => {
 		{
 			header: 'Current Price',
 			width: '15rem',
-			render: (item) => item.price,
+			render: (item) => item.price.toFixed(2),
 
 		}, 
 		{
 			header: 'Original Price',
 			width: '15rem',
-			render: (item) => item.originalPrice,
+			render: (item) => item.originalPrice.toFixed(2),
 
 		}, 
 		{
@@ -951,12 +956,12 @@ const AllProducts = ({ user }) => {
 			{loading ? (
 				<SpinnerComp />
 			) : (
-				<Container fluid className='pt-0 pb-5 pe-3 ps-0'>
+				<Container fluid className='pt-0 pe-3 ps-0'>
 					<Row>
 						<Col xs={3}>
 							<MemoizedSideBar sidebarItems={sidebarItems} selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
-						<Col className="mt-4 px-3">
+						<Col className="mt-4 px-3 pb-4">
 							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={'Orders'} />}
 							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 

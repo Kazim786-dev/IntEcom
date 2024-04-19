@@ -8,7 +8,7 @@ import './Sidebar.css'; // Importing custom CSS
 
 const Sidebar = ({ sidebarItems, selectedItem, handleItemClick }) => {
 	return (
-		<Card className=' h-100 p-4 border-0 min-h-screen sidebar' style={{ overflowX: 'auto' }}>
+		<Card className=' h-100 p-4 border-0 sidebar' style={{ overflowX: 'auto', maxHeight: '100%' }}>
 
 			{sidebarItems.map((item) => (
 				<>
