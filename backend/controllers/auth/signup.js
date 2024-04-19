@@ -28,7 +28,7 @@ const Signup = async ({ name, email, password, mobile, role, status }) => {
   
   
     const validateEmail = (email) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       // const emailRegex = /^[a-zA-Z0-9._-]{3,}@gmail.com$/; //check to have at least 3 characters for gmail
       return emailRegex.test(email);
     };
@@ -77,7 +77,7 @@ const Signup = async ({ name, email, password, mobile, role, status }) => {
           Congratulations on successfully applying for your account as a seller🎉. <b> </b><br/>
           <b>Note</b>: We  are processing you request and we will let you know once admin has approved your request!</p>`
           // Send the email to seller using the generic sendEmail function
-          sendEmail(newUser.email, 'Account Request Placed Successfully', emailContentForSeller);
+          //sendEmail(newUser.email, 'Account Request Placed Successfully', emailContentForSeller);
         }else{
           // Compose the email content
           const emailContent = `<h1>Welcome <b>${newUser.name}</b> to this amazing e-commerce platform.</h1><br/>
@@ -85,7 +85,7 @@ const Signup = async ({ name, email, password, mobile, role, status }) => {
           Congratulations on successfully creating your account. <b>Happy Shopping! 🎉</b><br/>
           <b>Note</b>: Do not share your password with anyone</p>`;
           // Send the email to customer using the generic sendEmail function
-          sendEmail(newUser.email, 'Account Created Successfully', emailContent);
+          //sendEmail(newUser.email, 'Account Created Successfully', emailContent);
         }
   
         // Save the user to the database

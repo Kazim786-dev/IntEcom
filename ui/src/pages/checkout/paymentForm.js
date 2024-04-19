@@ -63,7 +63,7 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
         
     const handlePhoneChange = (value) => {
         setShippingInfo({ ...shippingInfo, phoneNumber: value });
-    };
+    };    
 
     const handlePaymentSubmit = async (event) => {
         const form = event.currentTarget;
@@ -78,7 +78,11 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
         if (!stripe || !elements) {
             return;
         }
-
+        if (!shippingInfo.phoneNumber || !isValidPhoneNumber(shippingInfo.phoneNumber)) {
+            setErrorText('Please enter a valid phone number.'); // Set the specific error message
+            setOrderError(true);
+            return; // Prevent submission if the phone number is invalid or empty
+        }
         // Replace with your backend endpoint
         const paymentIntentEndpoint = `${process.env.REACT_APP_DEV_BACKEND_URL}/orders/create-payment-intent`;
 
@@ -245,9 +249,10 @@ const PaymentForm = ({ user, total, cartItems, setShowPaymentForm }) => {
                                     value={shippingInfo.phoneNumber}
                                     onChange={handlePhoneChange}
                                 />
-                                {!isValidPhoneNumber(shippingInfo.phoneNumber) && (
-                                    <Form.Text className="text-danger">Invalid phone number</Form.Text>
+                                {shippingInfo.phoneNumber && !isValidPhoneNumber(shippingInfo.phoneNumber) && (
+                                <Form.Text className="text-danger">Invalid phone number</Form.Text>
                                 )}
+
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="validationCustom02">
