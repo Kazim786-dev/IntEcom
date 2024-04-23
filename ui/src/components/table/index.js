@@ -17,7 +17,7 @@ const DetailsTable = ({
 			<thead>
 				<tr>
 					{columns.map((column, index) => (
-						<th key={index} className="header-cell text-primary" style={{ fontFamily: 'Arial, sans-serif' }}>
+						<th key={index} className="header-cell text-primary font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
 							{column.header}
 						</th>
 					))}
@@ -25,15 +25,20 @@ const DetailsTable = ({
 			</thead>
 			<tbody>
 				{data.length > 0 &&
-						data.map((item, index) => (
-							<tr style={{ height: '60px' }} key={index}>
-								{columns.map((column, idx) => (
-									<td key={idx} style={{ width: column.width }}>
-										{column.render(item,index)}
-									</td>
-								))}
-							</tr>
-						))}
+					data.map((item, index) => (
+						<tr style={{
+							height: '60px',
+							backgroundColor: '#cfd1d6',
+							backgroundImage: 'linear-gradient(147deg, #cfd1d6 0%, #edf1f4 74%)'
+
+						}} key={index}>
+							{columns.map((column, idx) => (
+								<td key={idx} style={{ width: column.width, backgroundColor: 'transparent' }}>
+									{column.render(item, index)}
+								</td>
+							))}
+						</tr>
+					))}
 			</tbody>
 		</Table>
 	)

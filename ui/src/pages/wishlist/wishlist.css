@@ -33,7 +33,11 @@
 .wishlist-item {
   margin-bottom: 15px;
   transition: transform 0.3s ease;  /* Smooth transform on hover */
-
+  /* background: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%); */
+  background-size: cover; 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('https://img.freepik.com/free-vector/vector-white-gradient-background-modern-design_361591-4403.jpg?w=996&t=st=1713891261~exp=1713891861~hmac=e903beaa487c041eeae8eee4460b76f5fff66a7c6e557c0ed5e739ddaecf0c4e');
 }
 .wishlist-item:hover {
   transform: scale(1.02);  /* Slight scale to lift card on hover */

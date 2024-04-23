@@ -6,7 +6,7 @@ import SearchBar from "../../../components/products-searchbar";
 
 const FiltersRow = ({searchTerm, handleSearchChange, searchInputRef, handleAudioSearch, priceFilter, handlePriceFilterChange, handleToggleFilters}) => {
     return (
-        <Row className='mb-4 m-0' >
+        <Row className='mb-4 m-0 bg-muted ps-2 rounded-1' >
             {/* <Col className='d-flex justify-content-start ps-0'>
 									<h2 className='text-primary'>Products</h2>
 								</Col> */}

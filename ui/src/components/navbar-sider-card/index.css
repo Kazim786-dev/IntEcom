@@ -14,7 +14,7 @@
   
   .navbar-link:hover {
     color: black;
-    background-color: #e2e2e2; /* Hover background color for non-active links */
+    background-color: rgb(223, 220, 220); /* Hover background color for non-active links */
   }
   
   .cust-nav-active-link:hover {

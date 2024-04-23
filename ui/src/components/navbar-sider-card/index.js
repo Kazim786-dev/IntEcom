@@ -52,7 +52,11 @@ const NavBarSiderCard = ({ user }) => {
     const [activeLink, setActiveLink] = useState(null);
 
     return (
-        <div className=' flex bg-slate-50' style={{maxHeight:"100%"}}>
+        <div className=' flex bg-slate-50 nav-sider-card' 
+            style={{maxHeight:"100%",
+                    backgroundColor: '#edf1f4',
+					backgroundImage: 'linear-gradient(147deg, #edf1f4 44%, #ccd8f5 84%)'
+            }}>
             <div className='rounded-0 p-4 pe-2 pt-1 border'>
                 {/* Company Logo and Name */}
                 <h5 className='flex items-center pt-2 gap-2 font-semibold mb-5'>
