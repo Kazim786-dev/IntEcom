@@ -6,5 +6,9 @@
     border-top-left-radius: 0% !important;
     border-bottom-left-radius: 0% !important;
     border-top-right-radius: 0% !important;
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDfTqbxdYD3LSKcXGpzGmoLSSAqMQ66oTdVhBeC9MrYQ&s') !important;
+    background-size: cover; /* Cover the entire element with the background image */
+    background-repeat: no-repeat; /* Do not repeat the background image */
+    background-position: center;
 }
 

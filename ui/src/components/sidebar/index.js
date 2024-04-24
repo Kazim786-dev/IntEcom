@@ -8,9 +8,11 @@ import './Sidebar.css'; // Importing custom CSS
 
 const Sidebar = ({ sidebarItems, selectedItem, handleItemClick }) => {
 	return (
-		<Card className=' h-100 p-4 border-0 sidebar' style={{ overflowX: 'auto', maxHeight: '100%',
-		backgroundColor: '#ccd8f5',
-					backgroundImage: 'linear-gradient(147deg, #ccd8f5 0%, #edf1f4 65%)' }}>
+		<Card className=' h-100 p-4 border-0 sidebar rounded-0' style={{
+			overflowX: 'auto', maxHeight: '100%',
+			// backgroundColor: '#ccd8f5',
+			// backgroundImage: 'linear-gradient(147deg, #ccd8f5 0%, #edf1f4 65%)'
+		}}>
 
 			{sidebarItems.map((item) => (
 				<>
@@ -21,7 +23,7 @@ const Sidebar = ({ sidebarItems, selectedItem, handleItemClick }) => {
 						isSelected={selectedItem === item.text}
 						onItemClick={() => handleItemClick(item.text)}
 					/>
-					<hr className='my-2'/>
+					<hr className='my-2' />
 				</>
 			))}
 		</Card>
