@@ -10,7 +10,8 @@
     background-position: center; /* Center the background image horizontally and vertically */
     
     /* set background image */
-    background-image: url('https://img.freepik.com/free-vector/blue-white-gradient-abstract-background_53876-62620.jpg?t=st=1713892424~exp=1713896024~hmac=f91e0fd1add0c8437de6f6c9ed4413af91643bb215df0927a677e9ab444cb45a&w=740');
+    background-image: url('../src/static/images/bg/bg.png');
+    /* background-image: url('https://img.freepik.com/free-vector/blue-white-gradient-abstract-background_53876-62620.jpg?t=st=1713892424~exp=1713896024~hmac=f91e0fd1add0c8437de6f6c9ed4413af91643bb215df0927a677e9ab444cb45a&w=740'); */
     /* background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDfTqbxdYD3LSKcXGpzGmoLSSAqMQ66oTdVhBeC9MrYQ&s'); */
     /* background-image: url('https://img.freepik.com/free-vector/vector-white-gradient-background-modern-design_361591-4403.jpg?w=996&t=st=1713891261~exp=1713891861~hmac=e903beaa487c041eeae8eee4460b76f5fff66a7c6e557c0ed5e739ddaecf0c4e'); */
   }
