@@ -91,44 +91,46 @@ function ForgetPasswordPage() {
                         <span className=' blockquote-footer tracking-tighter animate-pulse ' style={{marginBottom:'-16px', color:'#6f90af'}}>where fashion meets technology</span>
                     </h2>
 				</div>
-				<FormContainer heading="Forgot Password">
-					<Form onSubmit={handleSubmit}>
-						<Row>
-							<FormField
-								controlId="email"
-								label="Enter email address"
-								type="text"
-								placeholder="Please enter your email"
-								value={email}
-								onChange={handleEmailChange}
+				<div className="mx-auto w-full max-w-md py-1 landing rounded-2">
+					<FormContainer heading="Forgot Password">
+						<Form onSubmit={handleSubmit}>
+							<Row>
+								<FormField
+									controlId="email"
+									label="Enter email address"
+									type="text"
+									placeholder="Please enter your email"
+									value={email}
+									onChange={handleEmailChange}
+								/>
+								{emailError && <p className="text-danger">{emailError}</p>}
+
+							</Row>
+							
+							<Row className='m-0 mt-4'>
+								<CustomButton variant="primary" type="submit" className="w-100" 
+									// isDisabled={emailError!=='' || email==''}
+								>
+									Forgot Password
+								</CustomButton>
+							</Row>
+							<Row className="mt-3">
+								<Col>
+									<p className="text-center mb-0 text-styles">No, I remember my password! <Link to='/login' className="text-decoration-none">Login</Link></p>
+								</Col>
+							</Row>
+						</Form>
+
+						{showAlert && (
+							<AlertComp 
+								variant={variant} 
+								text={alertText}
+								onClose={() => setShowAlert(false)}
 							/>
-							{emailError && <p className="text-danger">{emailError}</p>}
+						)}
 
-						</Row>
-						
-						<Row className='m-0 mt-4'>
-							<CustomButton variant="primary" type="submit" className="w-100" 
-								// isDisabled={emailError!=='' || email==''}
-							>
-								Forgot Password
-							</CustomButton>
-						</Row>
-						<Row className="mt-3">
-							<Col>
-								<p className="text-center mb-0 text-styles">No, I remember my password! <Link to='/login' className="text-decoration-none">Login</Link></p>
-							</Col>
-						</Row>
-					</Form>
-
-					{showAlert && (
-						<AlertComp 
-							variant={variant} 
-							text={alertText}
-							onClose={() => setShowAlert(false)}
-						/>
-					)}
-
-				</FormContainer>
+					</FormContainer>
+				</div>
 			</div>
 		</div>
 	)

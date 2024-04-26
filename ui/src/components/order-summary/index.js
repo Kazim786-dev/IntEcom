@@ -93,7 +93,7 @@ const OrderSummary = ({ user, setErrorText, selectedItem }) => {
                     </select>
                 </div>
             )}
-            <div className='mb-4 d-flex justify-content-between'>
+            <div className='mb-4 d-flex justify-content-between summary-element-container'>
                 <SummaryElement 
                     title={'Total Orders:'} 
                     count={orderSummary.totalOrders}

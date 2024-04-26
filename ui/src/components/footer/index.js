@@ -7,7 +7,7 @@ const Footer = ({className, text, totalPages, currentPage, setCurrentPage}) => {
 
 	return (
 		<div className = {className} >
-			<p className='text-styles'>{text}</p>
+			<p className='text-purple-200'>{text}</p>
 			<PaginationComp
 				totalPages={totalPages}
 				currentPage={currentPage}

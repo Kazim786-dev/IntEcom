@@ -49,13 +49,13 @@ const NavBarSiderCard = ({ user }) => {
 
     const navLinks = user.role == 'customer' ? custNav : []
 
-    const [activeLink, setActiveLink] = useState(null);
+    const [activeLink, setActiveLink] = useState(0);
 
     return (
         <div className=' flex bg-slate-50 nav-sider-card' 
             style={{maxHeight:"100%",
-                    backgroundColor: '#ccd8f5',
-					backgroundImage: 'linear-gradient(147deg, #edf1f4 4%, #edf1f4 84%)'
+                    // backgroundColor: '#ccd8f5',
+					// backgroundImage: 'linear-gradient(147deg, #edf1f4 4%, #edf1f4 84%)',
             }}>
             <div className='rounded-0 p-4 pe-2 pt-1 border'>
                 {/* Company Logo and Name */}
@@ -87,7 +87,7 @@ const NavBarSiderCard = ({ user }) => {
                                                 {item.icon && (
                                                     item.icon
                                                 )}
-                                                <span className='text-black'>{item.text}</span>
+                                                <span className='text-light'>{item.text}</span>
 
                                                 {item.badge && (
                                                     <Badge className='bg-primary ml-auto rounded-circle p-1'>
@@ -124,7 +124,7 @@ const NavBarSiderCard = ({ user }) => {
                                         {item.icon && (
                                             item.icon
                                         )}
-                                        <span className='text-black'>{item.text}</span>
+                                        <span className='text-light'>{item.text}</span>
 
                                         {item.badge && (
                                             <Badge className='bg-primary ml-auto rounded-circle p-1'>
@@ -134,7 +134,7 @@ const NavBarSiderCard = ({ user }) => {
                                     </div>
                                 )}
                             </Link>
-                            <hr className='my-2' />
+                            <hr className='my-2 text-light' />
                         </>
                     ))}
                 </div>

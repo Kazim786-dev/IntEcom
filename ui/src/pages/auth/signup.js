@@ -94,9 +94,14 @@ function SignUpPage() {
                     </h2>
                 </div>
                 <div className="flex items-center justify-center p-6 lg:p-10">
-                    <div className="mx-auto w-full max-w-md px-4 space-y-8">
-                        <h1 className="text-3xl font-bold" style={{color: '#005A9C', fontStyle: 'italic'}}>Welcome to IntEcom</h1>
-                        <p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
+                    <div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing rounded-2">
+                        <h1 className="text-3xl font-bold text-purple-700">
+                            Welcome to IntEcom
+                            <p className="text-light text-sm font-normal dark:text-light">
+                                The best products delivered to your door
+                            </p>
+                        </h1>
+                        
                         <Form onSubmit={handleSubmit} className='items-start'>
                             <div className="flex flex-col space-y-3">
                                 <FormField
@@ -144,7 +149,7 @@ function SignUpPage() {
                                 />
                                 <Form.Group as={Row} className="mt-2">
                                     <Col>
-                                        <Form.Label className='font-semibold'>Role</Form.Label>
+                                        <Form.Label className='font-semibold text-purple-400'>Role</Form.Label>
                                         <Form.Select
                                             size='sm'
                                             aria-label="Select Role"
@@ -172,7 +177,7 @@ function SignUpPage() {
                             </div>
                         </Form>
                         <div className="border-t text-center border-gray-200 dark:border-gray-800">
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-400 dark:text-gray-400">
                                 Already have an account?
                                 <Link className="underline underline-offset-2" to="/login">Sign in</Link>
                             </p>

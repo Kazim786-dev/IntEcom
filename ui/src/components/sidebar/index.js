@@ -23,7 +23,7 @@ const Sidebar = ({ sidebarItems, selectedItem, handleItemClick }) => {
 						isSelected={selectedItem === item.text}
 						onItemClick={() => handleItemClick(item.text)}
 					/>
-					<hr className='my-2' />
+					<hr className='my-2 text-light' />
 				</>
 			))}
 		</Card>

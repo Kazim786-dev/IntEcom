@@ -97,14 +97,14 @@ const AllProducts = ({ user }) => {
 				labels: salesAnalytics.map((item, index) => index + 1),
 				datasets: [
 					{
-						label: 'Total Quantity Sold',
+						label: 'Quantity Sold',
 						data: salesAnalytics.map(item => item.totalQuantitySold),
 						backgroundColor: 'rgba(75, 192, 192, 0.2)',
 						borderColor: 'rgba(75, 192, 192, 1)',
 						borderWidth: 1,
 					},
 					{
-						label: 'Total Price Earned',
+						label: 'Price Earned',
 						data: salesAnalytics.map(item => item.totalCost),
 						backgroundColor: 'rgba(255, 99, 132, 0.2)',
 						borderColor: 'rgba(255, 99, 132, 1)',
@@ -401,7 +401,7 @@ const AllProducts = ({ user }) => {
 			render: (item) => (
 				<>
 					<button
-						className='d-flex gap-2 border-none ps-0'>
+						className='d-flex gap-2 border-none px-2 py-1' style={{ backgroundColor: '#483f55' }}>
 						<Trash onClick={() => handleTrashClick(item)} />
 						<Edit onClick={() => handleEditClick(item)} />
 					</button>
@@ -426,7 +426,7 @@ const AllProducts = ({ user }) => {
 			render: (item) => item.orderNumber
 		},
 		{
-			header: 'User Address',
+			header: 'Ship Address',
 			width: '22rem',
 			render: (item) => {
 				const { shippingDetails } = item
@@ -444,18 +444,17 @@ const AllProducts = ({ user }) => {
 			header: 'Action',
 			render: (item) => (
 				<>
-					<div className='d-flex'>
+					<div className='d-flex gap-2'>
 						<Button
 							onClick={() => handleShip(item._id)}
-							variant="info"
+							variant="dark"
 							disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
 						>
 							Ship
 						</Button>
 						<Button
 							onClick={() => handleDeliver(item._id)}
-							variant="success"
-							className="ms-2"
+							variant="primary"
 							disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
 						>
 							Deliver
@@ -728,12 +727,12 @@ const AllProducts = ({ user }) => {
 							}
 							<Row className='mb-4 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif'}}>{selectedItem}</h2>
+									<h2 className='text-light' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<>
-											<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
+											<Form.Label className="me-2 text-light mt-1"><b>Search:</b></Form.Label>
 											<Form.Group className="mb-1 mt-1">
 												<Form.Control
 													size='sm'
@@ -747,7 +746,7 @@ const AllProducts = ({ user }) => {
 											</Form.Group>
 											<Button
 												size='sm'
-												onClick={handleAddClick} className='px-3 ms-2' style={{border:'0px'}}>
+												onClick={handleAddClick} className='px-3 ms-2' style={{ border: '0px' }}>
 												Add New
 											</Button>
 
@@ -760,7 +759,7 @@ const AllProducts = ({ user }) => {
 												onClick={() => {
 													setShowSaleConfirmationModal(true)
 													setisAllStart(true)
-												}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{ }}>
+												}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>
 												Apply on All
 											</Button>
 											{/* <div style={{ marginRight: '10px' }}></div> */}
@@ -800,12 +799,12 @@ const AllProducts = ({ user }) => {
 									) : <></>}
 								</Col>
 							</Row>
-							<Row>
-								{selectedItem === 'Analytics' && salesAnalytics && (
-									<div className="my-4">
-										<canvas ref={chartRef} id="salesChart" width="400" height="200"></canvas>
-									</div>
-								)}
+							<Row className='mb-4 m-0'>
+								<Col className='mb-4 p-0 bg-light'>
+									{selectedItem === 'Analytics' && salesAnalytics && (
+										<canvas ref={chartRef} id="salesChart"></canvas>
+									)}
+								</Col>
 							</Row>
 
 							{/* Sale confirmation modal */}

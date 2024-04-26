@@ -217,7 +217,7 @@ const ShoppingCart = ({ user }) => {
 
 					<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-						<h1 className="cart-heading" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
+						<h1 className="cart-heading text-light" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
 					</div>
 					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
 						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '33rem', overflowY: 'auto', flex: 1 }}>

@@ -8,7 +8,7 @@ const {Flask_URL}= process.env
 const getProducts = async ({ query, catagory, isSaleOnly }) => {
   try {
     const sortOrder = query.sort;
-    if (sortOrder && sortOrder !== 'asc' && sortOrder !== 'desc') {
+    if (sortOrder && sortOrder !== 'asc' && sortOrder !== 'desc' && sortOrder!=='') {
       return { status: 400, data: { error: 'Invalid sort order. Use "asc" or "desc".' } };
     }
 
@@ -16,8 +16,11 @@ const getProducts = async ({ query, catagory, isSaleOnly }) => {
     const pageSize = parseInt(query.size) || 8;
     const queryName = query.name;
     const sortField = 'price';
-    const sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
-    let newArray 
+    let sortOptions = {};
+    if (sortOrder !== '') {
+      sortOptions = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+    }
+      let newArray 
     if (catagory.length!==0) {
       newArray = catagory.filter(item => item !== null);
 
@@ -92,19 +95,6 @@ const getProducts = async ({ query, catagory, isSaleOnly }) => {
         }
     }
     
-
-    // Update findQuery to exclude blocked products
-    // const findQuery = {
-    //   isDeleted: false,
-    //   status: { $ne: 'blocked' }, // Exclude blocked products
-    //   ...(queryName && {
-    //     $or: [
-    //       { name: { $regex: queryName, $options: 'i' } },
-    //       { description: { $regex: queryName, $options: 'i' } },
-    //     ],
-    //   }),
-    // };
-
     const totalCount = await Product.countDocuments(findQuery);
     const totalPages = Math.ceil(totalCount / pageSize);
 

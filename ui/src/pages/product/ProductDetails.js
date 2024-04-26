@@ -162,7 +162,7 @@ const ProductDetailPage = ({ user }) => {
 				{product && (
 
 					<div className='container my-4'>
-						<Row className="align-items-center">
+						<Row className="align-items-center landing">
 							{/* Image Container */}
 							<Col md={5} className='text-center'>
 								<Image className='img-fluid rounded mb-3' src={product.image} alt={product.name} style={{ maxHeight: '100%' }} />
@@ -198,19 +198,19 @@ const ProductDetailPage = ({ user }) => {
 									</div>
 								)}
 								<div className="text-left">
-									<h3 className="fw-bold">{product.name}</h3>
+									<h3 className="fw-bold text-light">{product.name}</h3>
 									<hr /><br />
-									<p><strong>Description:</strong></p>
-									<p>{product.description}</p>
+									<p className='text-purple-500'><strong>Description:</strong></p>
+									<p className='text-slate-400'>{product.description}</p>
 									<p>
-										<strong>Price:</strong>
+										<strong className='text-purple-500'>Price:</strong>
 										{product.isOnSale ? (
 											<>
-												<span style={{ color: 'red', textDecoration: 'line-through' }}>
+												<span className='px-1 text-danger' style={{ textDecoration: 'line-through' }}>
 													PKR {product.originalPrice.toFixed(2)}
 												</span>
 												{' '}
-												<span style={{ color: 'green' }}>
+												<span className='text-info' style={{ }}>
 													PKR {(
 														product.originalPrice -
 														(product.originalPrice * (product.offPercent / 100))
@@ -222,17 +222,21 @@ const ProductDetailPage = ({ user }) => {
 												PKR {product.originalPrice.toFixed(2)}
 											</span>
 										)}
-									</p>        <p><strong>Category:</strong> {product.category}</p>
-									<p style={{ display: 'flex', flexDirection: 'row' }}><strong style={{ marginRight: '5px' }}>Colour:</strong> {product.color}
-
+									</p>        
+									<p><strong className='text-purple-500'>Category:</strong> 
+										<span className='text-slate-400'>{product.category}</span>
+									</p>
+									<p style={{ display: 'flex', flexDirection: 'row' }}>
+										<strong className='text-purple-500' style={{ marginRight: '5px' }}>Colour:</strong> 
+											<span className='text-slate-400'>{product.color}</span>
 										<ColorIcon width="28" height="28" fill={product.color} />
 
 									</p>
-									<p><strong>Size:</strong> {product.size}</p>
+									<p ><strong className='text-purple-500'>Size:</strong> <span className='text-slate-400'>{product.size}</span></p>
 								</div>
 								<Form>
 									<div>
-										<p className="text-danger fw-bold">Quantity Available: <span className="text-danger">{product.quantity}</span></p>
+										<p className="text-purple-400 fw-bold">Quantity Available: <span className="text-info">{product.quantity}</span></p>
 									</div>
 									<div className="d-grid gap-2">
 										<Button variant="" size="lg" className="bg-black text-light mb-2" onClick={handleAddToCart} disabled={isProductInCart || product.quantity == 0}>
@@ -258,14 +262,14 @@ const ProductDetailPage = ({ user }) => {
 						<br /><br />
 						<Tabs
 							defaultActiveKey="Payments Policy"
-							className="mb-3 bg-light"
+							className="mb-3 bg-light rounded"
 						>
-							<Tab eventKey="Payments Policy" title="Payments Policy" className=' p3'>
+							<Tab eventKey="Payments Policy" title="Payments Policy" className='p3'>
 								<br />
-								<h5>
+								<h5 className='text'>
 									Payments
 								</h5>
-								<p className='text-justify'>
+								<p className='text-slate-300'>
 									At IntEcom, we value your security and convenience. Our secure payment system is powered by Stripe, one of the most trusted online payment solutions on the web. Stripe is certified to PCI Service Provider Level 1, the most stringent level of certification available in the payments industry. This means that when you shop with us, you can rest assured that your payment information is safe and protected.
 
 									We accept a variety of payment methods including major credit cards and digital wallets, ensuring that you can shop with ease. Once your order is confirmed, Stripe securely processes your payment, and you will receive an order confirmation via email.
@@ -276,7 +280,7 @@ const ProductDetailPage = ({ user }) => {
 								<h5>
 									Shipping
 								</h5>
-								<p className='text-justify'>
+								<p className='text-slate-300'>
 									Upon successful payment, your order information is immediately sent to the respective seller responsible for fulfillment. Our trusted network of sellers is committed to providing you with timely and efficient service. Each seller directly manages the shipping process for their products, which allows them to provide you with accurate updates.
 
 									The seller will handle the packaging and dispatch of your purchase. You can expect to receive shipping and delivery updates as the seller updates the status in our database during the key stages of fulfillment: Shipped when the item leaves their facility and Delivered once it arrives at your doorstep.

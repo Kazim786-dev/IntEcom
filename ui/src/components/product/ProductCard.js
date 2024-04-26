@@ -2,6 +2,8 @@ import React from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
+import HeartIcon from '../../static/icons/heart'
+import ShoppingCartIcon from '../../static/icons/cart'
 import './style.css'
 const ProductCard = ({
 	product,
@@ -36,27 +38,6 @@ const ProductCard = ({
 		navigate(`/product-detail/${product._id}`, { state: { wishlist: wishlist } })
 	}
 
-
-	function HeartIcon(props) {
-		return (
-			<svg
-				{...props}
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth="2"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-			>
-				<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-			</svg>
-		)
-	}
-
-
 	return (
 		<Card className="product-card bg-light border pb-0"
 			style={{ cursor: 'pointer', border: 'none', boxShadow: '0px 1px 1px rgba(0,0,0,0.15)', padding: '3px', position: 'relative' }}
@@ -67,12 +48,12 @@ const ProductCard = ({
 				</div>
 			)}
 			<Card.Img variant="top" src={product.image} className="product-card-img" />
-			<hr className='mb-1 mt-3'/>
+			<hr className='mb-1 mt-3' />
 			<Card.Body className="product-card-body rounded pt-0 pb-3 px-2 d-flex flex-column justify-content-between">
-				<Card.Text className='font-semibold pr-1 m-0' style={{ height: '27px', overflow: 'hidden' }}>
+				<Card.Text className=' text-light pr-1 m-0' style={{ height: '27px', overflow: 'hidden' }}>
 					{product.description}
 				</Card.Text>
-				<Card.Title className='mb-4 text-2xl font-semibold'>
+				<Card.Title className='mb-4 text-light text-2xl font-semibold'>
 					PKR {product.price.toFixed(2)}
 				</Card.Title>
 				<div className="d-flex justify-content-start mt-0 gap-2">
@@ -85,7 +66,10 @@ const ProductCard = ({
 							Added to Cart
 						</Button>
 					) : (
-						<Button size='sm' variant='' className='bg-black text-light' onClick={handleAddToCart}>
+						<Button size='sm' variant='' className='bg-black text-light d-flex items-center gap-1'
+							onClick={handleAddToCart}
+						>
+							<ShoppingCartIcon className="w-4 h-4" /> {/* Heart icon */}
 							Add to Cart
 						</Button>
 					)}
@@ -93,13 +77,13 @@ const ProductCard = ({
 						size='sm'
 						// variant='outline-primary'
 						variant='primary'
-						// className='border-dark'
+						className='d-flex items-center gap-1'
 						onClick={handleAddToWishlist}
 						disabled={isInWishlist(product._id)}
 						style={{ display: 'flex', alignItems: 'center' }} // Apply flexbox styles directly
 					>
 						<HeartIcon className="w-4 h-4" /> {/* Heart icon */}
-						<span className="p-1">
+						<span>
 							{isInWishlist(product._id) ? 'Added' : 'Wishlist'}
 						</span>
 					</Button>

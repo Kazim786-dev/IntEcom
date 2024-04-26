@@ -31,7 +31,7 @@ const AllProductsPage = ({ user }) => {
 
 	//states
 	const [searchTerm, setSearchTerm] = useState('')
-	const [priceFilter, setPriceFilter] = useState('desc')
+	const [priceFilter, setPriceFilter] = useState('')
 	const [fetchProductError, setFetchProductError] = useState(false)
 
 	const [wishlist, setWishlist] = useState([])
@@ -177,20 +177,18 @@ const AllProductsPage = ({ user }) => {
 	}
 
 	// Debounced version of fetchProducts
-	const debouncedFetchData = debounce(fetchProducts, 1000)
+	const debouncedFetchData = debounce(fetchProducts, 1800)
 
 	const handleSearchChange = (event) => {
 		const { value } = event.target
 		setSearchTerm(value)
+		setPriceFilter('')
 		setCurrentPage(1)
 	}
 
 	const handlePriceFilterChange = (event) => {
 		setPriceFilter(event.target.value)
 	}
-	const handleSortChange = (sortValue) => {
-		setPriceFilter(sortValue)
-	};
 
 	const addToCart = (product) => {
 		const foundProduct = cartProducts.find((item) => item._id == product._id)
@@ -266,19 +264,11 @@ const AllProductsPage = ({ user }) => {
 
 	}
 
-	const cartLength = cartProducts.length;
-	const isChecked = (item) => {
-		selectedFilters.includes(item)
-	}
-
 	const placeholderCount = 8;
 	const placeholders = Array.from({ length: placeholderCount }, (_, index) => index);
 
-
 	return (
 		<>
-			{/* <NavbarSider navLinks={navlinks} showSearch={true} onChange={handleSearchChange} value={searchTerm} ref={searchInputRef} > */}
-
 			{loading ? (
 				// <SpinnerComp/>
 				<Container fluid className='pt-5 min-vh-100 mb-5'>
@@ -297,36 +287,6 @@ const AllProductsPage = ({ user }) => {
 				(
 					<>
 						<Container fluid className='pt-0 min-vh-100 mt-4 mb-5'>
-
-							{/* <Row className='mb-4 m-0' >
-								<Col className='d-flex justify-content-start ps-0'>
-									<h2 className='text-primary'>Products</h2>
-								</Col>
-								<Col md={'auto'} className='d-flex align-items-start ms-0 me-3 ps-0'>
-									<div className="d-flex align-items-center">
-										<span className="me-2 font-semibold">Try Urdu Audio</span>
-										<div className='ms-2'>
-											<Form.Group>
-												<SpeakSearch handleAudioSearch={handleAudioSearch} />
-											</Form.Group>
-										</div>
-									</div>
-								</Col>
-								<Col  md={'auto'} className='d-flex align-items-center pe-0 gap-2'>
-								
-									<>
-										<Form.Label className='me-2 font-semibold'>Sort:</Form.Label>
-										<Form.Group className=''>
-											<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
-												<option value='asc'>Low to High</option>
-												<option value='desc'>High to Low</option>
-											</Form.Select>
-										</Form.Group>
-									</>
-									<Button onClick={handleToggleFilters} className='' variant='outline-primary'>Filters</Button>
-								</Col>
-
-							</Row> */}
 
 							<MemoizedFiltersRow searchTerm={searchTerm} handleToggleFilters={handleToggleFilters}
 								searchInputRef={searchInputRef} handleSearchChange={handleSearchChange}
@@ -378,26 +338,7 @@ const AllProductsPage = ({ user }) => {
 									<Offcanvas.Title><h5 className='text-3xl font-semibold mt-2 text-primary'>Filters</h5></Offcanvas.Title>
 								</Offcanvas.Header>
 								<Offcanvas.Body>
-									{/* Dynamically generate filter options */}
-									{/* {filters.map((filter, index) => (
-										<div key={index}>
-											<Form.Check
-												type='checkbox'
-												label={filter} // Directly use filter as the label since it's a string
-												id={`filter-${index}`} // Generate a unique ID for each checkbox
-												checked={selectedFilters.includes(filter)} // Check if the filter is in selectedFilters
-												onChange={() => handleFilterChange(filter)}
-											/>
-										</div>
-									))} */}
-									{/* <Form.Check
-										type='switch'
-										id='saleSwitch'
-										label='Discounted Products'
-										checked={showSaleProducts}
-										onChange={() => handleSalesFilter()}
-									/> */}
-
+								
 									{/* Filter options */}
 
 									<div className="mb-8">
@@ -405,6 +346,7 @@ const AllProductsPage = ({ user }) => {
 										{/* <h5 className="text-lg font-semibold mb-3">Sort by Price</h5> */}
 										<Form.Group className=''>
 											<Form.Select value={priceFilter} onChange={handlePriceFilterChange}>
+												<option value=''>Select</option>
 												<option value='asc'>Low to High</option>
 												<option value='desc'>High to Low</option>
 											</Form.Select>
@@ -453,8 +395,6 @@ const AllProductsPage = ({ user }) => {
 					</>
 				)
 			}
-
-			{/* </NavbarSider> */}
 		</>
 	)
 }

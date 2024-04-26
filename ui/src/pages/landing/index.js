@@ -2,14 +2,14 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import { Form, Link } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
+import { Container } from "react-bootstrap";
 
 import logo from '../../static/images/logo/logo.png'
-
 import Footer from "../../components/endFooter/endFooter";
 
 const LandingPage = () => {
     return (
-        <>
+        <Container fluid className="landing p-0">
             <Carousel interval={2200} style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <Carousel.Item>
                     {/* <ExampleCarouselImage text="First slide" /> */}
@@ -66,17 +66,17 @@ const LandingPage = () => {
                             className="mb-5 text-3xl text-primary font-bold tracking-tighter sm:text-4xl md:text-5xl/none lg:text-6xl">
                             Welcome to IntEcom
                             <p
-                                className="mx-auto tracking-normal text-dark" style={{ fontSize: '1.6rem' }}>
+                                className="mx-auto tracking-normal text-light" style={{ fontSize: '1.6rem' }}>
                                 where fashion meets technology
                             </p>
                         </h1>
                         <p
-                            className="mx-auto max-w-[600px] text-gray-700 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                            className="mx-auto max-w-[600px] text-purple-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                             The best place to find amazing match of products to your taste.
                         </p>
                     </div>
                     <div className="space-y-3">
-                        <p className="max-w-[600px] mx-auto text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                        <p className="max-w-[600px] mx-auto text-light md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                             Lets get started. Sign in or create your account
                         </p>
                     </div>
@@ -95,9 +95,9 @@ const LandingPage = () => {
                 <div
                     className="container grid items-center gap-4 px-4 text-center md:px-6 lg:gap-10">
                     <div className="space-y-3">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Why choose IntEcom?</h2>
+                        <h2 className="text-3xl text-primary font-bold tracking-tighter sm:text-4xl md:text-5xl">Why choose IntEcom?</h2>
                         <p
-                            className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                            className="mx-auto max-w-[600px] text-light md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed purple:text-gray-400">
                             We are dedicated to providing the best shopping experience. Here is what sets us apart.
                         </p>
                     </div>
@@ -107,25 +107,25 @@ const LandingPage = () => {
                             <ShoppingCartIcon className="w-20 h-20 rounded-full bg-gray-100 p-2 dark:bg-gray-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">Fast Shipping</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-sm text-purple-500 dark:text-purple-400">
                                     Get your items quickly with our expedited shipping options.
                                 </p>
                             </div>
                         </div>
                         <div className="flex flex-col items-center justify-center space-y-2">
-                            <CreditCardIcon className="w-20 h-20 rounded-full bg-gray-100 p-2 dark:bg-gray-800" />
+                            <CreditCardIcon className="w-20 h-20 rounded-full bg-purple-100 p-2 dark:bg-purple-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">Secure Payments</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-sm text-purple-500 dark:text-purple-400">
                                     Shop with confidence. Your payments are always secure with us.
                                 </p>
                             </div>
                         </div>
                         <div className="flex flex-col items-center justify-center space-y-2">
-                            <HelpCircleIcon className="w-20 h-20 rounded-full bg-gray-100 p-2 dark:bg-gray-800" />
+                            <HelpCircleIcon className="w-20 h-20 rounded-full bg-purple-100 p-2 dark:bg-purple-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">24/7 Support</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-sm text-purple-500 dark:text-purple-400">
                                     Need help? Our customer service team is available around the clock.
                                 </p>
                             </div>
@@ -136,16 +136,16 @@ const LandingPage = () => {
             <section className="w-full py-16 border-t">
                 <div className="container space-y-4 px-4 text-center md:px-6">
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                        <h2 className="text-3xl text-light font-bold tracking-tighter md:text-4xl/tight">
                             Experience the workflow the customers love the most.
                         </h2>
                         <p
-                            className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                            className="mx-auto max-w-[600px] text-light md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                             Let our team focus on shipping
                         </p>
                     </div>
                     <div className="mx-auto w-full max-w-sm space-y-2">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-purple-500 dark:text-purple-400">
                             Sign up to get notified when we launch.
                             <Link className="underline underline-offset-2" href="#">
                                 Terms & Conditions
@@ -154,42 +154,12 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-            {/* <footer
-                className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-                <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 IntECom Inc. All rights reserved.</p>
-                <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-                    <Link className="text-xs hover:underline underline-offset-4" href="#">
-                        Terms of Service
-                    </Link>
-                    <Link className="text-xs hover:underline underline-offset-4" href="#">
-                        Privacy
-                    </Link>
-                </nav>
-            </footer> */}
             <Footer />
 
-        </>
+        </Container>
     )
 }
 
-
-function MountainIcon(props) {
-    return (
-        (<svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round">
-            <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-        </svg>)
-    );
-}
 
 
 function ShoppingCartIcon(props) {

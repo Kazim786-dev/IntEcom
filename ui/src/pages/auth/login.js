@@ -113,15 +113,17 @@ const LoginPage = () => {
                             <span className='d-flex align-items-center gap-2 font-semibold '>
                                 <span style={{color:'white', fontFamily:'Lucida Handwriting'}}>IntEcom</span>
                             </span>
-                        <span className=' blockquote-footer tracking-tighter animate-pulse ' style={{marginBottom:'-16px', color:'#6f90af'}}>where fashion meets technology</span>
+                        <span className=' blockquote-footer tracking-tighter animate-pulse text-white' style={{marginBottom:'-16px'}}>where fashion meets technology</span>
                     </h2>
 				</div>
 				<div className="flex items-center justify-center p-6 lg:p-10 min-h-screen">
-					<div className="mx-auto w-full max-w-md px-4 space-y-8">
+					<div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing rounded-2">
 						<div className="space-y-2">
-							<h1 className="text-3xl font-bold" style={{color: '#005A9C',
-                            fontStyle: 'italic', }}>Welcome to IntEcom</h1>
-							<p className="text-gray-500 dark:text-gray-400">The best products delivered to your door</p>
+							<h1 className="text-3xl font-bold text-purple-700">
+								Welcome to IntEcom
+								<p className="text-light text-sm font-normal dark:text-light">The best products delivered to your door</p>
+							</h1>
+						
 						</div>
 						<form onSubmit={handleSubmit} className='items-start'>
 							<div className="flex flex-col space-y-3">
@@ -149,14 +151,14 @@ const LoginPage = () => {
 								</CustomButton>
 								<Row className="mt-3">
 									<Form.Group controlId="remember" className="mb-3">
-										<Form.Check className='font-semibold' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} />
+										<Form.Check className='font-semibold text-light' type="checkbox" name="remember" label="Remember me" checked={remember} onChange={handleFieldChange} />
 									</Form.Group>
 								</Row>
 								<div className="text-start">
-									<Link to='/forget-pass' className="text-black">Forgot your password?</Link>
+									<Link to='/forget-pass'>Forgot your password?</Link>
 								</div>
 								<div className="border-t text-center border-gray-200 dark:border-gray-800">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-gray-400 dark:text-gray-400">
 										Don't have an account?
 										<Link className="underline underline-offset-2" to={'/signup'}>
 											Sign up

@@ -1,4 +1,9 @@
-
+.landing{
+  background-image: url('../images/bg/product-card.jpg');
+  background-size: cover; /* Cover the entire element with the background image */
+    background-repeat: no-repeat; /* Do not repeat the background image */
+    background-position: center;
+}
 .pointer-cursor {
   cursor: pointer;
 }
@@ -123,23 +128,29 @@
   font-style: italic;
   color: #d31919;
 }
+
+.summary-element-container > * {
+  background-image: url('../images/bg/product-card.jpg');
+}
+
 /* product card */
 
 .product-card:hover {
-  transform: translateY(-7px); /* Move the card up on hover */
+  transform: translateY(-9px); /* Move the card up on hover */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
 }
 
 .product-card:hover .product-card-body {
-  /* background-color: #e4f6fa; */
-  background-color: #bdf0fc; /* Change background color of card body on hover */
-  
+  background-color: rgb(73, 37, 139);
+  /* background-color: #bdf0fc; */
+  /* background-color: #813eec; */
 }
 
 .product-card {
   width:17rem;
   height: 100%;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-image: url('../images/bg/product-card.jpg') !important
 }
 
 .product-card-img{
@@ -198,11 +209,21 @@
     color: #495057;
   }
   .header-cell {
-    background-color: #E9ECEF !important;
-    font-weight: 500;
+    /* background-color: #E9ECEF !important; */
+    background-color: #483f55 !important;
+    /* font-weight: 500;
     font-size: "16px";
     font-family: "Inter";
-    color:#212529;
+    color:#212529; */
+  }
+
+  .nav-sider-card{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    object-fit: fill;
+    background-image: url('../images/bg/cust-nav-sider-card.jpg');
+    /* background-image: url('https://img.freepik.com/free-vector/geometric-shapes-neon-lights-background_23-2148435097.jpg?w=740&t=st=1714133857~exp=1714134457~hmac=8dcae31849d3e6de1c2d488ba08bd266ea224c40a7a7444b5329141b6a0cdb40') !important; */
   }
   
   .total-container  {

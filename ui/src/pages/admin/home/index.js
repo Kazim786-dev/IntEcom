@@ -25,12 +25,12 @@ import { ReactComponent as ArrowUpRight } from '../../../static/images/svg/Arrow
 
 import {
 	PackageIcon,
-    ShoppingCartIcon,
-    AnalyticsIcon,
-    DiscountIcon,
-    EndSaleIcon,
-    FileWarningIcon,
-    FolderIcon,
+	ShoppingCartIcon,
+	AnalyticsIcon,
+	DiscountIcon,
+	EndSaleIcon,
+	FileWarningIcon,
+	FolderIcon,
 	UserIcon
 } from '../../../static/icons/admin-nav-icons'
 
@@ -114,8 +114,8 @@ const AllProducts = ({ user }) => {
 		if (selectedItem == 'Products' || selectedItem == "Orders Summary") {
 			var temp
 			if (selectedItem == 'Products') {
-				temp= selectedItem
-			}else{
+				temp = selectedItem
+			} else {
 				temp = 'Orders'
 			}
 
@@ -331,14 +331,14 @@ const AllProducts = ({ user }) => {
 	}, [salesAnalytics])
 
 	useEffect(() => {
-		if(selectedItem == 'Products'){
+		if (selectedItem == 'Products') {
 			debouncedFetchData()
 			// Cleanup the debounced function when the component is unmounted
 			return () => {
 				//return
 				debouncedFetchData.cancel()
 			}
-		} else if(selectedItem == 'Orders Summary'){
+		} else if (selectedItem == 'Orders Summary') {
 			debouncedFetchData()
 		} else if (selectedItem === 'Seller Requests') {
 			fetchSellers()
@@ -390,16 +390,16 @@ const AllProducts = ({ user }) => {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
-			}).then( (response)=>{
+			}).then((response) => {
 				console.log(response)
 				setSellers(response.data.sellers)
 				setTotalPages(response.data.totalPages)
 				setTableLoading(false)
-			}).catch((error)=>{
+			}).catch((error) => {
 				console.error('Error fetching sellers:', error)
 				setTableLoading(false)
 			})
-			
+
 		} catch (error) {
 			console.error('Error fetching sellers:', error)
 			setTableLoading(false)
@@ -447,7 +447,7 @@ const AllProducts = ({ user }) => {
 			header: 'Actions',
 			render: (sellers) => (
 				<>
-					<Button onClick={() => handleAcceptSeller(sellers._id)} variant="success">Accept</Button>
+					<Button onClick={() => handleAcceptSeller(sellers._id)} variant="primary">Accept</Button>
 					<Button onClick={() => handleRejectSeller(sellers._id)} variant="danger" className="ms-2">Reject</Button>
 				</>
 			),
@@ -509,8 +509,8 @@ const AllProducts = ({ user }) => {
 			header: 'Actions',
 			render: (item) => (
 				<>
-					<button className='d-flex gap-2'
-						style={{ border: 'none', paddingLeft: '0px' }}>
+					<button className='d-flex gap-2 px-2 py-1'
+						style={{ border: 'none', paddingLeft: '0px', backgroundColor: '#483f55' }}>
 						<Trash onClick={() => handleTrashClick(item)} />
 						<Edit onClick={() => handleEditClick(item)} />
 					</button>
@@ -577,7 +577,7 @@ const AllProducts = ({ user }) => {
 			render: (report) => (
 				<>
 					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
-					<Button onClick={() => handleCancelReport(report._id)} variant="secondary" className="ms-2">Cancel Report</Button>
+					<Button onClick={() => handleCancelReport(report._id)} variant="primary" className="ms-2">Cancel Report</Button>
 				</>
 			),
 		},
@@ -674,18 +674,17 @@ const AllProducts = ({ user }) => {
 		{
 			header: 'Action',
 			render: (item) => (
-				<div className='d-flex'>
+				<div className='d-flex gap-2'>
 					<Button
 						onClick={() => handleShip(item._id)}
-						variant="info"
+						variant="dark"
 						disabled={item.products.some(p => p.deliverStatus !== 'Pending')}
 					>
 						Ship
 					</Button>
 					<Button
 						onClick={() => handleDeliver(item._id)}
-						variant="success"
-						className="ms-2"
+						variant="primary"
 						disabled={item.products.some(p => p.deliverStatus !== 'Shipped')}
 					>
 						Deliver
@@ -844,19 +843,19 @@ const AllProducts = ({ user }) => {
 			width: '32rem',
 			render: (item) => item.description,
 
-		}, 
+		},
 		{
 			header: 'Current Price',
 			width: '15rem',
 			render: (item) => item.price.toFixed(2),
 
-		}, 
+		},
 		{
 			header: 'Original Price',
 			width: '15rem',
 			render: (item) => item.originalPrice.toFixed(2),
 
-		}, 
+		},
 		{
 			header: 'Stock',
 			width: '15rem',
@@ -967,224 +966,224 @@ const AllProducts = ({ user }) => {
 
 							<Row className='mb-3 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif'}}>{selectedItem}</h2>
+									<h2 className='text-light' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (
 										<>
-										<Form.Label className="me-2 mt-1"><b>Search:</b></Form.Label>
-										<Form.Group className="mb-1 mt-1">
-											<Form.Control
-												size='sm'
-												className='pe-5'
-												type="text"
-												value={searchTerm}
-												placeholder={`Search Product`}
-												onChange={handleSearchChange}
-												ref={searchInputRef}
-											/>
-										</Form.Group>
-										<Button variant='primary' size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{}}>Add Product</Button>
-
-									</>
-									) 
-									: selectedItem === 'Orders Summary' ? (
-										<>
-											<Form.Label className="me-2"><b>Search:</b></Form.Label>
-											<Form.Group className="mb-1">
+											<Form.Label className="me-2 mt-1 text-light"><b>Search:</b></Form.Label>
+											<Form.Group className="mb-1 mt-1">
 												<Form.Control
-												size='sm'
+													size='sm'
 													className='pe-5'
 													type="text"
 													value={searchTerm}
-													placeholder={`Search by Order#`}
+													placeholder={`Search Product`}
 													onChange={handleSearchChange}
 													ref={searchInputRef}
 												/>
 											</Form.Group>
+											<Button variant='primary' size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{}}>Add Product</Button>
+
 										</>
 									)
-									: selectedItem === 'Discount Management' ? (
-										<>
-											<Button size='sm' variant='primary' onClick={() => {
-												setShowSaleConfirmationModal(true)
-												setisAllStart(true)
-											}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>Apply on All</Button>
-											<div style={{ marginRight: '10px' }}></div>
-											<Button size='sm' variant='primary' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0}style={{}}>
-												Apply on Selected
-											</Button>
-											<Form.Group className="ms-2">
-												<Form.Control
-													size='sm'
-													type="number"
-													value={salePercentage}
-													placeholder="Discount %"
-													onChange={(e) => setSalePercentage(e.target.value)}
-													min="0"
-												/>
-											</Form.Group>
-										</>
-									) : selectedItem == 'End Sale' && (
-										<Col className='d-flex justify-content-end pe-0 align-items-center'>
-											<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0}style={{}}>End Sale for selected</Button>
-											<div style={{ marginRight: '10px' }}></div>
-											<Button size='sm' variant='primary' onClick={() => {
-												setShowEndSaleConfirmationModal(true)
-												setisAllEnd(true)
-											}} disabled={OnSale.length == 0} style={{}}>End Sale for all</Button>
-										</Col>
-									)
+										: selectedItem === 'Orders Summary' ? (
+											<>
+												<Form.Label className="me-2 text-light"><b>Search:</b></Form.Label>
+												<Form.Group className="mb-1">
+													<Form.Control
+														size='sm'
+														className='pe-5'
+														type="text"
+														value={searchTerm}
+														placeholder={`Search by Order#`}
+														onChange={handleSearchChange}
+														ref={searchInputRef}
+													/>
+												</Form.Group>
+											</>
+										)
+											: selectedItem === 'Discount Management' ? (
+												<>
+													<Button size='sm' variant='primary' onClick={() => {
+														setShowSaleConfirmationModal(true)
+														setisAllStart(true)
+													}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>Apply on All</Button>
+													<div style={{ marginRight: '10px' }}></div>
+													<Button size='sm' variant='primary' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0} style={{}}>
+														Apply on Selected
+													</Button>
+													<Form.Group className="ms-2">
+														<Form.Control
+															size='sm'
+															type="number"
+															value={salePercentage}
+															placeholder="Discount %"
+															onChange={(e) => setSalePercentage(e.target.value)}
+															min="0"
+														/>
+													</Form.Group>
+												</>
+											) : selectedItem == 'End Sale' && (
+												<Col className='d-flex justify-content-end pe-0 align-items-center'>
+													<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0} style={{}}>End Sale for selected</Button>
+													<div style={{ marginRight: '10px' }}></div>
+													<Button size='sm' variant='primary' onClick={() => {
+														setShowEndSaleConfirmationModal(true)
+														setisAllEnd(true)
+													}} disabled={OnSale.length == 0} style={{}}>End Sale for all</Button>
+												</Col>
+											)
 									}
-
-						
 								</Col>
-					</Row>
-					<Row>
-						{selectedItem === 'Analytics' && salesAnalytics && (
-							<div className="my-4">
-								<canvas ref={chartRef} id="salesChart" width="400" height="200"></canvas>
+							</Row>
+							{selectedItem === 'Analytics' &&
+								<Row className='mb-4 m-0'>
+									<Col className='mb-4 p-0 bg-light'>
+										{salesAnalytics && (
+											<canvas ref={chartRef} id="salesChart"></canvas>
+										)}
+									</Col>
+								</Row>
+							}
+
+							{/* Sale confirmation modal */}
+							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+									<Modal.Title>Confirm Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									Are you sure you want to put the products on sale with a {salePercentage}% discount?
+								</Modal.Body>
+								<Modal.Footer>
+									<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
+										Cancel
+									</Button>
+									<Button variant="primary" onClick={handleConfirmSale}>
+										Confirm
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+							{/* end Sale confirmation modal */}
+							<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
+								<Modal.Header closeButton>
+									<Modal.Title>Confirm End Sale</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									Are you sure you want to put products on back on origional price?
+								</Modal.Body>
+								<Modal.Footer>
+									<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
+										Cancel
+									</Button>
+									<Button variant="primary" onClick={handleConfirmEndSale}>
+										Confirm
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+							<div className='border shadow-sm rounded' style={{ height: '31rem', overflowY: 'auto' }}>
+								{tableLoading ? (
+									<SpinnerComp />
+								) : selectedItem === 'Reported Products' ? (
+									<DetailsTable
+										data={reportedProducts}
+										columns={ReportedProductsTableColumns}
+									/>
+								) : selectedItem === 'Process Orders' ? (
+									<DetailsTable
+										data={processedOrders}
+										columns={ProcessedOrdersTableColumns}
+									/>
+								) : selectedItem === 'Seller Requests' ? (
+									<DetailsTable
+										data={sellers}
+										columns={SellerTablecolumns}
+									/>
+								) : selectedItem === 'Analytics' && salesAnalytics ? (
+									<DetailsTable
+										data={salesAnalytics}
+										columns={SellersTablecolumns}
+									/>
+								) : selectedItem === 'Discount Management' ? (
+									<DetailsTable
+										data={notOnSale}
+										columns={productsColumns}
+									/>
+								) : selectedItem === 'End Sale' ? (
+									<DetailsTable
+										data={OnSale}
+										columns={EndSaleProductsColumns}
+									/>
+								) : selectedItem === 'Products' ? (
+									<DetailsTable
+										data={data}
+										columns={ProductsTablecolumns}
+									/>
+								) : (
+									<DetailsTable
+										data={data}
+										columns={OrdersTablecolumns}
+									/>
+								)}
 							</div>
-						)}
-					</Row>
 
-					{/* Sale confirmation modal */}
-					<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
-						<Modal.Header closeButton>
-							<Modal.Title>Confirm Sale</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>
-							Are you sure you want to put the products on sale with a {salePercentage}% discount?
-						</Modal.Body>
-						<Modal.Footer>
-							<Button variant="secondary" onClick={() => setShowSaleConfirmationModal(false)}>
-								Cancel
-							</Button>
-							<Button variant="primary" onClick={handleConfirmSale}>
-								Confirm
-							</Button>
-						</Modal.Footer>
-					</Modal>
-
-
-					{/* end Sale confirmation modal */}
-					<Modal show={showEndSaleConfirmationModal} onHide={() => setShowEndSaleConfirmationModal(false)}>
-						<Modal.Header closeButton>
-							<Modal.Title>Confirm End Sale</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>
-							Are you sure you want to put products on back on origional price?
-						</Modal.Body>
-						<Modal.Footer>
-							<Button variant="secondary" onClick={() => setShowEndSaleConfirmationModal(false)}>
-								Cancel
-							</Button>
-							<Button variant="primary" onClick={handleConfirmEndSale}>
-								Confirm
-							</Button>
-						</Modal.Footer>
-					</Modal>
-
-					<div className='border shadow-sm rounded' style={{ height: '31rem', overflowY: 'auto' }}>
-						{tableLoading ? (
-							<SpinnerComp />
-						) : selectedItem === 'Reported Products' ? (
-							<DetailsTable
-								data={reportedProducts}
-								columns={ReportedProductsTableColumns}
+							<Footer
+								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
+								text={''}
+								totalPages={totalPages}
+								currentPage={currentPage}
+								setCurrentPage={handlePageChange}
 							/>
-						) : selectedItem === 'Process Orders' ? (
-							<DetailsTable
-								data={processedOrders}
-								columns={ProcessedOrdersTableColumns}
-							/>
-						) : selectedItem === 'Seller Requests' ? (
-							<DetailsTable
-								data={sellers}
-								columns={SellerTablecolumns}
-							/>
-						) : selectedItem === 'Analytics' && salesAnalytics ? (
-							<DetailsTable
-								data={salesAnalytics}
-								columns={SellersTablecolumns}
-							/>
-						) : selectedItem === 'Discount Management' ? (
-							<DetailsTable
-								data={notOnSale}
-								columns={productsColumns}
-							/>
-						) : selectedItem === 'End Sale' ? (
-							<DetailsTable
-								data={OnSale}
-								columns={EndSaleProductsColumns}
-							/>
-						) : selectedItem === 'Products' ? (
-							<DetailsTable
-								data={data}
-								columns={ProductsTablecolumns}
-							/>
-						) : (
-							<DetailsTable
-								data={data}
-								columns={OrdersTablecolumns}
-							/>
-						)}
-					</div>
-
-					<Footer
-						className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}
-						text={''}
-						totalPages={totalPages}
-						currentPage={currentPage}
-						setCurrentPage={handlePageChange}
-					/>
-				</Col>
+						</Col>
 					</Row >
 
-		{ fetchDataError && (
-			<AlertComp
-				variant='danger'
-				text={Errortext}
-				onClose={() => setFetchDataError(false)}
-			/>
-		)
-}
+					{fetchDataError && (
+						<AlertComp
+							variant='danger'
+							text={Errortext}
+							onClose={() => setFetchDataError(false)}
+						/>
+					)
+					}
 
-{
-	showDeleteModal && (
-		<DeleteConfirmationModal
-			showDeleteModal={showDeleteModal}
-			setShowDeleteModal={setShowDeleteModal}
-			handleDeleteConfirmation={handleDeleteConfirmation}
-		/>
-	)
-}
+					{
+						showDeleteModal && (
+							<DeleteConfirmationModal
+								showDeleteModal={showDeleteModal}
+								setShowDeleteModal={setShowDeleteModal}
+								handleDeleteConfirmation={handleDeleteConfirmation}
+							/>
+						)
+					}
 
-{
-	showOrderCanvas && (
-		<OffCanvasComp
-			placement={'end'}
-			show={showOrderCanvas}
-			setShow={setShowOrderCanvas}
-			orderItem={orderItem}
-			name={orderItem.user.name}
-			token={user.token}
-		/>
-	)
-}
+					{
+						showOrderCanvas && (
+							<OffCanvasComp
+								placement={'end'}
+								show={showOrderCanvas}
+								setShow={setShowOrderCanvas}
+								orderItem={orderItem}
+								name={orderItem.user.name}
+								token={user.token}
+							/>
+						)
+					}
 
-{
-	showProductCanvas && (
-		<ProductCanvas
-			placement={'end'}
-			show={showProductCanvas}
-			setShow={setShowProductCanvas}
-			product={product}
-			handleShouldFetchAgain={handleShouldFetchAgain}
-			token={user.token}
-		/>
-	)
-}
+					{
+						showProductCanvas && (
+							<ProductCanvas
+								placement={'end'}
+								show={showProductCanvas}
+								setShow={setShowProductCanvas}
+								product={product}
+								handleShouldFetchAgain={handleShouldFetchAgain}
+								token={user.token}
+							/>
+						)
+					}
 				</Container >
 			)}
 		</>
