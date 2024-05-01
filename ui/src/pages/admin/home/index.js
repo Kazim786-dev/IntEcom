@@ -562,22 +562,22 @@ const AllProducts = ({ user }) => {
 		},
 		{
 			header: 'Reported By',
-			width: '15rem',
+			width: '14rem',
 			render: (report) => report.user.name,
 		},
 		{
 			header: 'Reason',
-			width: '20rem',
+			width: '27rem',
 			render: (report) => report.text,
 		},
 		// ... other columns for product details
 		{
 			header: 'Actions',
-			width: '17rem',
+			width: '20rem',
 			render: (report) => (
 				<>
-					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block Product</Button>
-					<Button onClick={() => handleCancelReport(report._id)} variant="primary" className="ms-2">Cancel Report</Button>
+					<Button onClick={() => handleBlockProduct(report.product._id)} variant="danger">Block</Button>
+					<Button onClick={() => handleCancelReport(report._id)} variant="primary" className="ms-2">Cancel</Button>
 				</>
 			),
 		},
@@ -790,7 +790,7 @@ const AllProducts = ({ user }) => {
 
 			setTableLoading(true)
 			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/not-on-discount?page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/not-on-discount?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -817,7 +817,7 @@ const AllProducts = ({ user }) => {
 
 			setTableLoading(true)
 			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/on-discount?page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/on-discount?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -1043,9 +1043,33 @@ const AllProducts = ({ user }) => {
 										{salesAnalytics && (
 											<canvas ref={chartRef} id="salesChart"></canvas>
 										)}
+										
 									</Col>
 								</Row>
 							}
+							{(selectedItem === "Discount Management" || selectedItem === "End Sale") && (
+											<Row className="justify-content-between align-items-center mb-3">
+											<Col md={6}>
+												{/* Left side content or empty if not needed */}
+											</Col>
+											<Col md={6}>
+												<div className="d-flex justify-content-end">
+													<Form.Label htmlFor="searchInput" className="me-2 align-self-center text-light"><b>Search:</b></Form.Label>
+													<Form.Control
+														size="md"
+														id="searchInput"
+														className='pe-5'
+														type="text"
+														value={searchTerm}
+														placeholder={`Search Product for ${selectedItem}`}
+														onChange={handleSearchChange}
+														ref={searchInputRef}
+														style={{ width: 'auto' }}  // Adjust width as necessary
+													/>
+												</div>
+											</Col>
+										</Row>
+									)}
 
 							{/* Sale confirmation modal */}
 							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>

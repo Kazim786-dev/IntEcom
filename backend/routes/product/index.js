@@ -181,9 +181,9 @@ router.post('/end-sale', async (req, res) => {
 // Get all Products not on sale
 router.get('/user-not-on-discount',authMiddleware, async (req, res) => {
   try {
-    const { page = 1, size = 9 } = req.query;
+    const { prod, page = 1, size = 9 } = req.query;
     const userId = req.user.user._id;
-    const result = await UserloadNotOnDiscount(page, size, userId);
+    const result = await UserloadNotOnDiscount(prod, page, size, userId);
     return res.status(result.status).json(result.data);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error.' });
@@ -207,9 +207,9 @@ router.post('/user-put-on-sale', authMiddleware, async (req, res) => {
 // Get all Products on sale
 router.get('/user-on-discount',authMiddleware, async (req, res) => {
   try {
-    const { page = 1, size = 9 } = req.query;
+    const { prod, page = 1, size = 9 } = req.query;
     const userId = req.user.user._id;
-    const result = await UserloadOnDiscount(page, size, userId);
+    const result = await UserloadOnDiscount(prod, page, size, userId);
     return res.status(result.status).json(result.data);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error.' });
