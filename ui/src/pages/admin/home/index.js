@@ -349,9 +349,11 @@ const AllProducts = ({ user }) => {
 		} else if (selectedItem === 'Analytics') {
 			fetchSalesAnalytics()
 		} else if (selectedItem === 'Discount Management') {
-			loadNotOnDiscount()
+			// loadNotOnDiscount()
+			debouncedLoadNotOnDiscount()
 		} else if (selectedItem === 'End Sale') {
-			loadOnDiscount()
+			// loadOnDiscount()
+			debouncedLoadOnDiscount()
 		}
 
 	}, [currentPage, selectedItem, searchTerm])
@@ -811,6 +813,8 @@ const AllProducts = ({ user }) => {
 		}
 	}
 
+	const debouncedLoadNotOnDiscount = debounce(loadNotOnDiscount, 1700)
+
 	/////end sale
 	const loadOnDiscount = async () => {
 		try {
@@ -836,6 +840,8 @@ const AllProducts = ({ user }) => {
 			setTableLoading(false)
 		}
 	}
+
+	const debouncedLoadOnDiscount = debounce(loadOnDiscount, 1700)
 
 	const EndSaleProductsColumns = [
 		{
@@ -1049,10 +1055,10 @@ const AllProducts = ({ user }) => {
 							}
 							{(selectedItem === "Discount Management" || selectedItem === "End Sale") && (
 											<Row className="justify-content-between align-items-center mb-3">
-											<Col md={6}>
+											<Col md={4}>
 												{/* Left side content or empty if not needed */}
 											</Col>
-											<Col md={6}>
+											<Col md={8}>
 												<div className="d-flex justify-content-end">
 													<Form.Label htmlFor="searchInput" className="me-2 align-self-center text-light"><b>Search:</b></Form.Label>
 													<Form.Control
@@ -1061,7 +1067,7 @@ const AllProducts = ({ user }) => {
 														className='pe-5'
 														type="text"
 														value={searchTerm}
-														placeholder={`Search Product for ${selectedItem}`}
+														placeholder={`Search Product`}
 														onChange={handleSearchChange}
 														ref={searchInputRef}
 														style={{ width: 'auto' }}  // Adjust width as necessary

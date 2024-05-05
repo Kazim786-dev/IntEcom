@@ -1,12 +1,12 @@
 .landing{
-  background-image: url('../images/bg/cust-nav-sider-card.jpg');
+    background-image: url('../images/bg/cust-nav-sider-card.jpg') !important;
     background-size: cover; /* Cover the entire element with the background image */
     background-repeat: no-repeat; /* Do not repeat the background image */
     background-position: center;
 }
 
 .product-detail{
-  background-image: url('../images/bg/wishlist.jpg');
+  background-image: url('../images/bg/wishlist.jpg') !important;
   background-size: cover; /* Cover the entire element with the background image */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: center;

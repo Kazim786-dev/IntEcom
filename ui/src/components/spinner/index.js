@@ -11,7 +11,7 @@ const SpinnerComp = ({ style }) => {
 	const containerStyle = { ...defaultStyle, ...style };
 	return (
 		<div className='d-flex justify-content-center align-items-center' style={containerStyle}>
-			<Spinner animation="border" variant="light" />
+			<Spinner animation="border" variant="primary" />
 		</div>
 	)
 }
