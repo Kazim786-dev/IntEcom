@@ -3,7 +3,7 @@ import SpinnerComp from "../spinner";
 
 const ProductLoadPlaceHolder = () => {
     return (
-        <div className="card product-card" aria-hidden="true">
+        <div className="card placeholder-product-card" aria-hidden="true">
             {/* <img src="..." className="card-img-top product-card-img bg-gray-400" alt="..."/> */}
             <div className="card-img-top product-card-img bg-gray-300" >
                 <SpinnerComp style={{height: '100%'}}/>
@@ -20,7 +20,7 @@ const ProductLoadPlaceHolder = () => {
                         <span className="placeholder col-8"></span>
                     </p>
                     <div className="d-flex gap-2">
-                        <a href="#" tabIndex="-1" className="btn btn-dark disabled placeholder col-6"></a>
+                        <a href="#" tabIndex="-1" className="btn btn-dark disabled placeholder col-6" style={{backgroundColor:'black'}}></a>
                         <a href="#" tabIndex="-1" className="btn btn-primary disabled placeholder col-6"></a>
                     </div>
                 </div>

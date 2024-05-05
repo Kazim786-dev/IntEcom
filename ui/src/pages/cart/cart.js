@@ -168,13 +168,13 @@ const ShoppingCart = ({ user }) => {
 					</button>
 					<input
 						type="number"
-						className="form-control quantity-input mx-3"
+						className="form-control quantity-input mx-2"
 						value={item.orderQuantity}
 						onChange={(e) => handleQuantityChange(e, item._id)}
 						min="1"
 						max={item.quantity} // Assuming you have a stock property
 						style={{
-							width: '80px',
+							width: '70px',
 							textAlign: 'center',
 							borderRadius: '4px',
 							borderColor: '#DFDFDF',
@@ -217,11 +217,11 @@ const ShoppingCart = ({ user }) => {
 
 					<div className="d-flex align-items-center heading-container">
 						<Link to='/products'><ArrowLeft style={{ cursor: 'pointer' }} /></Link>
-						<h1 className="cart-heading text-light" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
+						<h1 className="cart-heading text-primary" style={{ fontFamily: 'Arial, sans-serif'}}>Your Shopping Bag</h1>
 					</div>
 					<Row className='p-0' style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
 						<Col className='p-0 border shadow-sm rounded' lg={9} style={{height: '33rem', overflowY: 'auto', flex: 1 }}>
-							<DetailsTable data={cartItems} columns={columns} />
+							<DetailsTable isTransparent={true} data={cartItems} columns={columns} />
 						</Col>
 						<Col lg={3} style={{
 							// flex: 1,

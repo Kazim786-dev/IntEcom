@@ -9,7 +9,7 @@ import Footer from "../../components/endFooter/endFooter";
 
 const LandingPage = () => {
     return (
-        <Container fluid className="landing p-0">
+        <Container fluid className="p-0">
             <Carousel interval={2200} style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <Carousel.Item>
                     {/* <ExampleCarouselImage text="First slide" /> */}
@@ -71,7 +71,7 @@ const LandingPage = () => {
                             </p>
                         </h1>
                         <p
-                            className="mx-auto max-w-[600px] text-purple-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                            className="mx-auto max-w-[600px] text-secondary md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                             The best place to find amazing match of products to your taste.
                         </p>
                     </div>
@@ -107,7 +107,7 @@ const LandingPage = () => {
                             <ShoppingCartIcon className="w-20 h-20 rounded-full bg-gray-100 p-2 dark:bg-gray-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">Fast Shipping</h3>
-                                <p className="text-sm text-purple-500 dark:text-purple-400">
+                                <p className="text-sm text-light dark:text-light">
                                     Get your items quickly with our expedited shipping options.
                                 </p>
                             </div>
@@ -116,7 +116,7 @@ const LandingPage = () => {
                             <CreditCardIcon className="w-20 h-20 rounded-full bg-purple-100 p-2 dark:bg-purple-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">Secure Payments</h3>
-                                <p className="text-sm text-purple-500 dark:text-purple-400">
+                                <p className="text-sm text-light dark:text-light">
                                     Shop with confidence. Your payments are always secure with us.
                                 </p>
                             </div>
@@ -125,7 +125,7 @@ const LandingPage = () => {
                             <HelpCircleIcon className="w-20 h-20 rounded-full bg-purple-100 p-2 dark:bg-purple-800" />
                             <div className="space-y-2">
                                 <h3 className="font-bold text-primary">24/7 Support</h3>
-                                <p className="text-sm text-purple-500 dark:text-purple-400">
+                                <p className="text-sm text-light dark:text-light">
                                     Need help? Our customer service team is available around the clock.
                                 </p>
                             </div>

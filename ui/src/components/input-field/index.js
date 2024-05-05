@@ -21,7 +21,7 @@ const FormField = ({
     
 	return (
 		<Form.Group controlId={controlId} className={className}>
-			<Form.Label className="text-styles input-field text-purple-400">{label}</Form.Label>
+			<Form.Label className="text-styles input-field text-light">{label}</Form.Label>
 			<Form.Control
 				type={type}
 				as={as}

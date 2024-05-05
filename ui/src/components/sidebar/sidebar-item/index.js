@@ -7,8 +7,9 @@ const SidebarItem = ({ icon, text, isSelected, onItemClick }) => {
             className={`sidebar-item font-semibold p-2 ${isSelected ? 'active' : ''}`}
             onClick={onItemClick}
         >
-            <span className={`ms-2 ${isSelected ? 'text-light' : 'text-slate-400'}`}>{icon}</span>
-            <span className={`ms-2 ${isSelected ? 'text-light' : 'text-slate-400'}`}>{text}</span>
+            {/* ${isSelected ? 'text-light' : 'text-slate-300'} */}
+            <span className={`ms-2 ${isSelected ? 'text-light' : 'text-primary'}`}>{icon}</span>
+            <span className={`ms-2`}>{text}</span>
         </div>
     )
 }

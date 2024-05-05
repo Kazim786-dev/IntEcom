@@ -65,7 +65,7 @@ const OffCanvasComp = ({
 			header: 'Title',
 			width: '32rem',
 			render: (item) => (
-				<div className="row align-items-center pe-5">
+				<div className="row align-items-center text-black pe-5">
 					<div className="col-auto pe-0" >
 						<Image src={item.image} alt="Product" className='table-product-img' />
 					</div>
@@ -79,13 +79,13 @@ const OffCanvasComp = ({
 			header: 'Price',
 			width: '17rem',
 			render: (product) => (
-				product.price.toFixed(2)
+				<span className='text-black'>{product.price.toFixed(2)}</span>
 			),
 		},
 		{
 			header: 'Quantity',
 			width: '22rem',
-			render: (product) => product.quantity,
+			render: (product) => <span className='text-black'>{product.quantity}</span>,
 		},
 		// {
 		// 	header: 'Stock',
@@ -103,7 +103,7 @@ const OffCanvasComp = ({
 					<Offcanvas show={show} onHide={() => setShow(false)} placement={placement} style={{ width: '80%' }}>
 						<Offcanvas.Body>
 							<Container fluid className="pt-0 p-3" >
-								<div className="d-flex align-items-center heading-container">
+								<div className="d-flex text-primary align-items-center heading-container">
 									<ArrowLeft onClick={() => setShow(false)} style={{ cursor: 'pointer' }}/>
 									<h3 className='ms-1'>Order Detail</h3>
 								</div>

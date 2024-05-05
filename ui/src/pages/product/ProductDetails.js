@@ -162,7 +162,7 @@ const ProductDetailPage = ({ user }) => {
 				{product && (
 
 					<div className='container my-4'>
-						<Row className="align-items-center landing">
+						<Row className="px-2 py-3 align-items-center cust-nav-sider-card product-detail text-black">
 							{/* Image Container */}
 							<Col md={5} className='text-center'>
 								<Image className='img-fluid rounded mb-3' src={product.image} alt={product.name} style={{ maxHeight: '100%' }} />
@@ -197,20 +197,20 @@ const ProductDetailPage = ({ user }) => {
 										{product.offPercent}% OFF
 									</div>
 								)}
-								<div className="text-left">
-									<h3 className="fw-bold text-light">{product.name}</h3>
+								<div className="text-left ps-2">
+									<h3 className="fw-bold text-primary">{product.name}</h3>
 									<hr /><br />
-									<p className='text-purple-500'><strong>Description:</strong></p>
-									<p className='text-slate-400'>{product.description}</p>
+									<p className=''><strong>Description:</strong> <span className='text-slate-800'>{product.description}</span></p>
+									
 									<p>
-										<strong className='text-purple-500'>Price:</strong>
+										<strong className=''>Price: </strong>
 										{product.isOnSale ? (
 											<>
 												<span className='px-1 text-danger' style={{ textDecoration: 'line-through' }}>
 													PKR {product.originalPrice.toFixed(2)}
 												</span>
 												{' '}
-												<span className='text-info' style={{ }}>
+												<span style={{ color:'green'}}>
 													PKR {(
 														product.originalPrice -
 														(product.originalPrice * (product.offPercent / 100))
@@ -223,28 +223,28 @@ const ProductDetailPage = ({ user }) => {
 											</span>
 										)}
 									</p>        
-									<p><strong className='text-purple-500'>Category:</strong> 
-										<span className='text-slate-400'>{product.category}</span>
+									<p><strong className=''>Category:</strong> 
+										<span className='text-slate-800'>{product.category}</span>
 									</p>
 									<p style={{ display: 'flex', flexDirection: 'row' }}>
-										<strong className='text-purple-500' style={{ marginRight: '5px' }}>Colour:</strong> 
-											<span className='text-slate-400'>{product.color}</span>
+										<strong className='' style={{ marginRight: '5px' }}>Colour:</strong> 
+											<span className='text-slate-800'>{product.color}</span>
 										<ColorIcon width="28" height="28" fill={product.color} />
 
 									</p>
-									<p ><strong className='text-purple-500'>Size:</strong> <span className='text-slate-400'>{product.size}</span></p>
+									<p ><strong className=''>Size:</strong> <span className='text-slate-800'>{product.size}</span></p>
 								</div>
-								<Form>
+								<Form className='ps-2'>
 									<div>
-										<p className="text-purple-400 fw-bold">Quantity Available: <span className="text-info">{product.quantity}</span></p>
+										<p className=" fw-bold">Quantity Available: <span className="text-primary">{product.quantity}</span></p>
 									</div>
 									<div className="d-grid gap-2">
-										<Button variant="" size="lg" className="bg-black text-light mb-2" onClick={handleAddToCart} disabled={isProductInCart || product.quantity == 0}>
-											{isProductInCart ? 'In Cart' : product.quantity == 0 ? 'Out of Stock' : 'Add to Cart'}
+										<Button variant="" size="lg" className="bg-black text-white mb-2" onClick={handleAddToCart} disabled={isProductInCart || product.quantity == 0}>
+											{isProductInCart ? 'Already In Cart' : product.quantity == 0 ? 'Out of Stock' : 'Add to Cart'}
 										</Button>
 										<Button variant="outline-primary" size="lg" className="mb-2" onClick={handleAddToWishlist} disabled={isProductInWishlist} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 											<HeartIcon className="w-4 h-4" /> {/* Heart icon */}
-											<span className="p-1">
+											<span className="mx-1">
 												{isProductInWishlist ? 'Added' : 'Wishlist'}
 											</span>
 										</Button>
@@ -257,16 +257,14 @@ const ProductDetailPage = ({ user }) => {
 						</Row>
 
 
-						<hr />
-						<br />
-						<br /><br />
+						<hr /><br /><br /><br />
 						<Tabs
 							defaultActiveKey="Payments Policy"
 							className="mb-3 bg-light rounded"
 						>
 							<Tab eventKey="Payments Policy" title="Payments Policy" className='p3'>
 								<br />
-								<h5 className='text'>
+								<h5 className='text-info'>
 									Payments
 								</h5>
 								<p className='text-slate-300'>
@@ -277,7 +275,7 @@ const ProductDetailPage = ({ user }) => {
 							</Tab>
 							<Tab eventKey="Shipping Policy" title="Shipping Policy">
 								<br />
-								<h5>
+								<h5 className='text-info'>
 									Shipping
 								</h5>
 								<p className='text-slate-300'>

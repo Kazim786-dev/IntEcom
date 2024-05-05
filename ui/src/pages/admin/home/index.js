@@ -510,7 +510,7 @@ const AllProducts = ({ user }) => {
 			render: (item) => (
 				<>
 					<button className='d-flex gap-2 px-2 py-1'
-						style={{ border: 'none', paddingLeft: '0px', backgroundColor: '#483f55' }}>
+						style={{ border: 'none', paddingLeft: '0px', }}>
 						<Trash onClick={() => handleTrashClick(item)} />
 						<Edit onClick={() => handleEditClick(item)} />
 					</button>
@@ -966,7 +966,7 @@ const AllProducts = ({ user }) => {
 
 							<Row className='mb-3 m-0'>
 								<Col className='d-flex justify-content-start ps-0 align-items-center'>
-									<h2 className='text-light' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
+									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
 									{selectedItem === 'Products' ? (

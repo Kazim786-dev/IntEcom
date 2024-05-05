@@ -20,20 +20,20 @@ const NavTag = ({user}) => {
 
     return (
         <div className="w-full flex-1 nav-tag">
-            <header className="flex items-center justify-between gap-4 border-b bg-gray-100/50 p-2 px-3">
+            <header className="flex items-center justify-between gap-4 border-b bg-gray-700 p-2 px-3">
                 <div className="">
                 {/* text-2xl sm:text-3xl md:text-4xl */}
                     
                     
-                    <h4 className="m-0 d-flex align-items-center gap-2 font-semibold tracking-tighter text-black">
+                    <h4 className="m-0 d-flex align-items-center gap-2 font-semibold tracking-tighter text-light">
                         {user && user.role !== 'customer' && (
-                            <span className='d-flex align-items-center gap-2 font-semibold text-violet-800'>
+                            <span className='d-flex align-items-center gap-2 font-semibold text-primary'>
                                 <Package2Icon className='h-6 w-6'/>
                                 <span className='mr-3'>IntEcom</span>
                             </span>
                         )}
                         Fashion for Every Season 
-                        <span className=' blockquote-footer tracking-tighter animate-pulse text-light ' style={{marginBottom:'-16px'}}>where fashion meets technology</span>
+                        <span className=' blockquote-footer tracking-tighter animate-pulse text-primary ' style={{marginBottom:'-16px'}}>where fashion meets technology</span>
                     </h4>
 
 

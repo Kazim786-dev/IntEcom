@@ -66,7 +66,7 @@ const Wishlist = ({ user }) => {
 				<br/>
 				{wishlistItems.length > 0 ? (
 					wishlistItems.map((item, index) => (
-						<Card className="wishlist-item px-4 py-2 text-light" key={index}>
+						<Card className="wishlist-item px-4 py-2 text-black" key={index}>
 							<Row className="align-items-center justify-content-center">
 								<Col md={2} style={{display:"flex", alignItems:'center', justifyContent:'center'}}>
 									<Image src={item.image} alt={'image not found'} fluid className="wishlist-item-img" />
