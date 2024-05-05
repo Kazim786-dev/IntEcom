@@ -2,12 +2,26 @@
 import Product from '../../models/product.js'; // Import your Product model
 
 const loadNotOnDiscount = async (req, res) => {
-  const { page = 1, size = 9 } = req.query;
+  const { prod, page = 1, size = 9 } = req.query;
+
+  // Initialize the search query to handle cases when prod is undefined or an empty string
+  var productToSearch = prod && prod !== 'undefined' ? prod : '';
+
   try {
-    const totalCount = await Product.countDocuments({ isOnSale: false });
+    const findQuery = {
+      isOnSale: false,
+      ...(productToSearch && {
+        $or: [
+          { name: { $regex: productToSearch, $options: 'i' } },
+          { description: { $regex: productToSearch, $options: 'i' } },
+        ]
+      })
+    };
+
+    const totalCount = await Product.countDocuments(findQuery);
     const totalPages = Math.ceil(totalCount / size);
 
-    const products = await Product.find({ isOnSale: false })
+    const products = await Product.find(findQuery)
       .skip((page - 1) * size)
       .limit(size);
 
@@ -19,7 +33,6 @@ const loadNotOnDiscount = async (req, res) => {
   } catch (error) {
     console.error('Error fetching products not on discount:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-    return; // Added this line to prevent further execution
   }
 };
 
@@ -61,12 +74,26 @@ const applyDiscount = async (productIds, offPercent, flag) => {
 
 
 const loadOnDiscount = async (req, res) => {
-  const { page = 1, size = 9 } = req.query;
+  const { prod, page = 1, size = 9 } = req.query;
+
+  // Initialize the search query to handle cases when prod is undefined or an empty string
+  var productToSearch = prod && prod !== 'undefined' ? prod : '';
+
   try {
-    const totalCount = await Product.countDocuments({ isOnSale: true });
+    const findQuery = {
+      isOnSale: true,
+      ...(productToSearch && {
+        $or: [
+          { name: { $regex: productToSearch, $options: 'i' } },
+          { description: { $regex: productToSearch, $options: 'i' } },
+        ]
+      })
+    };
+
+    const totalCount = await Product.countDocuments(findQuery);
     const totalPages = Math.ceil(totalCount / size);
 
-    const products = await Product.find({ isOnSale: true })
+    const products = await Product.find(findQuery)
       .skip((page - 1) * size)
       .limit(size);
 
@@ -78,7 +105,6 @@ const loadOnDiscount = async (req, res) => {
   } catch (error) {
     console.error('Error fetching products not on discount:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-    return; // Added this line to prevent further execution
   }
 };
 

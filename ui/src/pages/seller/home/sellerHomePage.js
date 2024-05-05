@@ -559,7 +559,7 @@ const AllProducts = ({ user }) => {
 		try {
 			setTableLoading(true)
 			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-not-on-discount?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -587,7 +587,7 @@ const AllProducts = ({ user }) => {
 			setTableLoading(true)
 
 			const response = await axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/products/user-on-discount?prod=${searchTerm}&page=${currentPage}&size=${pageSize}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -799,13 +799,39 @@ const AllProducts = ({ user }) => {
 									) : <></>}
 								</Col>
 							</Row>
+							{selectedItem === 'Analytics' &&
 							<Row className='mb-4 m-0'>
-								<Col className='mb-4 p-0 bg-light'>
+								<Col className='mb-4 p-0'>
 									{selectedItem === 'Analytics' && salesAnalytics && (
 										<canvas ref={chartRef} id="salesChart"></canvas>
 									)}
+									
 								</Col>
 							</Row>
+							}
+							{(selectedItem === "Discount Management" || selectedItem === "End Sale") && (
+											<Row className="justify-content-between align-items-center mb-3">
+											<Col md={6}>
+												{/* Left side content or empty if not needed */}
+											</Col>
+											<Col md={6}>
+												<div className="d-flex justify-content-end">
+													<Form.Label htmlFor="searchInput" className="me-2 align-self-center text-light"><b>Search:</b></Form.Label>
+													<Form.Control
+														size="md"
+														id="searchInput"
+														className='pe-5'
+														type="text"
+														value={searchTerm}
+														placeholder={`Search Product for ${selectedItem}`}
+														onChange={handleSearchChange}
+														ref={searchInputRef}
+														style={{ width: 'auto' }}  // Adjust width as necessary
+													/>
+												</div>
+											</Col>
+										</Row>
+									)}
 
 							{/* Sale confirmation modal */}
 							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
