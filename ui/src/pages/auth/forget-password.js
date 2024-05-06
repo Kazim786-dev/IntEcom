@@ -91,7 +91,7 @@ function ForgetPasswordPage() {
                         <span className=' blockquote-footer tracking-tighter animate-pulse ' style={{marginBottom:'-16px', color:'#6f90af'}}>where fashion meets technology</span>
                     </h2>
 				</div>
-				<div className="mx-auto w-full max-w-md py-1 landing rounded-2">
+				<div className="mx-auto w-full max-w-md py-1 landing border-2 border-primary rounded-2">
 					<FormContainer heading="Forgot Password">
 						<Form onSubmit={handleSubmit}>
 							<Row>

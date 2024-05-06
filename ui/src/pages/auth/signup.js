@@ -94,7 +94,7 @@ function SignUpPage() {
                     </h2>
                 </div>
                 <div className="flex items-center justify-center p-6 lg:p-10">
-                    <div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing rounded-2">
+                    <div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing border-1 border-primary rounded-2">
                         <h1 className="text-3xl font-bold text-primary">
                             Welcome to IntEcom
                             <p className="text-light text-sm font-normal dark:text-light">

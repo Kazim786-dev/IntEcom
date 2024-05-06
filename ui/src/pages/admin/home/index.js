@@ -31,8 +31,10 @@ import {
 	EndSaleIcon,
 	FileWarningIcon,
 	FolderIcon,
-	UserIcon
+	UserIcon,
+	PencilIcon
 } from '../../../static/icons/admin-nav-icons'
+import DescriptionGenerate from './desc-generate'
 
 
 const AllProducts = ({ user }) => {
@@ -360,7 +362,9 @@ const AllProducts = ({ user }) => {
 
 	const handleItemClick = (item) => {
 		setCurrentPage(1)
-		setTableLoading(true)
+		if(item!='Generate Description')
+			setTableLoading(true)
+
 		setSelectedItem(item)
 		setSearchTerm()
 	}
@@ -954,6 +958,7 @@ const AllProducts = ({ user }) => {
 		{ id: 6, icon: <UserIcon className="h-5 w-5" />, text: 'Orders Summary' },
 		{ id: 7, icon: <FolderIcon className="h-5 w-5" />, text: 'Seller Requests' },
 		{ id: 8, icon: <FileWarningIcon className="h-5 w-5" />, text: 'Reported Products' },
+		{ id: 8, icon: <PencilIcon className="h-5 w-5" />, text: 'Generate Description' },
 	];
 
 	return (
@@ -975,25 +980,24 @@ const AllProducts = ({ user }) => {
 									<h2 className='text-primary' style={{ fontFamily: 'Arial, sans-serif' }}>{selectedItem}</h2>
 								</Col>
 								<Col className='d-flex justify-content-end pe-0 align-items-center'>
-									{selectedItem === 'Products' ? (
-										<>
-											<Form.Label className="me-2 mt-1 text-light"><b>Search:</b></Form.Label>
-											<Form.Group className="mb-1 mt-1">
-												<Form.Control
-													size='sm'
-													className='pe-5'
-													type="text"
-													value={searchTerm}
-													placeholder={`Search Product`}
-													onChange={handleSearchChange}
-													ref={searchInputRef}
-												/>
-											</Form.Group>
-											<Button variant='primary' size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{}}>Add Product</Button>
+									{	selectedItem === 'Products' ? (
+											<>
+												<Form.Label className="me-2 mt-1 text-light"><b>Search:</b></Form.Label>
+												<Form.Group className="mb-1 mt-1">
+													<Form.Control
+														size='sm'
+														className='pe-5'
+														type="text"
+														value={searchTerm}
+														placeholder={`Search Product`}
+														onChange={handleSearchChange}
+														ref={searchInputRef}
+													/>
+												</Form.Group>
+												<Button variant='primary' size='sm' onClick={handleAddClick} className='px-3  ms-2' style={{}}>Add Product</Button>
 
-										</>
-									)
-										: selectedItem === 'Orders Summary' ? (
+											</>
+										) : selectedItem === 'Orders Summary' ? (
 											<>
 												<Form.Label className="me-2 text-light"><b>Search:</b></Form.Label>
 												<Form.Group className="mb-1">
@@ -1008,38 +1012,37 @@ const AllProducts = ({ user }) => {
 													/>
 												</Form.Group>
 											</>
+										) : selectedItem === 'Discount Management' ? (
+											<>
+												<Button size='sm' variant='primary' onClick={() => {
+													setShowSaleConfirmationModal(true)
+													setisAllStart(true)
+												}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>Apply on All</Button>
+												<div style={{ marginRight: '10px' }}></div>
+												<Button size='sm' variant='primary' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0} style={{}}>
+													Apply on Selected
+												</Button>
+												<Form.Group className="ms-2">
+													<Form.Control
+														size='sm'
+														type="number"
+														value={salePercentage}
+														placeholder="Discount %"
+														onChange={(e) => setSalePercentage(e.target.value)}
+														min="0"
+													/>
+												</Form.Group>
+											</>
+										) : selectedItem == 'End Sale' && (
+											<Col className='d-flex justify-content-end pe-0 align-items-center'>
+												<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0} style={{}}>End Sale for selected</Button>
+												<div style={{ marginRight: '10px' }}></div>
+												<Button size='sm' variant='primary' onClick={() => {
+													setShowEndSaleConfirmationModal(true)
+													setisAllEnd(true)
+												}} disabled={OnSale.length == 0} style={{}}>End Sale for all</Button>
+											</Col>
 										)
-											: selectedItem === 'Discount Management' ? (
-												<>
-													<Button size='sm' variant='primary' onClick={() => {
-														setShowSaleConfirmationModal(true)
-														setisAllStart(true)
-													}} disabled={salePercentage <= 0 || notOnSale.length == 0} style={{}}>Apply on All</Button>
-													<div style={{ marginRight: '10px' }}></div>
-													<Button size='sm' variant='primary' onClick={() => setShowSaleConfirmationModal(true)} disabled={salePercentage <= 0 || selectedProducts.length == 0} style={{}}>
-														Apply on Selected
-													</Button>
-													<Form.Group className="ms-2">
-														<Form.Control
-															size='sm'
-															type="number"
-															value={salePercentage}
-															placeholder="Discount %"
-															onChange={(e) => setSalePercentage(e.target.value)}
-															min="0"
-														/>
-													</Form.Group>
-												</>
-											) : selectedItem == 'End Sale' && (
-												<Col className='d-flex justify-content-end pe-0 align-items-center'>
-													<Button size='sm' variant='primary' onClick={() => setShowEndSaleConfirmationModal(true)} disabled={selectedProductsNotOnSale.length == 0} style={{}}>End Sale for selected</Button>
-													<div style={{ marginRight: '10px' }}></div>
-													<Button size='sm' variant='primary' onClick={() => {
-														setShowEndSaleConfirmationModal(true)
-														setisAllEnd(true)
-													}} disabled={OnSale.length == 0} style={{}}>End Sale for all</Button>
-												</Col>
-											)
 									}
 								</Col>
 							</Row>
@@ -1049,33 +1052,33 @@ const AllProducts = ({ user }) => {
 										{salesAnalytics && (
 											<canvas ref={chartRef} id="salesChart"></canvas>
 										)}
-										
+
 									</Col>
 								</Row>
 							}
 							{(selectedItem === "Discount Management" || selectedItem === "End Sale") && (
-											<Row className="justify-content-between align-items-center mb-3">
-											<Col md={4}>
-												{/* Left side content or empty if not needed */}
-											</Col>
-											<Col md={8}>
-												<div className="d-flex justify-content-end">
-													<Form.Label htmlFor="searchInput" className="me-2 align-self-center text-light"><b>Search:</b></Form.Label>
-													<Form.Control
-														size="md"
-														id="searchInput"
-														className='pe-5'
-														type="text"
-														value={searchTerm}
-														placeholder={`Search Product`}
-														onChange={handleSearchChange}
-														ref={searchInputRef}
-														style={{ width: 'auto' }}  // Adjust width as necessary
-													/>
-												</div>
-											</Col>
-										</Row>
-									)}
+								<Row className="justify-content-between align-items-center mb-3">
+									<Col md={4}>
+										{/* Left side content or empty if not needed */}
+									</Col>
+									<Col md={8}>
+										<div className="d-flex justify-content-end">
+											<Form.Label htmlFor="searchInput" className="me-2 align-self-center text-light"><b>Search:</b></Form.Label>
+											<Form.Control
+												size="md"
+												id="searchInput"
+												className='pe-5'
+												type="text"
+												value={searchTerm}
+												placeholder={`Search Product`}
+												onChange={handleSearchChange}
+												ref={searchInputRef}
+												style={{ width: 'auto' }}  // Adjust width as necessary
+											/>
+										</div>
+									</Col>
+								</Row>
+							)}
 
 							{/* Sale confirmation modal */}
 							<Modal show={showSaleConfirmationModal} onHide={() => setShowSaleConfirmationModal(false)}>
@@ -1114,51 +1117,57 @@ const AllProducts = ({ user }) => {
 								</Modal.Footer>
 							</Modal>
 
-							<div className='border shadow-sm rounded' style={{ height: '31rem', overflowY: 'auto' }}>
-								{tableLoading ? (
-									<SpinnerComp />
-								) : selectedItem === 'Reported Products' ? (
-									<DetailsTable
-										data={reportedProducts}
-										columns={ReportedProductsTableColumns}
-									/>
-								) : selectedItem === 'Process Orders' ? (
-									<DetailsTable
-										data={processedOrders}
-										columns={ProcessedOrdersTableColumns}
-									/>
-								) : selectedItem === 'Seller Requests' ? (
-									<DetailsTable
-										data={sellers}
-										columns={SellerTablecolumns}
-									/>
-								) : selectedItem === 'Analytics' && salesAnalytics ? (
-									<DetailsTable
-										data={salesAnalytics}
-										columns={SellersTablecolumns}
-									/>
-								) : selectedItem === 'Discount Management' ? (
-									<DetailsTable
-										data={notOnSale}
-										columns={productsColumns}
-									/>
-								) : selectedItem === 'End Sale' ? (
-									<DetailsTable
-										data={OnSale}
-										columns={EndSaleProductsColumns}
-									/>
-								) : selectedItem === 'Products' ? (
-									<DetailsTable
-										data={data}
-										columns={ProductsTablecolumns}
-									/>
-								) : (
-									<DetailsTable
-										data={data}
-										columns={OrdersTablecolumns}
-									/>
-								)}
-							</div>
+							
+								<div className='border shadow-sm rounded' style={{ height: '31rem', overflowY: 'auto' }}>
+									{tableLoading ? (
+										<SpinnerComp />
+									) : selectedItem === 'Process Orders' ? (
+										<DetailsTable
+											data={processedOrders}
+											columns={ProcessedOrdersTableColumns}
+										/>
+									) : selectedItem === 'Seller Requests' ? (
+										<DetailsTable
+											data={sellers}
+											columns={SellerTablecolumns}
+										/>
+									) : selectedItem === 'Analytics' && salesAnalytics ? (
+										<DetailsTable
+											data={salesAnalytics}
+											columns={SellersTablecolumns}
+										/>
+									) : selectedItem === 'Discount Management' ? (
+										<DetailsTable
+											data={notOnSale}
+											columns={productsColumns}
+										/>
+									) : selectedItem === 'End Sale' ? (
+										<DetailsTable
+											data={OnSale}
+											columns={EndSaleProductsColumns}
+										/>
+									) : selectedItem === 'Products' ? (
+										<DetailsTable
+											data={data}
+											columns={ProductsTablecolumns}
+										/>
+									) : selectedItem === 'Orders Summary' ? (
+										<DetailsTable
+											data={data}
+											columns={OrdersTablecolumns}
+										/>
+									) : selectedItem === 'Reported Products' ? (
+										<DetailsTable
+											data={reportedProducts}
+											columns={ReportedProductsTableColumns}
+										/>
+									) : selectedItem == 'Generate Description' ? (
+										<DescriptionGenerate />
+									) : (
+										<></>
+									)}
+								</div>
+							
 
 							<Footer
 								className={'d-flex justify-content-between align-items-center pt-4 ps-1 pe-0'}

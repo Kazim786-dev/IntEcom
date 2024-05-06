@@ -116,8 +116,9 @@ const LoginPage = () => {
                         <span className=' blockquote-footer tracking-tighter animate-pulse text-white' style={{marginBottom:'-16px'}}>where fashion meets technology</span>
                     </h2>
 				</div>
+				{/* mx-auto w-full max-w-md px-4 py-2 space-y-8 landing rounded-2 */}
 				<div className="flex items-center justify-center p-6 lg:p-10 min-h-screen">
-					<div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing rounded-2">
+					<div className="mx-auto w-full max-w-md px-4 py-2 space-y-8 landing border-1 border-primary rounded-2">
 						<div className="space-y-2">
 							<h1 className="text-3xl font-bold text-primary">
 								Welcome to IntEcom

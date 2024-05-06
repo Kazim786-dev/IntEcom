@@ -6,6 +6,7 @@ import EndSaleIcon from './EndSaleIcon'
 import FileWarningIcon from './fileWarningIcon'
 import FolderIcon from './folderIcon'
 import UserIcon from "./user"
+import PencilIcon from './pencilIcon';
 
 export {
     PackageIcon,
@@ -15,5 +16,6 @@ export {
     EndSaleIcon,
     FileWarningIcon,
     FolderIcon,
-    UserIcon
+    UserIcon,
+    PencilIcon
 }

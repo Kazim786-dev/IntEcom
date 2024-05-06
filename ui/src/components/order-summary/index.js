@@ -97,17 +97,17 @@ const OrderSummary = ({ user, setErrorText, selectedItem }) => {
                 <SummaryElement 
                     title={'Total Orders:'} 
                     count={orderSummary.totalOrders}
-                    className={'px-4 py-3 mr-1 bg-muted order-summary-element'}
+                    className={'px-4 py-3 mr-1 bg-muted order-summary-element border-primary border-1'}
                 />
                 <SummaryElement 
                     title={'Total Units:'} 
                     count={orderSummary.totalUnits} 
-                    className={'px-4 py-3 mr-1 bg-muted order-summary-element'}
+                    className={'px-4 py-3 mr-1 bg-muted order-summary-element border-primary border-1'}
                 />
                 <SummaryElement 
                     title={'Total Amount:'} 
                     count={`PKR ${orderSummary.totalAmount}`} 
-                    className={'px-4 py-3 bg-muted order-summary-element'}
+                    className={'px-4 py-3 bg-muted order-summary-element border-primary border-1'}
                 />
             </div>
         </div>
