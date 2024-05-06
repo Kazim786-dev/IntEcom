@@ -144,21 +144,22 @@
 /* product card */
 
 .product-card:hover {
-  transform: translateY(-9px); /* Move the card up on hover */
+  transform: translateY(-15px); /* Move the card up on hover */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
 }
 
-.product-card:hover .product-card-body {
-  background-color: rgb(73, 37, 139);
-  /* background-color: #bdf0fc; */
-  /* background-color: #813eec; */
-}
+/* .product-card:hover .product-card-body {
+  background-color: rgb(5, 49, 192);
+} */
 
 .product-card {
   width:17rem;
   height: 100%;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  background-image: url('../images/bg/product-card.jpg') !important
+  background-image: url('../images/bg/card.jpg') !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .placeholder-product-card {
