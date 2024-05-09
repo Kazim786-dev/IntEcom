@@ -1003,7 +1003,7 @@ const AllProducts = ({ user }) => {
 											<>
 												<OrderSummaryFilter duration={duration} setDuration={setDuration} />
 												
-												<Form.Label className="mx-2 text-light"><b>Search:</b></Form.Label>
+												<Form.Label className="mx-2 text-semibold text-light"><b>Search:</b></Form.Label>
 												<Form.Group className="">
 													<Form.Control
 														size='sm'

@@ -27,7 +27,7 @@ const OrderSummaryFilter = ({duration, setDuration}) => {
 
     return (
             <div style={styles.selectorContainer}>
-                <label className="text-light text-semibold mr-2">Time Range: </label>
+                <label className="text-light text-semibold mr-1"><b>Time Range:</b></label>
                 <select
                     style={styles.select}
                     value={duration}
