@@ -23,12 +23,12 @@ const router = Router();
 // Route for fetching all orders (accessible only to admin)
 router.get('/', VerifyRole({ roleToCheck: 'admin' }), async (req, res) => {
     // Extracting query parameters from the request
-    const { searchQuery, page = 1, size = 9 } = req.query;
+    const { searchQuery, page = 1, size = 9, duration = '' } = req.query;
     const { role } = req.user.user;
 
     try {
         // Calling the controller function to get all orders
-        const result = await getAllOrders({ role, searchQuery, page, size });
+        const result = await getAllOrders({ role, searchQuery, page, size, duration });
         // Sending the response with the retrieved data
         res.status(result.status).json(result.data);
     } catch (error) {

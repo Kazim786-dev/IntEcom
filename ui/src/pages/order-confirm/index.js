@@ -128,9 +128,9 @@ const OrderConfirm = () => {
         <div className="flex flex-col items-center justify-center min-h-screen py-12 space-y-4 text-center">
             <div className="w-full max-w-[400px] space-y-2">
                 <div className="space-y-2">
-                    <PackageIcon className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-400" />
-                    <h1 className="font-bold text-3xl">Thank you for your order!</h1>
-                    <p className="text-gray-500 dark:text-gray-400">Your order has been confirmed and will be processed soon.</p>
+                    <PackageIcon className="mx-auto h-12 w-12 text-primary dark:text-primary" />
+                    <h1 className="font-bold text-primary text-3xl">Thank you for your order!</h1>
+                    <p className="text-gray-200 dark:text-gray-200">Your order has been confirmed and will be processed soon.</p>
                 </div>
                 <Card className="p-4 space-y-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
@@ -168,7 +168,7 @@ const OrderConfirm = () => {
                     <hr />
                     {/* <Separator /> */}
                     <div className="space-y-2">
-                        <h2 className="font-semibold text-lg text-primary">Shipping address</h2>
+                        <h2 className="font-semibold text-lg text-primary">Shipping Details</h2>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                             <div className="font-medium">{shippingInfo.name}</div>
                             <div className="text-right">{phone}</div>

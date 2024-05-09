@@ -35,6 +35,7 @@ import {
 	PencilIcon
 } from '../../../static/icons/admin-nav-icons'
 import DescriptionGenerate from './desc-generate'
+import OrderSummaryFilter from '../../../components/orderSummaryFilter'
 
 
 const AllProducts = ({ user }) => {
@@ -80,6 +81,7 @@ const AllProducts = ({ user }) => {
 	const [OnSale, setOnSale] = useState([])
 	const [isAllEnd, setisAllEnd] = useState(false)
 	const [isAllStart, setisAllStart] = useState(false)
+	const [duration, setDuration] = useState(''); // Default to all orders
 
 	const fetchSalesAnalytics = async () => {
 		try {
@@ -122,7 +124,7 @@ const AllProducts = ({ user }) => {
 			}
 
 			axios.get(
-				`${process.env.REACT_APP_DEV_BACKEND_URL}/${temp.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}`,
+				`${process.env.REACT_APP_DEV_BACKEND_URL}/${temp.toLowerCase()}?searchQuery=${searchTerm}&page=${currentPage}&size=${pageSize}&duration=${duration}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -358,7 +360,7 @@ const AllProducts = ({ user }) => {
 			debouncedLoadOnDiscount()
 		}
 
-	}, [currentPage, selectedItem, searchTerm])
+	}, [currentPage, selectedItem, searchTerm, duration])
 
 	const handleItemClick = (item) => {
 		setCurrentPage(1)
@@ -972,7 +974,7 @@ const AllProducts = ({ user }) => {
 							<MemoizedSideBar sidebarItems={sidebarItems} selectedItem={selectedItem} handleItemClick={handleItemClick} />
 						</Col>
 						<Col className="mt-4 px-3 pb-4">
-							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={'Orders'} />}
+							{selectedItem == 'Orders Summary' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={'Orders'} duration={duration} />}
 							{selectedItem === 'Analytics' && <OrderSummary user={user} setErrorText={setErrorText} selectedItem={selectedItem} />}
 
 							<Row className='mb-3 m-0'>
@@ -999,8 +1001,10 @@ const AllProducts = ({ user }) => {
 											</>
 										) : selectedItem === 'Orders Summary' ? (
 											<>
-												<Form.Label className="me-2 text-light"><b>Search:</b></Form.Label>
-												<Form.Group className="mb-1">
+												<OrderSummaryFilter duration={duration} setDuration={setDuration} />
+												
+												<Form.Label className="mx-2 text-light"><b>Search:</b></Form.Label>
+												<Form.Group className="">
 													<Form.Control
 														size='sm'
 														className='pe-5'
