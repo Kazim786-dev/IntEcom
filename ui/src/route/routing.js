@@ -27,6 +27,9 @@ import LandingPage from '../pages/landing'
 //components
 import Layout from '../components/layout'
 
+// new component import
+import ModelViewer from '../pages/product/modelViewer'; 
+
 const RouterLinks = ({
 	user }) => {
 
@@ -153,6 +156,7 @@ const RouterLinks = ({
 						</Route>
 					</>
 				}
+				<Route path='/model-viewer' element={<ModelViewer />} /> {/* Add this line */}
 				<Route path='*' element={<h1>Page Not Found!</h1>} />
 			</Routes>
 		</BrowserRouter>

@@ -1,7 +1,5 @@
 import React from 'react'
-
 import { Form, Button } from 'react-bootstrap'
-
 import FormField from '../input-field'
 
 const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
@@ -54,8 +52,16 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 				name='catagory'
 				placeholder={'Clothing'}
 			/>
+			<Form.Group controlId="model3D" className="mb-4">
+				<Form.Label>3D Model (optional)</Form.Label>
+				<Form.Control
+					type="file"
+					name="model3D"
+					onChange={handleChange}
+					accept=".glb,.gltf,.obj"
+				/>
+			</Form.Group>
 			<div className='d-flex justify-content-end'>
-                
 				<Button className='w-25 py-2' variant='primary' type='submit'>
 					{product ? 'Update' : 'Save'}
 				</Button>
@@ -64,4 +70,4 @@ const ProductForm = ({product, formData, handleChange, handleSubmit}) => {
 	)
 }
 
-export default ProductForm
+export default ProductForm 

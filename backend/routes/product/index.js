@@ -1,10 +1,8 @@
-import { Router, response } from 'express';
-import upload from '../../middleware/multer.js';
+import { Router } from 'express';
+import upload from '../../middleware/multer.js'; // Using the updated multer setup
 import VerifyRole from '../../middleware/role-verification.js';
 import reportProduct from '../../controllers/product/report-product.js';
-import multer from 'multer';
 import { checkUserReports } from '../../controllers/product/is-reported_by_user.js';
-const updateupload = multer()
 
 import {
   getProducts,
@@ -27,8 +25,7 @@ import {
   getUniqueCategories,
 } from '../../controllers/product/index.js';
 
-
-import authMiddleware from '../../middleware/auth.js'
+import authMiddleware from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -65,8 +62,6 @@ router.delete('/cancel-report/:reportId', authMiddleware, async (req, res) => {
   }
 });
 
-
-
 router.get('/all-reports', authMiddleware, async (req, res) => {
   try {
     const result = await getReportedProducts(req.user.user);
@@ -76,6 +71,7 @@ router.get('/all-reports', authMiddleware, async (req, res) => {
     return res.status(500).json({ error: 'An error occurred while fetching reported products.' });
   }
 });
+
 // POST request to report a product
 router.post('/report', authMiddleware, async (req, res) => {
   try {
@@ -109,19 +105,6 @@ router.post('/allproducts', async (req, res) => {
   }
 });
 
-
-
-// // Get all Products filtered by catagory
-// router.post('/allFilteredProducts', async (req, res) => {
-//   try {
-//     console.log(req.body.filters);
-//     const result = await getProducts({query: req.query, catagory: req.body.filters});
-//     return res.status(result.status).json(result.data);
-//   } catch (error) {
-//     return res.status(500).json({ error: 'Internal server error.' });
-//   }
-// });
-
 // Get all Products filters
 router.get('/all-filters', async (req, res) => {
   try {
@@ -142,7 +125,6 @@ router.get('/not-on-discount', async (req, res) => {
   }
 });
 
-
 // put Products on sale
 router.post('/put-on-sale', async (req, res) => {
   const { productIds, offPercent, flag } = req.body;
@@ -153,7 +135,6 @@ router.post('/put-on-sale', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
 
 // Get all Products on sale
 router.get('/on-discount', async (req, res) => {
@@ -177,7 +158,6 @@ router.post('/end-sale', async (req, res) => {
   }
 });
 
-
 // Get all Products not on sale
 router.get('/user-not-on-discount',authMiddleware, async (req, res) => {
   try {
@@ -190,7 +170,6 @@ router.get('/user-not-on-discount',authMiddleware, async (req, res) => {
   }
 });
 
-
 // put Products on sale
 router.post('/user-put-on-sale', authMiddleware, async (req, res) => {
   const { productIds, offPercent, flag } = req.body;
@@ -202,7 +181,6 @@ router.post('/user-put-on-sale', authMiddleware, async (req, res) => {
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
 
 // Get all Products on sale
 router.get('/user-on-discount',authMiddleware, async (req, res) => {
@@ -229,11 +207,6 @@ router.post('/user-end-sale',authMiddleware, async (req, res) => {
   }
 });
 
-
-
-
-
-
 // Get Product by ID
 router.get('/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
@@ -250,10 +223,15 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, upload, async (req, res) => {
   const { user } = req.user;
   try {
-    const result = await createProduct({productData: req.body, imageFile: req.file, user: user});
+    const result = await createProduct({
+      productData: req.body,
+      imageFile: req.files.image ? req.files.image[0] : null,
+      modelFile: req.files.model3D ? req.files.model3D[0] : null,
+      user: user
+    });
     return res.status(result.status).json(result.data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ error: 'An error occurred while creating the product.' });
   }
 });
@@ -264,7 +242,13 @@ router.put('/:id', authMiddleware, upload, async (req, res) => {
   const { user } = req.user;
 
   try {
-    const result = await updateProduct({id: id, productData: req.body, imageFile: req.file, user: user});
+    const result = await updateProduct({
+      id: id,
+      productData: req.body,
+      imageFile: req.files.image ? req.files.image[0] : null,
+      modelFile: req.files.model3D ? req.files.model3D[0] : null,
+      user: user
+    });
     return res.status(result.status).json(result.data);
   } catch (error) {
     return res.status(500).json({ error: 'An error occurred while updating the product.' });
@@ -272,18 +256,16 @@ router.put('/:id', authMiddleware, upload, async (req, res) => {
 });
 
 // Delete Product
-router.delete('/:id', authMiddleware,  async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
   const { user } = req.user;
 
   try {
-    const result = await deleteProduct({id: id , user: user});
+    const result = await deleteProduct({ id: id, user: user });
     return res.status(result.status).json(result.message);
   } catch (error) {
     return res.status(500).json({ error: 'An error occurred while deleting the product.' });
   }
 });
-
-
 
 export default router;

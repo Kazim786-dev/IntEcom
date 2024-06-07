@@ -28,23 +28,21 @@ const ProductCanvas = ({
 		description: product?.description,
 		image: product?.image,
 		catagory: product?.catagory,
+		model3D: product?.model3D,
 	})
-
-	
 
 	const handleChange = (e) => {
 		const { name, value, files } = e.target
 		setFormData((prevFormData) => ({
 			...prevFormData,
-			[name]: name === 'image' ? files[0] : value,
+			[name]: name === 'image' || name === 'model3D' ? files[0] : value,
 		}))
 	}
-
 
 	const handleAddProduct = async (e) => {
 		e.preventDefault()
 
-		if(formData.quantity<1 || formData.price<1){
+		if (formData.quantity < 1 || formData.price < 1) {
 			setErrorText('Quantity and price can\'t be less than 1')
 			return
 		}
@@ -60,7 +58,9 @@ const ProductCanvas = ({
 		if (formData.image) {
 			Form.append('image', formData.image)
 		}
-
+		if (formData.model3D) {
+			Form.append('model3D', formData.model3D)
+		}
 
 		try {
 			const response = await axios.post(
@@ -73,7 +73,6 @@ const ProductCanvas = ({
 					},
 				}
 			)
-			console.log(response)
 			if (response.status && (response.status === 201 || response.status === 202)) {
 				handleShouldFetchAgain()
 				setShow(false)
@@ -84,9 +83,8 @@ const ProductCanvas = ({
 		} catch (error) {
 			if (error.response?.status && error.response.status === 401) {
 				setErrorText('Unauthorized. Try login again')
-			}
-			else{
-				setErrorText('Error occured while creating the product.')
+			} else {
+				setErrorText('Error occurred while creating the product.')
 			}
 			console.log(error)
 			setTimeout(() => {
@@ -95,10 +93,10 @@ const ProductCanvas = ({
 		}
 	}
 
-	const handleEditProduct = async(e) => {
+	const handleEditProduct = async (e) => {
 		e.preventDefault()
 
-		if(formData.quantity<1 || formData.price<1){
+		if (formData.quantity < 1 || formData.price < 1) {
 			setErrorText('Quantity and price can\'t be less than 1')
 			return
 		}
@@ -113,6 +111,9 @@ const ProductCanvas = ({
 		Form.append('catagory', formData.catagory)
 		if (formData.image) {
 			Form.append('image', formData.image)
+		}
+		if (formData.model3D) {
+			Form.append('model3D', formData.model3D)
 		}
 
 		try {
@@ -137,9 +138,9 @@ const ProductCanvas = ({
 			if (error.response?.status && error.response.status === 401) {
 				handleShouldFetchAgain()
 				setErrorText('Unauthorized. Try login again')
+			} else {
+				setErrorText('Error occurred while updating the product.')
 			}
-			else
-				setErrorText('Error occured while updating the product.')
 			console.error(error)
 			setTimeout(() => {
 				setLoading(false)
@@ -147,9 +148,7 @@ const ProductCanvas = ({
 		}
 	}
 
-
 	return (
-
 		<Offcanvas show={show} onHide={() => setShow(false)} placement={placement} style={{ width: '50%' }}>
 			<Offcanvas.Body>
 				{loading ? (
@@ -163,14 +162,12 @@ const ProductCanvas = ({
 									<h3 className='ms-1'>Edit Product</h3>
 								) : (
 									<h3 className='ms-1'>Add Product</h3>
-								)
-								}
+								)}
 							</div>
 							<hr />
-							{/* form to add/edit product */}
 							<Row>
 								<Col md={4}>
-									<ImageUpload handleChange={handleChange} product={product}/>
+									<ImageUpload handleChange={handleChange} product={product} />
 								</Col>
 								<Col md={8}>
 									<ProductForm product={product} formData={formData} handleChange={handleChange} 
@@ -178,7 +175,7 @@ const ProductCanvas = ({
 								</Col>
 							</Row>
 						</Container>
-						{Errortext != '' && (
+						{Errortext !== '' && (
 							<AlertComp
 								variant='danger'
 								text={Errortext}
@@ -189,7 +186,6 @@ const ProductCanvas = ({
 				)}
 			</Offcanvas.Body>
 		</Offcanvas>
-
 	)
 }
 

@@ -10,7 +10,7 @@ const productSchema = new Schema({
     type: String,
     required: true
   },
-  catagory: {
+  category: {
     type: String,
     required: true,
     default: "Electronics"
@@ -66,12 +66,16 @@ const productSchema = new Schema({
   originalPrice: {
     type: Number,
     default: 0
+  },
+  modelPath: { // New field for 3D model path
+    type: String,
+    required: false
   }
 }, {
   timestamps: true
 });
 
-//indexes
+// indexes
 productSchema.index({ isDeleted: 1, status: 1, uid: 1 });
 productSchema.index({ isDeleted: 1, user: 1 }); // Index for isDeleted and user
 productSchema.index({ name: 'text', description: 'text' }); // Text index for name and description
