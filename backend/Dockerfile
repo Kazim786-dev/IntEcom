@@ -1,7 +1,7 @@
 # Dockerfile for Node Express Backend
 
 # Use a specific Node.js version as the base image
-FROM node:16-alpine
+FROM node:14-alpine
 
 # Create App Directory
 WORKDIR /server/app
@@ -13,7 +13,7 @@ ENV MONGO_URL=mongodb+srv://mwaqasakhtar101:uT8yu7UHJJhRmkCb@cluster0.wg4on3p.mo
 COPY package*.json ./
 
 # Install dependencies for production
-RUN npm install --silent
+RUN npm install
 
 # Copy app source code
 COPY . .
